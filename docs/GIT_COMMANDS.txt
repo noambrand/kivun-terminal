@@ -1,0 +1,93 @@
+=================================================================
+KIVUN TERMINAL v1.0.2 - GITHUB UPLOAD COMMANDS
+=================================================================
+
+STEP 1: CREATE GITHUB REPOSITORY
+---------------------------------
+1. Go to: https://github.com/new
+2. Repository name: kivun-terminal
+3. Description: Professional RTL terminal for Claude Code - Supports 10 RTL languages with smart installer
+4. Public repository
+5. DON'T initialize with README
+6. Click "Create repository"
+
+
+STEP 2: INITIALIZE GIT & UPLOAD
+---------------------------------
+Open Git Bash or Terminal and run these commands:
+
+cd "C:/Users/noam.ORHITEC/Downloads/ClaudeHebrew_Installer"
+
+git init
+
+git add .
+
+git commit -m "Initial release v1.0.2 - RTL Terminal for Claude Code
+
+🌍 10 RTL Language Support
+- Hebrew, Arabic, Persian, Urdu, Pashto, Kurdish, Dari, Uyghur, Sindhi, Azerbaijani
+- Smart installer with auto-detection
+- Unicode UTF-8 encoding throughout
+
+🐛 Critical Bugs Fixed
+- Git detection (no false positives from WSL)
+- Ubuntu re-installation bug
+- WSL path conversion
+
+✨ Features
+- Smart component detection (skips what's installed)
+- State tracking for multi-run installations
+- Comprehensive error checking
+- Git made optional
+- Resume after restart
+
+📚 Complete Documentation
+- Installation guide
+- RTL language support guide
+- Troubleshooting
+- Release notes
+
+Made with ❤️ for RTL developers worldwide"
+
+git remote add origin https://github.com/noambrand/kivun-terminal.git
+
+git branch -M main
+
+git push -u origin main
+
+
+STEP 3: CREATE RELEASE FOR LARGE FILES
+---------------------------------------
+1. Go to: https://github.com/noambrand/kivun-terminal/releases/new
+2. Tag version: v1.0.2
+3. Release title: Kivun Terminal v1.0.2 - 10 RTL Language Support
+4. Description: Copy from RELEASE_NOTES_v1.0.2.md
+5. Upload these files:
+   - Git-2.53.0-64-bit.exe (64MB)
+   - node-v24.14.0-x64.msi (32MB)
+   - Kivun_Terminal_Setup.exe (95MB)
+6. Click "Publish release"
+
+
+STEP 4: CONFIGURE REPOSITORY
+-----------------------------
+Topics to add (Settings → Topics):
+- rtl
+- hebrew
+- arabic
+- persian
+- claude-code
+- terminal
+- konsole
+- wsl
+- windows
+- unicode
+- bidi
+
+
+DONE! ✅
+---------
+Your repository is live!
+Repository URL: https://github.com/noambrand/kivun-terminal
+
+=================================================================

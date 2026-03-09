@@ -1,0 +1,73 @@
+========================================
+KIVUN TERMINAL - FIX FOR OTHER PC
+========================================
+
+PROBLEM: Window opens and immediately closes when clicking shortcut.
+
+========================================
+STEP 1: RUN DIAGNOSTIC
+========================================
+
+1. Copy DIAGNOSE_OTHER_PC.bat to the other PC
+2. Double-click to run it
+3. Take a SCREENSHOT of the full output window
+4. Send screenshot to identify the exact problem
+
+The diagnostic will check:
+- Installation directory exists
+- All required files present
+- WSL installed and working  
+- Ubuntu installed and working
+- Config file settings
+- Launcher execution
+
+========================================
+COMMON ISSUES & FIXES
+========================================
+
+ISSUE 1: WSL Not Installed
+----------------------------
+SYMPTOM: Diagnostic shows "[ERROR] WSL not installed"
+FIX: Run Kivun_Terminal_Setup.exe installer
+
+ISSUE 2: Ubuntu Not Working
+----------------------------
+SYMPTOM: Diagnostic shows "[ERROR] Ubuntu not working"
+FIX: 
+  a) Open PowerShell as Admin
+  b) Run: wsl --install -d Ubuntu
+  c) Restart computer
+  d) Run Kivun_Terminal_Setup.exe installer again
+
+ISSUE 3: Files Missing
+----------------------------
+SYMPTOM: Diagnostic shows "[MISSING]" for some files
+FIX: Run Kivun_Terminal_Setup.exe installer to repair
+
+ISSUE 4: Wrong Installer Version
+----------------------------
+SYMPTOM: Old installer was used (before folder reorganization)
+FIX: 
+  ** WE NEED TO REBUILD THE INSTALLER FIRST **
+  The current installer may have old paths.
+  Wait for updated Kivun_Terminal_Setup.exe
+
+========================================
+TEMPORARY WORKAROUND
+========================================
+
+If WSL and Ubuntu are working but launcher fails:
+
+1. Open Command Prompt
+2. cd %LOCALAPPDATA%\Kivun
+3. Run: kivun-terminal.bat
+   (This is the fallback launcher with better error messages)
+
+========================================
+NEED MORE HELP?
+========================================
+
+Run the diagnostic and send screenshot.
+This will show exactly what's failing.
+
+========================================

@@ -1,0 +1,215 @@
+========================================
+KIVUN TERMINAL - FOLDER STRUCTURE
+========================================
+
+Date: 2026-03-09
+Version: 1.0.3
+
+This document explains the organized folder structure after cleanup.
+
+========================================
+ROOT DIRECTORY
+========================================
+
+Contains ONLY user-facing files for easy access.
+
+INSTALLER:
+  Kivun_Terminal_Setup.exe     (132 MB) - Main installer executable
+  Kivun_Terminal_Setup.nsi            - NSIS installer source code
+
+LAUNCHERS:
+  claude-hebrew-konsole.bat           - Main launcher (simple, no fallback)
+  kivun-terminal.bat                  - Production launcher (with fallback)
+  kivun-terminal-debug.bat            - Debug launcher (shows detailed output)
+  kivun-terminal-choose-folder.bat    - Launch with folder selection
+  kivun-toggle-vcxsrv.bat             - Toggle VcXsrv/WSLg mode utility
+
+CONFIGURATION:
+  config.txt                          - User configuration file
+  kivun.xlaunch                       - VcXsrv X Server configuration
+  ClaudeHebrew.profile                - Konsole terminal profile
+  ColorSchemeNoam.colorscheme         - Konsole color scheme
+
+UTILITIES:
+  fix-shortcuts.bat                   - Fix broken shortcuts utility
+  create-shortcut.vbs                 - VBScript helper for shortcuts
+  claude_code.ico                     - Application icon
+
+WSL SCRIPTS:
+  kivun-launch.sh                     - WSL helper script (main launcher logic)
+  post-install.sh                     - WSL dependency installation
+
+DOCUMENTATION (User-Facing):
+  START_HERE.txt                      - Quick start guide (READ THIS FIRST)
+  README.md                           - Main documentation
+  README_INSTALLATION.md              - Installation guide
+  README_GITHUB.md                    - GitHub project page
+  QUICK_START.md                      - Quick reference guide
+  LAUNCHER_FIXES.md                   - Launcher troubleshooting
+  KONSOLE_FONTS.md                    - Font configuration details
+
+DOCUMENTATION (Technical):
+  CHANGELOG.md                        - Version history
+  RELEASE_NOTES_v1.0.2.md             - Release notes for v1.0.2
+  RELEASE_NOTES_v1.0.3.md             - Release notes for v1.0.3
+  CODE_REVIEW_v1.0.3.md               - Comprehensive code review
+  CLEANUP_v1.0.3.md                   - Cleanup documentation
+  SECURITY.txt                        - Security considerations
+  CREDENTIALS.txt                     - Login information
+  GIT_COMMANDS.txt                    - Git workflow reference
+  quick-fix-other-pc.txt              - Quick fix for other PCs
+
+OTHER:
+  LICENSE                             - MIT License
+
+========================================
+BACKUP_v1.0.3_WORKING_STATE/
+========================================
+
+Complete backup of working v1.0.3 state created on 2026-03-09.
+
+Contains:
+- All launcher files (claude-hebrew-konsole.bat, kivun-terminal.bat, etc.)
+- Configuration files (config.txt, profiles, color schemes)
+- All documentation (.md files, .txt files)
+- NSIS installer source and executable
+- BACKUP_README.txt - Detailed backup documentation
+
+Purpose:
+- Restore point for working state
+- Reference for correct file versions
+- Safety net before making changes
+
+========================================
+BUILD_FILES/
+========================================
+
+Contains ONLY bundled installers included in NSIS installer.
+
+Contents:
+- Git-2.53.0-64-bit.exe (62 MB)
+- node-v24.14.0-x64.msi (31 MB)
+- vcxsrv-64.1.20.14.0.installer.exe (41 MB)
+
+Purpose:
+- Keeps large installer files organized
+- Reduces clutter in root directory
+- NSIS references these files during build (lines 177-179)
+
+========================================
+DEVELOPMENT/
+========================================
+
+Contains development tools, diagnostic scripts, and obsolete files.
+
+DIAGNOSTIC TOOLS:
+  check-installation.bat              - Installation status checker
+  check-shortcut.vbs                  - Shortcut verification script
+  diagnose.bat                        - System diagnostics
+  diagnose-terminal.bat               - Terminal launch diagnostics
+
+BUILD TOOLS:
+  rebuild-installer.bat               - NSIS installer rebuild script
+  Add-NSIS-RightClick.reg             - Registry file for NSIS integration
+
+TESTING:
+  test-installer-fixes.bat            - Installer fix verification
+  folder-picker.vbs                   - VBScript folder picker
+
+OBSOLETE (Advanced/):
+  auto-setup-ubuntu.bat               - Old automated Ubuntu setup
+  install-claude-hebrew-improved.bat  - Old manual credential installer
+  install-wsl-ubuntu-auto.bat         - Old automated WSL installer
+  README.txt                          - Old advanced options guide
+
+Purpose:
+- Developer tools and utilities
+- Testing and diagnostic scripts
+- Historical/obsolete scripts preserved for reference
+
+========================================
+FOLDER ORGANIZATION RULES
+========================================
+
+ROOT DIRECTORY:
+✅ User-facing files only
+✅ Installer executable
+✅ Main launchers
+✅ Configuration files
+✅ Documentation
+❌ No diagnostic scripts
+❌ No build tools
+❌ No obsolete files
+
+BUILD_FILES/:
+✅ Large bundled installers (Git, Node.js, VcXsrv)
+✅ Initialization scripts referenced by NSIS
+❌ Not for user access
+
+DEVELOPMENT/:
+✅ Diagnostic and testing tools
+✅ Build scripts
+✅ Obsolete/historical files
+✅ Developer utilities
+❌ Not for end users
+
+BACKUP_v1.0.3_WORKING_STATE/:
+✅ Complete working state snapshot
+✅ Restore point
+❌ Do not modify after creation
+
+========================================
+FILE COUNT SUMMARY
+========================================
+
+Root Directory:
+- 31 files (launchers, config, docs, installer)
+- 3 directories
+
+BUILD_FILES/:
+- 3 files (134 MB total - bundled installers only)
+
+DEVELOPMENT/:
+- 13 files + Advanced/ subfolder (4 files)
+
+BACKUP_v1.0.3_WORKING_STATE/:
+- 28 files (133 MB total)
+
+========================================
+CLEANUP HISTORY
+========================================
+
+v1.0.3 Cleanup (2026-03-09):
+1. Created BACKUP_v1.0.3_WORKING_STATE/ with full backup
+2. Moved diagnostic tools to DEVELOPMENT/
+3. Moved build tools to DEVELOPMENT/
+4. Moved obsolete Advanced/ to DEVELOPMENT/
+5. Removed redundant shortcuts
+6. Organized BUILD_FILES/ (already done in previous cleanup)
+
+Result: Clean root directory with only user-facing files.
+
+========================================
+MAINTENANCE GUIDELINES
+========================================
+
+When adding new files:
+- User utilities → Root directory
+- Diagnostic tools → DEVELOPMENT/
+- Bundled installers → BUILD_FILES/
+- Backups → Create new BACKUP_vX.X.X/ folder
+
+Before major changes:
+1. Create new backup folder (BACKUP_vX.X.X/)
+2. Copy all working files
+3. Document in BACKUP_README.txt
+
+When updating version:
+1. Update CHANGELOG.md
+2. Create RELEASE_NOTES_vX.X.X.md
+3. Rebuild installer (Kivun_Terminal_Setup.exe)
+4. Create backup of working state
+
+========================================
+END OF FOLDER STRUCTURE DOCUMENTATION
+========================================

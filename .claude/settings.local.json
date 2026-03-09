@@ -1,0 +1,70 @@
+{
+  "permissions": {
+    "allow": ["Bash", "Edit", "Write", "View", "mcp__*" ,
+      "Bash(\"C:/Program Files \\(x86\\)/NSIS/makensis.exe\":*)",
+      "WebSearch",
+      "WebFetch(domain:mintty.github.io)",
+      "Bash(mintty:*)",
+      "Bash(\"$PROGRAMFILES/Git/git-bash.exe\":*)",
+      "Bash(\"$PROGRAMFILES/Git/usr/bin/mintty.exe\":*)",
+      "Bash(powershell:*)"],
+    "deny": ["Bash(rm -rf /)", "Bash(rm -rf /*)", "Bash(format *)", "Bash(powershell *)", "Bash(pwsh *)"]
+  },
+  "outputStyle": "minimal",
+  "transcriptVerbosity": "minimal",
+  "showToolCalls": true,
+  "showCommandOutput": false,
+  "showCommand": false,
+  "showCode": false,
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo '{\"feedback\": \"Remember: Add unit test if this is a fix. Wire in RunAllTests.\"}'",
+            "timeout": 5,
+            "async": true
+          },
+          {
+            "type": "command",
+            "command": "bash -c 'NON_ASCII=$(grep -rPn \"[^\\x00-\\x7F]\" --include=\"*.bas\" --include=\"*.cls\" \"$CLAUDE_PROJECT_DIR/MyVBAfiles/\" 2>/dev/null); if [ -n \"$NON_ASCII\" ]; then echo \"{\\\"feedback\\\": \\\"WARNING: Non-English text detected in .bas/.cls files! Check and fix: $NON_ASCII\\\"}\"; fi'",
+            "timeout": 10,
+            "async": true
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "rm -f \"$CLAUDE_PROJECT_DIR\"/tmpclaude-*",
+            "timeout": 15,
+            "async": true
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "rm -f \"$CLAUDE_PROJECT_DIR\"/tmpclaude-*",
+            "timeout": 15,
+            "async": true
+          },
+          {
+            "type": "command",
+            "command": "cscript //nologo \"$CLAUDE_PROJECT_DIR/.claude/scripts/cleanup_temp.vbs\"",
+            "timeout": 30,
+            "async": true
+          }
+        ]
+      }
+    ]
+  }
+}

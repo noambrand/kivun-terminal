@@ -1,0 +1,107 @@
+╔════════════════════════════════════════════════════════════╗
+║                                                            ║
+║        Kivun Terminal for Claude Code v1.0.3                ║
+║         Hebrew & RTL Support for Claude Code (Konsole)     ║
+║                                                            ║
+╚════════════════════════════════════════════════════════════╝
+
+🚀 INSTALLATION - First Time Setup:
+
+1. Run the installer:
+   → Double-click: Kivun_Terminal_Setup.exe
+   → Select "Run as Administrator" if prompted
+   → Follow the wizard:
+     - Choose language (English/Hebrew)
+     - Set Ubuntu credentials (or use defaults)
+     - Select components (Git is optional)
+   → Wait for completion
+   → Restart if prompted, installer resumes automatically
+
+✨ Smart Installation (v1.0.2):
+   ✓ Auto-detects existing Git, WSL, Ubuntu
+   ✓ Skips what's already installed
+   ✓ Resumes after restart automatically
+   ✓ Installs everything in one go!
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✨ DAILY USE - After Installation:
+
+Desktop shortcuts (two options):
+  "Kivun Terminal"                → opens in home folder
+  "Kivun Terminal (Choose Folder)" → pick a project folder
+Or: Start Menu → Kivun Terminal
+Or: Right-click any folder → Send To → Kivun Terminal
+Or: Right-click any folder → "Open with Kivun Terminal"
+
+That's it! Konsole opens maximized with:
+  ✓ Window title: "Kivun Terminal" (no "- Konsole" suffix)
+  ✓ Custom color scheme (light blue background, dark text, blue cursor)
+  ✓ Hebrew BiDi support (RTL rendering)
+  ✓ Language preference from config.txt
+  ✓ Ready to code!
+
+A small cmd window appears briefly saying "you can ignore this window".
+It closes automatically - focus on the Konsole window.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📖 WHAT YOU GET:
+
+✅ Konsole terminal with proper Hebrew RTL support
+✅ Custom color scheme (auto-configured)
+✅ Hebrew fonts optimized for terminal display
+✅ Choose response language (Hebrew/English)
+✅ One-click launcher after installation
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+💡 TIPS:
+
+• A cmd window titled "you can ignore this window" appears briefly (closes automatically)
+• Change language anytime: Edit config.txt, restart launcher
+• Font settings: Konsole → Settings → Edit Profile → Appearance
+• Default credentials: username / password (for sudo commands)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+❓ PROBLEMS?
+
+Problem: Konsole closes immediately
+→ Run: Start Menu → Kivun Terminal → Debug Mode
+
+Problem: VcXsrv error "Cannot establish listening sockets" (v1.0.3 fixed)
+→ Quick fix: taskkill /F /IM vcxsrv.exe
+→ Then launch again
+→ Or: Set USE_VCXSRV=false in config.txt
+
+Problem: Launcher not opening Konsole (v1.0.3 fixed)
+→ Use: kivun-terminal.bat (main launcher)
+→ Or: kivun-terminal-debug.bat (shows progress)
+→ Fixed in v1.0.3: claude-hebrew-konsole.bat now works properly
+
+Problem: Want to check what's installed
+→ Run: Start Menu → Kivun Terminal → Diagnostics
+
+Problem: Default colors instead of custom scheme
+→ Color scheme installs automatically during setup
+→ Launch terminal at least once to apply
+
+Problem: WSL not installed
+→ Installer handles this automatically
+→ Restart if prompted
+
+Problem: Git detection issues (v1.0.2 fixed)
+→ Installer now correctly detects Git (no false positives)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📚 For detailed documentation:
+   • README_INSTALLATION.md - Complete installation guide
+   • KONSOLE_FONTS.md - Font configuration tips
+   • SECURITY.txt - Password security info
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Ready to start? See README_INSTALLATION.md
+Already installed? Use the "Kivun Terminal" desktop shortcut

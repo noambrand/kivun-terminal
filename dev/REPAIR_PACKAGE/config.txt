@@ -1,0 +1,67 @@
+# Kivun Terminal Configuration
+# Primary RTL language and response language settings
+
+# =================================================================
+# PRIMARY RTL LANGUAGE
+# =================================================================
+# Your primary RTL language (selected during installation)
+# This determines which RTL language you primarily work with
+PRIMARY_LANGUAGE=hebrew
+
+# =================================================================
+# CLAUDE RESPONSE LANGUAGE
+# =================================================================
+# Controls what language Claude Code responds in
+#
+# Supported Languages:
+#   english      - English (default - best for technical content)
+#   hebrew       - Hebrew (עברית)
+#   arabic       - Arabic (العربية)
+#   persian      - Persian/Farsi (فارسی)
+#   urdu         - Urdu (اردو)
+#   pashto       - Pashto (پښتو)
+#   kurdish      - Kurdish (کوردی)
+#   dari         - Dari (دری)
+#   uyghur       - Uyghur (ئۇيغۇرچە)
+#   sindhi       - Sindhi (سنڌي)
+#   azerbaijani  - Azerbaijani (آذربایجان)
+#
+# Default: english (recommended for development/technical work)
+# You can change this anytime and restart the Kivun Terminal launcher
+RESPONSE_LANGUAGE=english
+
+# =================================================================
+# UBUNTU CREDENTIALS
+# =================================================================
+# Username and password created during Ubuntu installation
+#
+# Default: username / password
+# These work fine for most users (see SECURITY.txt for details)
+#
+# Change these if you want custom credentials:
+# - Use only lowercase letters, numbers, underscore
+# - Password can be anything (no special requirements)
+# - Must edit BEFORE installation
+USERNAME=username
+PASSWORD=password
+
+# =================================================================
+# VCXSRV X SERVER (KEYBOARD SWITCHING)
+# =================================================================
+# Set to true to use VcXsrv instead of WSLg for Konsole display.
+# This enables Alt+Shift keyboard language switching inside Konsole.
+#
+# Requires VcXsrv to be installed:
+#   - Select "VcXsrv X Server" during installation, OR
+#   - Install manually from https://sourceforge.net/projects/vcxsrv/
+#
+# Default: false (uses WSLg - most compatible, works out-of-box)
+# Only set to true if you installed VcXsrv and need Alt+Shift switching
+USE_VCXSRV=false
+
+# =================================================================
+# For more information:
+# - SECURITY.txt - Password security explained
+# - CREDENTIALS.txt - Login information
+# - README_INSTALLATION.md - Full setup guide
+# =================================================================

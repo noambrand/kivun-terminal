@@ -1,0 +1,69 @@
+========================================
+⚠️ INSTALLER NEEDS REBUILDING
+========================================
+
+Date: 2026-03-09
+Issue: Installer is outdated after folder reorganization
+
+PROBLEM:
+- Current Kivun_Terminal_Setup.exe: Built 14:10 (OUTDATED)
+- Kivun_Terminal_Setup.nsi: Updated 14:38 (NEW PATHS)
+- Missing files in installations: ClaudeHebrew.profile, ColorSchemeNoam.colorscheme
+
+ROOT CAUSE:
+- Folder reorganization for GitHub (moved to scripts/, config/, etc.)
+- NSIS paths updated to use ../ references
+- BUT installer not recompiled yet
+
+========================================
+TO REBUILD INSTALLER:
+========================================
+
+METHOD 1: NSIS Right-Click (Easiest)
+-------------------------------------
+1. Navigate to: build\Kivun_Terminal_Setup.nsi
+2. Right-click → "Compile NSIS Script"
+3. New Kivun_Terminal_Setup.exe will be created in root
+
+METHOD 2: Command Line
+-------------------------------------
+1. Open Command Prompt
+2. cd C:\Users\noam.ORHITEC\Downloads\ClaudeHebrew_Installer\build
+3. "C:\Program Files (x86)\NSIS\makensis.exe" Kivun_Terminal_Setup.nsi
+
+METHOD 3: Use COMPILE.bat (in dev/)
+-------------------------------------
+1. cd dev
+2. COMPILE.bat
+
+========================================
+VERIFY AFTER REBUILD:
+========================================
+
+1. Check file date:
+   - Kivun_Terminal_Setup.exe should be newer than 14:38
+
+2. Test installation on VM or clean PC:
+   - Install Kivun Terminal
+   - Check C:\Users\[User]\AppData\Local\Kivun\
+   - Verify ClaudeHebrew.profile exists
+   - Verify ColorSchemeNoam.colorscheme exists
+   - Run launcher - should open Konsole
+
+========================================
+TEMPORARY WORKAROUND (CURRENT):
+========================================
+
+Use REPAIR_PACKAGE for existing installations:
+- Copy REPAIR_PACKAGE to affected PC
+- Run REPAIR.bat
+- Fixes missing files immediately
+
+========================================
+PRIORITY: HIGH
+========================================
+
+New installations will fail without these files!
+Rebuild installer before distributing to more PCs.
+
+========================================

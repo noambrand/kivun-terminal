@@ -1,0 +1,55 @@
+========================================
+✅ SIMPLE STRUCTURE - EVERYTHING IN ROOT!
+========================================
+
+📄 Kivun_Terminal_Setup.nsi  <-- NSIS FILE IS HERE!
+📦 Kivun_Terminal_Setup.exe  <-- Compiled installer
+
+========================================
+TO REBUILD INSTALLER:
+========================================
+
+1. Find: Kivun_Terminal_Setup.nsi (in root folder)
+2. Right-click → "Compile NSIS Script"
+3. Done! New .exe created.
+
+OR just double-click: dev\COMPILE.bat
+
+========================================
+ALL FILES IN ROOT (EASY TO FIND):
+========================================
+
+LAUNCHERS:
+  - claude-hebrew-konsole.bat
+  - kivun-terminal.bat  
+  - kivun-terminal-debug.bat
+  - kivun-toggle-vcxsrv.bat
+
+CONFIG:
+  - config.txt
+  - ClaudeHebrew.profile
+  - ColorSchemeNoam.colorscheme
+  - kivun.xlaunch
+
+SCRIPTS:
+  - kivun-launch.sh (WSL helper)
+  - post-install.sh (dependency installer)
+  - create-shortcut.vbs
+
+OTHER:
+  - claude_code.ico (icon)
+  - README.md
+  - LICENSE
+
+========================================
+FOLDERS (ONLY 3):
+========================================
+
+📁 docs/          All documentation
+📁 bundled/       Git, Node, VcXsrv installers  
+📁 dev/           Development tools
+📁 REPAIR_PACKAGE/ Fix for other PC
+
+========================================
+THAT'S IT! SIMPLE AND EASY!
+========================================

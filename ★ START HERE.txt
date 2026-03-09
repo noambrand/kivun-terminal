@@ -1,0 +1,39 @@
+========================================
+✅ KIVUN TERMINAL - CLEAN & SIMPLE
+========================================
+
+ROOT FOLDER - ONLY WHAT YOU NEED:
+========================================
+
+📦 Kivun_Terminal_Setup.exe    ⭐ THE INSTALLER (distribute this)
+📄 Kivun_Terminal_Setup.nsi    ⭐ NSIS SOURCE (rebuild installer)
+📖 README.md                    ⭐ Documentation
+
+========================================
+TO REBUILD INSTALLER:
+========================================
+
+Right-click: Kivun_Terminal_Setup.nsi
+→ "Compile NSIS Script"
+
+New .exe created in 5 seconds!
+
+========================================
+FOLDERS (everything else hidden):
+========================================
+
+📁 source/      All .bat, .sh, config files (you rarely need these)
+📁 docs/        All documentation
+📁 bundled/     Git, Node, VcXsrv (large files)
+📁 dev/         Development tools & repair package
+
+========================================
+FOR OTHER PC FIX:
+========================================
+
+Copy: dev/REPAIR_PACKAGE
+to the other PC and run REPAIR.bat
+
+========================================
+THAT'S IT! SIMPLE AND CLEAN!
+========================================

@@ -1,0 +1,7 @@
+Windows Registry Editor Version 5.00
+
+[HKEY_CLASSES_ROOT\*\shell\Compile NSIS Script]
+@="Compile NSIS Script"
+
+[HKEY_CLASSES_ROOT\*\shell\Compile NSIS Script\command]
+@="\"C:\\Program Files (x86)\\NSIS\\makensis.exe\" \"%1\""

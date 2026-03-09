@@ -1,0 +1,46 @@
+# Kivun Terminal - Git Ignore File
+
+# Backups
+.backup/
+*.backup
+backups/
+
+# Large binaries (use GitHub Releases instead)
+*.exe
+*.msi
+bundled/
+build/.bundled/
+
+# IDE and Editor Files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Windows System Files
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Temporary Files
+*.tmp
+*.temp
+*.log
+*.cache
+
+# WSL/Ubuntu Generated Files
+.wsl-updated
+*.state
+
+# Node Modules
+node_modules/
+package-lock.json
+
+# Development Test Files
+dev/test-results/
+dev/screenshots/
+
+# Keep VBScript helpers (they're small)
+!*.vbs

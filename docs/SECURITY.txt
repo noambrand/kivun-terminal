@@ -1,0 +1,151 @@
+================================================================================
+  CLAUDEHEBREW - SECURITY & PASSWORD INFORMATION
+================================================================================
+
+## Default Generic Credentials
+
+By default, ClaudeHebrew uses:
+- Username: username
+- Password: password
+
+These are stored in config.txt and used during installation.
+
+## Why Generic Credentials?
+
+**1. Simplicity**
+   - No "I forgot my password" support requests
+   - No confusion about blank password entry
+   - Works out-of-box without user intervention
+
+**2. Minimal Risk in WSL Context**
+   - WSL runs isolated on your local machine
+   - NOT accessible from network
+   - NOT accessible from internet
+   - Requires physical access to your computer
+
+**3. Purpose**
+   - Development and learning environment
+   - NOT a production server
+   - NOT hosting sensitive services
+
+## Security Risk Assessment
+
+✅ LOW RISK:
+   - Single-user personal computer
+   - WSL not exposed to network
+   - Local development only
+   - Package installation convenience
+
+⚠️ MEDIUM RISK:
+   - Shared/multi-user computers
+   - Storing sensitive code or credentials in WSL
+   - Using WSL for work projects with proprietary code
+
+❌ HIGH RISK:
+   - If you configure port forwarding from WSL to network
+   - If you run network services from WSL
+   - If you store production credentials/secrets
+
+## When to Change Password
+
+You SHOULD change the password if:
+- Multiple people use your computer
+- You store sensitive code/data in Ubuntu
+- You feel uncomfortable with generic password
+- Company security policy requires it
+
+You DON'T need to change if:
+- Personal single-user computer
+- Just learning/experimenting
+- No sensitive data stored
+
+## How to Customize Credentials
+
+### Option 1: Before Installation (Easiest)
+
+1. Open: config.txt
+2. Change these lines:
+   USERNAME=yourusername
+   PASSWORD=yourpassword
+3. Save the file
+4. Run install-wsl-ubuntu-simple.bat
+
+The installer will use your custom credentials.
+
+### Option 2: After Installation
+
+**In Ubuntu terminal, run:**
+```bash
+passwd
+```
+
+It will ask:
+- Current password: password
+- New password: (type your new password)
+- Retype new password: (type it again)
+
+**IMPORTANT:** When typing passwords in Linux, nothing appears on screen
+(no dots, no asterisks). This is normal - just type and press Enter.
+
+### Option 3: Change Username (Requires Reinstall)
+
+Changing username after installation is complex. Instead:
+
+1. Uninstall Ubuntu:
+   ```cmd
+   wsl --unregister Ubuntu
+   ```
+   ⚠️ WARNING: This deletes all Ubuntu data!
+
+2. Edit config.txt with new username
+3. Run install-wsl-ubuntu-simple.bat again
+
+## Additional Security Measures
+
+### 1. WSL Firewall
+WSL has limited network exposure by default. To check:
+```bash
+ip addr show eth0
+```
+The IP shown (usually 172.x.x.x) is only accessible from Windows host.
+
+### 2. Sudo Configuration
+Generic password allows sudo access. If you change password, sudo will
+require the new password.
+
+### 3. SSH Access
+By default, SSH server is NOT installed. Don't install it unless needed.
+If you do, DEFINITELY change from generic password first!
+
+## Support Trade-offs
+
+**With Generic Password:**
+✅ Zero "forgot password" support tickets
+✅ No "nothing appears when I type" confusion
+✅ Works immediately without user setup
+❌ Less secure on shared computers
+
+**With Custom Password:**
+✅ More secure
+✅ Meets security policies
+❌ Users forget passwords (we can't reset them)
+❌ Confusion about blank password typing
+❌ Extra setup step
+
+## Our Recommendation
+
+**For most users:** Keep generic password
+- It's a local development environment
+- WSL is isolated
+- Convenience outweighs minimal risk
+
+**Change it if:**
+- Company requires it
+- Shared computer
+- Storing sensitive data
+- You're uncomfortable with it
+
+================================================================================
+
+Questions? See CREDENTIALS.txt for login info, or README_INSTALLATION.md
+for setup instructions.

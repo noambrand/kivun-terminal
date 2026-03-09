@@ -1,0 +1,70 @@
+QUICK FIX FOR OTHER PC
+======================
+
+If Kivun Terminal opens in regular CMD instead of Konsole:
+
+STEP 1: Run fix-shortcuts.bat
+------------------------------
+Double-click: fix-shortcuts.bat
+
+This updates shortcuts to use the correct launcher.
+
+
+STEP 2: Check if Konsole is installed
+--------------------------------------
+Double-click: diagnose-terminal.bat
+
+This checks if WSL, Ubuntu, and Konsole are properly installed.
+
+
+STEP 3: If Konsole not installed
+---------------------------------
+Open WSL Ubuntu and run:
+  sudo apt install -y konsole xdotool wmctrl
+
+
+STEP 4: If still not working
+-----------------------------
+The old installer may have been used.
+
+Option A: Rebuild installer
+  1. On the working PC, run: BUILD_INSTALLER.bat
+  2. Copy new Kivun_Terminal_Setup.exe to other PC
+  3. Run installer on other PC
+
+Option B: Manual fix
+  1. Copy these files to other PC:
+     - claude-hebrew-konsole.bat
+     - kivun-launch.sh
+     - fix-shortcuts.bat
+     - create-shortcut.vbs
+     - check-shortcut.vbs
+  2. Run fix-shortcuts.bat
+  3. Test desktop shortcut
+
+
+COMMON ISSUES
+=============
+
+Issue: "WSL not installed"
+Fix: Run installer, it will install WSL
+
+Issue: "Konsole not installed"
+Fix: wsl -d Ubuntu
+     sudo apt install -y konsole
+
+Issue: "WSLg not available"
+Fix: Edit config.txt, set USE_VCXSRV=true
+     Install VcXsrv component
+
+Issue: Shortcuts point to wrong launcher
+Fix: Run fix-shortcuts.bat
+
+
+VERIFY IT WORKS
+===============
+After fix:
+1. Double-click desktop "Kivun Terminal" shortcut
+2. Should open Konsole window (not CMD)
+3. Window title should be "Kivun Terminal"
+4. Background should be light blue
