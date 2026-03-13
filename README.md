@@ -31,10 +31,13 @@ The installer auto-detects what you already have and skips it.
 ### macOS
 
 1. **[Download](https://github.com/noambrand/kivun-terminal/releases/latest)** `Kivun_Terminal_Setup_<version>.pkg`
-2. Double-click the `.pkg` file and follow the installer
-3. Open Terminal and run `claude`
+2. **Right-click** the `.pkg` file → **Open** (required because the package is unsigned — macOS will block a regular double-click)
+3. Enter your password when prompted — the installer needs admin access to install Homebrew, Node.js, Git, and Claude Code
+4. Open **Terminal** (Applications → Utilities → Terminal) and type `claude`
 
-The installer sets up Homebrew (if needed), Node.js, Git, and Claude Code. On first run, macOS may show an "unidentified developer" warning — right-click the `.pkg` and select Open.
+> **What happens during install:** The .pkg runs a script that installs [Homebrew](https://brew.sh) (the macOS package manager), then uses it to install Node.js and Git, then installs Claude Code via `npm`. Everything is downloaded fresh — no binaries are bundled. An internet connection is required.
+
+> **First time using Claude Code?** You'll need an [Anthropic API key](https://console.anthropic.com). Claude will ask for it on first launch.
 
 ![Terminal Demo](/kivun_terminal_GIF.gif)
 

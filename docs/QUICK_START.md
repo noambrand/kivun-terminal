@@ -19,11 +19,19 @@ Kivun Terminal is a Claude Code installer for Windows and macOS. It sets up Node
 
 ### macOS
 
-1. Double-click `Kivun_Terminal_Setup_<version>.pkg`
-2. Follow the installer (may need right-click - Open for unsigned package)
-3. Open Terminal and run `claude`
+> **Note:** An internet connection is required. The installer downloads all dependencies via Homebrew — no binaries are bundled in the .pkg.
 
-The installer sets up Homebrew, Node.js, Git, and Claude Code automatically.
+1. Download `Kivun_Terminal_Setup_<version>.pkg` from the [latest release](https://github.com/noambrand/kivun-terminal/releases/latest)
+2. **Right-click** the `.pkg` file → select **Open** (macOS blocks unsigned packages on double-click)
+3. Click "Open" again in the confirmation dialog
+4. Enter your Mac password when prompted (admin access is needed to install packages)
+5. Wait for the installer to finish — it installs Homebrew, Node.js, Git, and Claude Code
+6. Open **Terminal** (Finder → Applications → Utilities → Terminal)
+7. Type `claude` and press Enter
+
+On first launch, Claude Code will ask for your [Anthropic API key](https://console.anthropic.com).
+
+**If something goes wrong:** Check the install log at `/tmp/kivun_install.log`.
 
 ## Using Kivun Terminal
 
