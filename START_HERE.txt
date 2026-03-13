@@ -1,0 +1,44 @@
+╔════════════════════════════════════════════════════════════╗
+║                                                            ║
+║        Kivun Terminal for Claude Code v2.0.1                ║
+║        Windows & macOS Installer                           ║
+║                                                            ║
+╚════════════════════════════════════════════════════════════╝
+
+INSTALLATION:
+
+  Windows:
+    1. Double-click Kivun_Terminal_Setup.exe (Run as Administrator)
+    2. Follow the wizard — choose your language, click Next
+    3. The installer auto-detects what you have and skips it
+
+  macOS:
+    1. Double-click Kivun_Terminal_Setup.pkg
+    2. Follow the prompts — Homebrew, Node.js, Git, and Claude Code
+       are installed automatically
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+DAILY USE:
+
+  Desktop shortcut:
+    "Kivun Terminal"  → pick a project folder and start Claude Code
+
+  Or: Start Menu → Kivun Terminal (Windows)
+  Or: Right-click any folder → "Open with Kivun Terminal" (Windows)
+  Or: Open Terminal and run 'claude' (macOS)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PROBLEMS?
+
+  → See docs/QUICK_START.md for setup details
+  → See docs/CHANGELOG.md for version history
+  → Report issues: https://github.com/noambrand/kivun-terminal/issues
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+DOCUMENTATION:
+
+  docs/QUICK_START.md     Quick start guide
+  docs/CHANGELOG.md       Version history and changes

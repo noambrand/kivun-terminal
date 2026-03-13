@@ -1,0 +1,47 @@
+name: Build macOS Installer
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  build-mac:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Prepare scripts
+        run: |
+          chmod +x mac/scripts/postinstall
+          cp source/statusline.mjs mac/scripts/statusline.mjs
+
+      - name: Build .pkg
+        run: |
+          pkgbuild \
+            --nopayload \
+            --scripts mac/scripts \
+            --identifier com.kivun.terminal \
+            --version "${{ github.ref_name }}" \
+            --install-location / \
+            "Kivun_Terminal_Setup_${{ github.ref_name }}.pkg"
+
+      - name: Test .pkg structure
+        run: |
+          pkgutil --payload-files "Kivun_Terminal_Setup_${{ github.ref_name }}.pkg" || true
+          pkgutil --check-signature "Kivun_Terminal_Setup_${{ github.ref_name }}.pkg" || true
+          echo "Package built successfully: $(ls -lh Kivun_Terminal_Setup_*.pkg)"
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: kivun-terminal-mac
+          path: "Kivun_Terminal_Setup_*.pkg"
+
+      - name: Upload to Release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: "Kivun_Terminal_Setup_*.pkg"

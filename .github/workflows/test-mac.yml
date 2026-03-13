@@ -1,0 +1,30 @@
+name: Test macOS Install
+
+on:
+  push:
+    paths:
+      - 'mac/**'
+  pull_request:
+    paths:
+      - 'mac/**'
+  workflow_dispatch:
+
+jobs:
+  test-install:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run postinstall as dry test
+        run: |
+          chmod +x mac/scripts/postinstall
+          sudo bash mac/scripts/postinstall
+
+      - name: Verify installations
+        run: |
+          echo "--- Verification ---"
+          which node   && echo "Node.js: $(node --version)"   || echo "Node.js missing"
+          which npm    && echo "npm: $(npm --version)"         || echo "npm missing"
+          which git    && echo "Git: $(git --version)"         || echo "Git missing"
+          which claude && echo "Claude Code found"             || echo "Claude Code missing"

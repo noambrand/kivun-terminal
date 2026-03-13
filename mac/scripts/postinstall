@@ -1,0 +1,102 @@
+#!/bin/bash
+# Kivun Terminal — macOS dependency installer (postinstall)
+# Runs as root after .pkg installation
+
+set -e
+
+LOG_FILE="/tmp/kivun_install.log"
+REAL_USER="${SUDO_USER:-$USER}"
+REAL_HOME=$(eval echo "~$REAL_USER")
+
+log() { echo "[$(date '+%H:%M:%S')] $1" | tee -a "$LOG_FILE"; }
+run_as_user() { sudo -u "$REAL_USER" bash -c "$1"; }
+
+log "=== Kivun Terminal macOS Installer ==="
+log "User: $REAL_USER | Home: $REAL_HOME"
+
+# --- Homebrew ---
+if ! run_as_user "command -v brew" &>/dev/null; then
+    log "Installing Homebrew..."
+    run_as_user 'NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"'
+    # Add brew to path for Apple Silicon
+    if [[ $(uname -m) == "arm64" ]]; then
+        run_as_user 'echo "eval \"\$(/opt/homebrew/bin/brew shellenv)\"" >> ~/.zprofile'
+        eval "$(/opt/homebrew/bin/brew shellenv)"
+    fi
+    log "Homebrew installed"
+else
+    log "Homebrew already installed — skipping"
+fi
+
+# Ensure brew is in PATH for this session
+if [[ $(uname -m) == "arm64" ]]; then
+    export PATH="/opt/homebrew/bin:$PATH"
+else
+    export PATH="/usr/local/bin:$PATH"
+fi
+
+# --- Node.js ---
+if ! run_as_user "command -v node" &>/dev/null; then
+    log "Installing Node.js..."
+    run_as_user "brew install node"
+    log "Node.js $(run_as_user 'node --version') installed"
+else
+    log "Node.js $(run_as_user 'node --version') already installed — skipping"
+fi
+
+# --- Git ---
+if ! run_as_user "command -v git" &>/dev/null; then
+    log "Installing Git..."
+    run_as_user "brew install git"
+    log "Git installed"
+else
+    log "Git already installed — skipping"
+fi
+
+# --- Claude Code ---
+if ! run_as_user "command -v claude" &>/dev/null; then
+    log "Installing Claude Code..."
+    run_as_user "npm install -g @anthropic-ai/claude-code"
+    log "Claude Code installed"
+else
+    log "Claude Code already installed — skipping"
+fi
+
+# --- Statusline ---
+STATUSLINE_DIR="/usr/local/share/kivun"
+STATUSLINE_SRC="$(dirname "$0")/statusline.mjs"
+log "Installing statusline..."
+mkdir -p "$STATUSLINE_DIR"
+if [ -f "$STATUSLINE_SRC" ]; then
+    cp "$STATUSLINE_SRC" "$STATUSLINE_DIR/statusline.mjs"
+    chmod 644 "$STATUSLINE_DIR/statusline.mjs"
+    log "Statusline copied to $STATUSLINE_DIR/statusline.mjs"
+else
+    log "WARNING: statusline.mjs not found in package — skipping"
+fi
+
+# Set CLAUDE_CODE_STATUSLINE in user's shell profile
+SHELL_RC="$REAL_HOME/.zshrc"
+if [ -f "$REAL_HOME/.bashrc" ] && [ ! -f "$REAL_HOME/.zshrc" ]; then
+    SHELL_RC="$REAL_HOME/.bashrc"
+fi
+EXPORT_LINE="export CLAUDE_CODE_STATUSLINE=\"$STATUSLINE_DIR/statusline.mjs\""
+if ! grep -q "CLAUDE_CODE_STATUSLINE" "$SHELL_RC" 2>/dev/null; then
+    run_as_user "echo '' >> '$SHELL_RC' && echo '# Kivun Terminal statusline' >> '$SHELL_RC' && echo '$EXPORT_LINE' >> '$SHELL_RC'"
+    log "CLAUDE_CODE_STATUSLINE added to $SHELL_RC"
+else
+    log "CLAUDE_CODE_STATUSLINE already in $SHELL_RC — skipping"
+fi
+
+# --- Summary ---
+log ""
+log "=== Installation Complete ==="
+log "Node.js: $(run_as_user 'node --version' 2>/dev/null || echo 'N/A')"
+log "npm:     $(run_as_user 'npm --version' 2>/dev/null || echo 'N/A')"
+log "Git:     $(run_as_user 'git --version' 2>/dev/null || echo 'N/A')"
+log "Claude:  $(run_as_user 'claude --version' 2>/dev/null || echo 'N/A')"
+log ""
+log "Next: Open Terminal and run 'claude' to start."
+log "Log saved to $LOG_FILE"
+
+exit 0

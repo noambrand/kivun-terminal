@@ -1,0 +1,46 @@
+# Kivun Terminal - Git Ignore File
+
+# Backups
+.backup/
+*.backup
+backups/
+
+# Build output
+Kivun_Terminal_Setup.exe
+build/.bundled/
+bundled/
+
+# IDE and Editor Files
+.claude/
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Windows System Files
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.lnk
+
+# Temporary Files
+*.tmp
+*.temp
+*.log
+*.cache
+
+# State Files
+*.state
+
+# Node Modules
+node_modules/
+package-lock.json
+
+# Development Test Files
+dev/test-results/
+dev/screenshots/
+
+# Keep VBScript helpers (they're small)
+!*.vbs

@@ -1,0 +1,6 @@
+# Kivun Terminal Configuration
+# Claude Code response language
+#
+# Options: english, hebrew
+# Default: english
+RESPONSE_LANGUAGE=english
