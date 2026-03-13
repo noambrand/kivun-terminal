@@ -12,7 +12,7 @@
 
 ## What You Get
 
-- **Automatic installation** - Node.js + Claude Code installed and configured automatically
+- **Automatic installation** - Node.js, Git, and Claude Code installed and configured automatically
 - **Clean, modern terminal** - light blue theme with dark text (Windows Terminal on Windows)
 - **One-click launch** - double-click the desktop shortcut and Claude Code starts immediately (Windows)
 - **Folder picker** - choose a project folder and Claude opens right there, no `cd` needed (Windows)
