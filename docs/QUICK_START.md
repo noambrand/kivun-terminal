@@ -65,6 +65,28 @@ Double-click the desktop shortcut "Kivun Terminal" - opens Claude Code in your h
 2. Edit `RESPONSE_LANGUAGE=english` to `RESPONSE_LANGUAGE=hebrew`
 3. Save and close
 
+## Status Bar
+
+Kivun Terminal adds a status bar at the bottom of Claude Code. It updates automatically and shows:
+
+```
+Opus 4.6 | context used:23% | my-project | total tokens:45K | duration:12m | /Users/me/my-project
+```
+
+**Fields:**
+
+- **Model** — which Claude model is active. Green = Opus, Yellow = Sonnet or Haiku.
+- **Context used** — how much of the context window has been consumed.
+  - Green: under 40% — plenty of room
+  - Yellow: 40–69% — getting there
+  - Red: 70%+ — running low, consider starting a new session
+- **Project** — the name of your current working folder (cyan).
+- **Total tokens** — combined input and output tokens used this session (e.g. "45K", "1.2M").
+- **Duration** — how long the session has been running (e.g. "12m" or "1:30" for hours).
+- **Full path** — the complete path to your working directory.
+
+The status bar is installed automatically — no configuration needed.
+
 ## Files
 
 Everything is installed in: `%LOCALAPPDATA%\Kivun`

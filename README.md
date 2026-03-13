@@ -17,6 +17,26 @@
 - **One-click launch** - double-click the desktop shortcut and Claude Code starts immediately (Windows)
 - **Folder picker** - choose a project folder and Claude opens right there, no `cd` needed (Windows)
 - **Right-click any folder** - "Open with Kivun Terminal" context menu integration (Windows)
+- **Status bar** - live display of model, context usage, token count, and session duration
+
+## Status Bar
+
+Kivun Terminal adds a status bar at the bottom of Claude Code that shows live session info:
+
+```
+Opus 4.6 | context used:23% | my-project | total tokens:45K | duration:12m | /Users/me/my-project
+```
+
+| Field | What it shows | Colors |
+|-------|---------------|--------|
+| **Model** | Active Claude model (e.g. "Opus 4.6") | Green = Opus, Yellow = Sonnet/Haiku |
+| **Context used** | % of context window consumed | Green = under 40%, Yellow = 40–69%, Red = 70%+ |
+| **Project** | Current folder name | Cyan |
+| **Total tokens** | Combined input + output tokens | Yellow |
+| **Duration** | Session time (e.g. "12m" or "1:30") | Gray |
+| **Full path** | Complete working directory path | Gray |
+
+> **Tip:** Watch the **context used** field — when it turns red (70%+), Claude is running low on context and may start forgetting earlier parts of the conversation. Consider starting a new session.
 
 ## Installation
 
