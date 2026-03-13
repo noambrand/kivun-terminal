@@ -7,6 +7,9 @@
 
 INSTALLATION:
 
+  ⚠ The installer may close open terminal windows during setup.
+    Save your work in any open terminals before running the installer.
+
   Windows:
     1. Double-click Kivun_Terminal_Setup.exe (Run as Administrator)
     2. Follow the wizard — choose your language, click Next

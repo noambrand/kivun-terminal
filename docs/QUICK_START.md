@@ -8,6 +8,8 @@ Kivun Terminal is a Claude Code installer for Windows and macOS. It sets up Node
 
 ### Windows
 
+> **Note:** The installer may close open terminal windows (Windows Terminal, cmd.exe) during setup — particularly when installing Git or Windows Terminal. Save your work in any open terminals before running the installer.
+
 1. Run `Kivun_Terminal_Setup.exe` as Administrator
 2. Follow the wizard:
    - Enter your name
