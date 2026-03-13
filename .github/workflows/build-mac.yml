@@ -45,3 +45,5 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: "Kivun_Terminal_Setup_*.pkg"
+          fail_on_unmatched_files: false
+          make_latest: true
