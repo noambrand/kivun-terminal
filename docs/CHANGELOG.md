@@ -30,7 +30,7 @@ Complete rewrite removing WSL/Ubuntu/Konsole dependency. Claude Code now runs na
 ### Changed
 - Architecture: NSIS -> Node.js -> Claude Code -> Windows Terminal (was: NSIS -> WSL -> Ubuntu -> Konsole -> VcXsrv -> Claude Code)
 - Launcher scripts rewritten as pure Windows batch files (no more bash/WSL)
-- Config simplified to single setting: RESPONSE_LANGUAGE (english or hebrew)
+- Config simplified to single setting: RESPONSE_LANGUAGE (english + 24 RTL languages)
 - Installer simplified: Node.js + Claude Code + Windows Terminal (recommended) + Git (optional)
 
 ### Added

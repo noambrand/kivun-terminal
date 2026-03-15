@@ -1,6 +1,6 @@
 # Kivun Terminal Configuration
 # Claude Code response language
 #
-# Options: english, hebrew
+# Options: english, hebrew, arabic, persian, urdu, kurdish, pashto, sindhi, yiddish, syriac, dhivehi, nko, adlam, mandaic, samaritan, dari, uyghur, balochi, kashmiri, shahmukhi, azeri_south, jawi, hausa_ajami, rohingya, turoyo
 # Default: english
 RESPONSE_LANGUAGE=english

@@ -62,7 +62,8 @@ Double-click the desktop shortcut "Kivun Terminal" - opens Claude Code in your h
 ### Change Language
 
 1. Start Menu - Kivun Terminal - Configuration
-2. Edit `RESPONSE_LANGUAGE=english` to `RESPONSE_LANGUAGE=hebrew`
+2. Edit `RESPONSE_LANGUAGE=english` to any supported RTL language:
+   - `hebrew`, `arabic`, `persian`, `urdu`, `kurdish`, `pashto`, `sindhi`, `yiddish`, `syriac`, `dhivehi`, `nko`, `adlam`, `mandaic`, `samaritan`, `dari`, `uyghur`, `balochi`, `kashmiri`, `shahmukhi`, `azeri_south`, `jawi`, `hausa_ajami`, `rohingya`, `turoyo`
 3. Save and close
 
 ## Status Bar
