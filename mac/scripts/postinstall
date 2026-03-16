@@ -2,53 +2,60 @@
 # Kivun Terminal — macOS dependency installer (postinstall)
 # Runs as root after .pkg installation
 
-set -e
-
+# Do NOT use set -e — we handle errors per-step so one failure doesn't kill the whole install
 LOG_FILE="/tmp/kivun_install.log"
-REAL_USER="${SUDO_USER:-$USER}"
+REAL_USER="${SUDO_USER:-$(stat -f '%Su' /dev/console)}"
 REAL_HOME=$(eval echo "~$REAL_USER")
 
 log() { echo "[$(date '+%H:%M:%S')] $1" | tee -a "$LOG_FILE"; }
-run_as_user() { sudo -u "$REAL_USER" bash -c "$1"; }
+
+# Run command as the real user with proper PATH including Homebrew
+run_as_user() {
+    sudo -u "$REAL_USER" bash -l -c "$1"
+}
 
 log "=== Kivun Terminal macOS Installer ==="
 log "User: $REAL_USER | Home: $REAL_HOME"
+log "Arch: $(uname -m) | macOS: $(sw_vers -productVersion)"
 
 # --- Homebrew ---
 if ! run_as_user "command -v brew" &>/dev/null; then
     log "Installing Homebrew..."
-    run_as_user 'NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"'
-    # Add brew to path for Apple Silicon
-    if [[ $(uname -m) == "arm64" ]]; then
-        run_as_user 'echo "eval \"\$(/opt/homebrew/bin/brew shellenv)\"" >> ~/.zprofile'
-        eval "$(/opt/homebrew/bin/brew shellenv)"
+    if run_as_user 'NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"'; then
+        # Add brew to shell profile for Apple Silicon
+        if [[ $(uname -m) == "arm64" ]]; then
+            if ! grep -q "brew shellenv" "$REAL_HOME/.zprofile" 2>/dev/null; then
+                run_as_user 'echo "eval \"\$(/opt/homebrew/bin/brew shellenv)\"" >> ~/.zprofile'
+            fi
+        fi
+        log "Homebrew installed"
+    else
+        log "ERROR: Homebrew installation failed — continuing anyway"
     fi
-    log "Homebrew installed"
 else
     log "Homebrew already installed — skipping"
-fi
-
-# Ensure brew is in PATH for this session
-if [[ $(uname -m) == "arm64" ]]; then
-    export PATH="/opt/homebrew/bin:$PATH"
-else
-    export PATH="/usr/local/bin:$PATH"
 fi
 
 # --- Node.js ---
 if ! run_as_user "command -v node" &>/dev/null; then
     log "Installing Node.js..."
-    run_as_user "brew install node"
-    log "Node.js $(run_as_user 'node --version') installed"
+    if run_as_user "brew install node"; then
+        log "Node.js $(run_as_user 'node --version' 2>/dev/null) installed"
+    else
+        log "ERROR: Node.js installation failed"
+    fi
 else
-    log "Node.js $(run_as_user 'node --version') already installed — skipping"
+    log "Node.js $(run_as_user 'node --version' 2>/dev/null) already installed — skipping"
 fi
 
 # --- Git ---
 if ! run_as_user "command -v git" &>/dev/null; then
     log "Installing Git..."
-    run_as_user "brew install git"
-    log "Git installed"
+    if run_as_user "brew install git"; then
+        log "Git installed"
+    else
+        log "ERROR: Git installation failed"
+    fi
 else
     log "Git already installed — skipping"
 fi
@@ -56,17 +63,22 @@ fi
 # --- Claude Code ---
 if ! run_as_user "command -v claude" &>/dev/null; then
     log "Installing Claude Code..."
-    run_as_user "npm install -g @anthropic-ai/claude-code"
-    log "Claude Code installed"
+    if run_as_user "npm install -g @anthropic-ai/claude-code"; then
+        log "Claude Code installed"
+    else
+        log "ERROR: Claude Code installation failed"
+    fi
 else
-    log "Claude Code already installed — skipping"
+    log "Updating Claude Code..."
+    run_as_user "npm update -g @anthropic-ai/claude-code" 2>/dev/null || true
+    log "Claude Code already installed — updated"
 fi
 
 # --- Statusline ---
 STATUSLINE_DIR="/usr/local/share/kivun"
 STATUSLINE_SRC="$(dirname "$0")/statusline.mjs"
 log "Installing statusline..."
-mkdir -p "$STATUSLINE_DIR"
+mkdir -p "$STATUSLINE_DIR" 2>/dev/null || true
 if [ -f "$STATUSLINE_SRC" ]; then
     cp "$STATUSLINE_SRC" "$STATUSLINE_DIR/statusline.mjs"
     chmod 644 "$STATUSLINE_DIR/statusline.mjs"
@@ -80,6 +92,8 @@ SHELL_RC="$REAL_HOME/.zshrc"
 if [ -f "$REAL_HOME/.bashrc" ] && [ ! -f "$REAL_HOME/.zshrc" ]; then
     SHELL_RC="$REAL_HOME/.bashrc"
 fi
+# Create shell rc if it doesn't exist
+run_as_user "touch '$SHELL_RC'" 2>/dev/null || true
 EXPORT_LINE="export CLAUDE_CODE_STATUSLINE=\"$STATUSLINE_DIR/statusline.mjs\""
 if ! grep -q "CLAUDE_CODE_STATUSLINE" "$SHELL_RC" 2>/dev/null; then
     run_as_user "echo '' >> '$SHELL_RC' && echo '# Kivun Terminal statusline' >> '$SHELL_RC' && echo '$EXPORT_LINE' >> '$SHELL_RC'"
@@ -91,12 +105,14 @@ fi
 # --- Summary ---
 log ""
 log "=== Installation Complete ==="
-log "Node.js: $(run_as_user 'node --version' 2>/dev/null || echo 'N/A')"
-log "npm:     $(run_as_user 'npm --version' 2>/dev/null || echo 'N/A')"
-log "Git:     $(run_as_user 'git --version' 2>/dev/null || echo 'N/A')"
-log "Claude:  $(run_as_user 'claude --version' 2>/dev/null || echo 'N/A')"
+log "Node.js: $(run_as_user 'node --version' 2>/dev/null || echo 'not installed')"
+log "npm:     $(run_as_user 'npm --version' 2>/dev/null || echo 'not installed')"
+log "Git:     $(run_as_user 'git --version' 2>/dev/null || echo 'not installed')"
+log "Claude:  $(run_as_user 'claude --version' 2>/dev/null || echo 'not installed')"
 log ""
 log "Next: Open Terminal and run 'claude' to start."
 log "Log saved to $LOG_FILE"
 
+# Always exit 0 so the .pkg installer reports success
+# Individual errors are logged above
 exit 0
