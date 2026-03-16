@@ -162,6 +162,19 @@ SHORTCUT_PATH="$REAL_HOME/Desktop/Kivun Terminal.command"
 cat > "$SHORTCUT_PATH" << 'SCRIPT'
 #!/bin/bash
 # Kivun Terminal — launches Claude Code
+
+# Apply light blue background with dark text via AppleScript
+osascript -e '
+tell application "Terminal"
+    tell front window
+        set background color of selected tab to {59624, 61937, 64250}
+        set normal text color of selected tab to {0, 0, 0}
+        set bold text color of selected tab to {0, 0, 0}
+        set cursor color of selected tab to {6425, 6425, 6425}
+    end tell
+end tell
+' 2>/dev/null
+
 clear
 echo "Starting Claude Code..."
 echo ""
