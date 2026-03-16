@@ -159,9 +159,12 @@ log "Terminal profile '$PROFILE_NAME' configured"
 # --- Desktop Shortcut ---
 log "Creating desktop shortcut..."
 SHORTCUT_PATH="$REAL_HOME/Desktop/Kivun Terminal.command"
-cat > "$SHORTCUT_PATH" << 'SCRIPT'
+cat > "$SHORTCUT_PATH" << SCRIPT
 #!/bin/bash
 # Kivun Terminal — launches Claude Code
+
+# Statusline
+export CLAUDE_CODE_STATUSLINE="$STATUSLINE_DIR/statusline.mjs"
 
 # Apply light blue background with dark text via AppleScript
 osascript -e '
