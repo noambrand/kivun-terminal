@@ -18,6 +18,28 @@ log "=== Kivun Terminal macOS Installer ==="
 log "User: $REAL_USER | Home: $REAL_HOME"
 log "Arch: $(uname -m) | macOS: $(sw_vers -productVersion)"
 
+# --- Xcode Command Line Tools (required for Homebrew & Git) ---
+if ! xcode-select -p &>/dev/null; then
+    log "Installing Xcode Command Line Tools..."
+    # Non-interactive CLT install via softwareupdate
+    touch /tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress
+    CLT_LABEL=$(softwareupdate -l 2>/dev/null | grep -o 'Label: Command Line Tools.*' | sed 's/Label: //' | head -1)
+    if [ -n "$CLT_LABEL" ]; then
+        log "Found: $CLT_LABEL — installing (this may take a few minutes)..."
+        softwareupdate -i "$CLT_LABEL" 2>&1 | tee -a "$LOG_FILE" || true
+    else
+        log "WARNING: CLT not found in Software Update catalog"
+    fi
+    rm -f /tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress
+    if xcode-select -p &>/dev/null; then
+        log "Xcode CLT installed"
+    else
+        log "WARNING: Xcode CLT installation may have failed — Homebrew will attempt its own install"
+    fi
+else
+    log "Xcode CLT already installed — skipping"
+fi
+
 # --- Homebrew ---
 if ! run_as_user "command -v brew" &>/dev/null; then
     log "Installing Homebrew..."
