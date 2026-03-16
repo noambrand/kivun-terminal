@@ -5,7 +5,8 @@
 # Do NOT use set -e — we handle errors per-step so one failure doesn't kill the whole install
 LOG_FILE="/tmp/kivun_install.log"
 REAL_USER="${SUDO_USER:-$(stat -f '%Su' /dev/console)}"
-REAL_HOME=$(eval echo "~$REAL_USER")
+REAL_HOME=$(dscl . -read "/Users/$REAL_USER" NFSHomeDirectory 2>/dev/null | awk '{print $2}')
+REAL_HOME="${REAL_HOME:-/Users/$REAL_USER}"
 
 log() { echo "[$(date '+%H:%M:%S')] $1" | tee -a "$LOG_FILE"; }
 
@@ -23,7 +24,7 @@ if ! xcode-select -p &>/dev/null; then
     log "Installing Xcode Command Line Tools..."
     # Non-interactive CLT install via softwareupdate
     touch /tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress
-    CLT_LABEL=$(softwareupdate -l 2>/dev/null | grep -o 'Label: Command Line Tools.*' | sed 's/Label: //' | head -1)
+    CLT_LABEL=$(softwareupdate -l 2>/dev/null | grep 'Label:.*Command Line Tools' | sed 's/.*Label: //' | sed 's/[[:space:]]*$//' | head -1)
     if [ -n "$CLT_LABEL" ]; then
         log "Found: $CLT_LABEL — installing (this may take a few minutes)..."
         softwareupdate -i "$CLT_LABEL" 2>&1 | tee -a "$LOG_FILE" || true
@@ -123,38 +124,6 @@ if ! grep -q "CLAUDE_CODE_STATUSLINE" "$SHELL_RC" 2>/dev/null; then
 else
     log "CLAUDE_CODE_STATUSLINE already in $SHELL_RC — skipping"
 fi
-
-# --- Terminal.app Light Blue Profile ---
-log "Setting up Kivun Terminal profile..."
-PROFILE_NAME="Kivun Terminal"
-PLIST_DOMAIN="com.apple.Terminal"
-
-# Create the profile with light blue background using osascript
-run_as_user "defaults write $PLIST_DOMAIN 'Window Settings' -dict-add '$PROFILE_NAME' '
-<dict>
-    <key>name</key>
-    <string>Kivun Terminal</string>
-    <key>BackgroundColor</key>
-    <data>YnBsaXN0MDDUAQIDBAUGBwpYJHZlcnNpb25ZJGFyY2hpdmVyVCR0b3BYJG9iamVjdHMSAAGGoF8QD05TS2V5ZWRBcmNoaXZlctEICVRyb290gAGkCwwVFlUkbnVsbNQNDg8QERITFFdOU1doaXRlXE5TQ29sb3JTcGFjZVYkY2xhc3NPEBQwLjkwOTcgMC45NDUxIDAuOTgAEAOAAoAD0hcYGRpYJGNsYXNzZXNaTlNDb2xvcqIZG1hOU09iamVjdAAIABEAGgAkACkAMgA3AEkATABRAFMAWABeAGoAcQB5AIkAiwCNAI8AkQAAAAAAAAIBAAAAAAAAABwAAAAAAAAAAAAAAAAAAACT</data>
-    <key>Font</key>
-    <data>YnBsaXN0MDDUAQIDBAUGBwpYJHZlcnNpb25ZJGFyY2hpdmVyVCR0b3BYJG9iamVjdHMSAAGGoF8QD05TS2V5ZWRBcmNoaXZlctEICVRyb290gAGkCwwVFlUkbnVsbNQNDg8QERITFFdOU1NpemVYTlNmRmxhZ3NWTlNOYW1lViRjbGFzcyNAKgAAAAAAAAQQEIACgANfEBBNZW5sby1SZWd1bGFy0hcYGRpYJGNsYXNzZXNaTlNGb250ohkbWE5TT2JqZWN0AAgAEQAaACQAKQAyADcASQBMAFEAUwBYAF4AagBxAHkAfgCAAIIAhACNAJ8AoQCzALUAAAAAAAACAQAAAAAAAAAcAAAAAAAAAAAAAAAAAAAAtw==</data>
-    <key>columnCount</key>
-    <integer>120</integer>
-    <key>rowCount</key>
-    <integer>36</integer>
-    <key>CursorBlink</key>
-    <true/>
-    <key>UseBrightBold</key>
-    <true/>
-    <key>ShowWindowSettingsNameInTitle</key>
-    <true/>
-</dict>
-'" 2>/dev/null || true
-
-# Set as default profile
-run_as_user "defaults write $PLIST_DOMAIN 'Default Window Settings' -string '$PROFILE_NAME'" 2>/dev/null || true
-run_as_user "defaults write $PLIST_DOMAIN 'Startup Window Settings' -string '$PROFILE_NAME'" 2>/dev/null || true
-log "Terminal profile '$PROFILE_NAME' configured"
 
 # --- Desktop Shortcut ---
 log "Creating desktop shortcut..."
