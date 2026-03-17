@@ -75,6 +75,20 @@ if ! run_as_user "command -v brew" &>/dev/null; then
     log "  User HOME: $REAL_HOME"
     log "  User shell: $(dscl . -read /Users/$REAL_USER UserShell 2>/dev/null | awk '{print $2}' || echo 'unknown')"
 
+    # Pre-create Homebrew directory as root so the installer won't need sudo.
+    # In a .pkg postinstall context there is no TTY, so the Homebrew installer's
+    # `sudo -n` check always fails ("Need sudo access on macOS"). By creating
+    # /opt/homebrew owned by the real user beforehand, the installer skips sudo.
+    if [[ $(uname -m) == "arm64" ]]; then
+        BREW_PREFIX="/opt/homebrew"
+    else
+        BREW_PREFIX="/usr/local/Homebrew"
+    fi
+    log "Pre-creating $BREW_PREFIX owned by $REAL_USER (avoids sudo requirement)..."
+    mkdir -p "$BREW_PREFIX" 2>/dev/null || true
+    chown -R "$REAL_USER:admin" "$BREW_PREFIX" 2>/dev/null || true
+    log "  $BREW_PREFIX owner: $(ls -ld "$BREW_PREFIX" 2>&1)"
+
     log "Running Homebrew installer (NONINTERACTIVE=1)..."
     BREW_OUTPUT=$(run_as_user 'NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"' 2>&1)
     BREW_EXIT=$?
