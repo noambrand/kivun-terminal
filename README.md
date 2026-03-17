@@ -61,6 +61,27 @@ The installer auto-detects what you already have and skips it.
 
 ![Terminal Demo](/kivun_terminal_GIF.gif)
 
+## A Note on RTL (Hebrew/Arabic) Support
+
+The first version of Kivun Terminal included a custom RTL text-reversal fix that made Hebrew and Arabic display correctly in the terminal. Since then, **Claude has released a built-in RTL fix**, so the current version uses Claude's native implementation instead.
+
+**Regardless of RTL**, the installer saves significant setup time and adds features (status bar, light blue theme, desktop shortcut, folder picker) that make it worthwhile on its own.
+
+**Disclaimer:** Text alignment is left-to-right, but the text itself is fully readable.
+
+### Differences between the original RTL fix and Claude's built-in fix
+
+| | Original (v1.x) | Current (Claude's built-in) |
+|---|---|---|
+| Hebrew/Arabic display | Reversed per-line | Reversed natively |
+| Copy Hebrew text from terminal | Worked correctly | May copy in visual order |
+| Parentheses/brackets direction | Displayed correctly | May appear reversed |
+| Mixed Hebrew + English | Could break ordering | Preserves original order |
+
+The original fix had its own trade-offs — mixed Hebrew/English lines didn't always maintain the correct order. We hope Claude will continue improving their built-in RTL support to address the remaining edge cases.
+
+> **For developers:** If you prefer the original RTL approach, you're welcome to [fork this repo](https://github.com/noambrand/kivun-terminal/fork) and build on it.
+
 ## Requirements
 
 - **Windows**: Windows 10/11
