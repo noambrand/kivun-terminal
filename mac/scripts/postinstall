@@ -20,43 +20,87 @@ log "User: $REAL_USER | Home: $REAL_HOME"
 log "Arch: $(uname -m) | macOS: $(sw_vers -productVersion)"
 
 # --- Xcode Command Line Tools (required for Homebrew & Git) ---
+log "Checking Xcode CLT..."
+CLT_PATH=$(xcode-select -p 2>&1) || true
+log "xcode-select -p: '$CLT_PATH' (exit: $?)"
+
 if ! xcode-select -p &>/dev/null; then
-    log "Installing Xcode Command Line Tools..."
-    # Non-interactive CLT install via softwareupdate
+    log "CLT not installed — attempting non-interactive install via softwareupdate"
     touch /tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress
-    CLT_LABEL=$(softwareupdate -l 2>/dev/null | grep 'Label:.*Command Line Tools' | sed 's/.*Label: //' | sed 's/[[:space:]]*$//' | head -1)
+
+    log "Running: softwareupdate -l (listing available updates)..."
+    SWUPDATE_OUTPUT=$(softwareupdate -l 2>&1) || true
+    log "softwareupdate -l output:"
+    echo "$SWUPDATE_OUTPUT" >> "$LOG_FILE"
+
+    CLT_LABEL=$(echo "$SWUPDATE_OUTPUT" | grep 'Label:.*Command Line Tools' | sed 's/.*Label: //' | sed 's/[[:space:]]*$//' | head -1)
+    log "Parsed CLT label: '$CLT_LABEL'"
+
     if [ -n "$CLT_LABEL" ]; then
-        log "Found: $CLT_LABEL — installing (this may take a few minutes)..."
-        softwareupdate -i "$CLT_LABEL" 2>&1 | tee -a "$LOG_FILE" || true
+        log "Installing: $CLT_LABEL (this may take 5-10 minutes)..."
+        softwareupdate -i "$CLT_LABEL" 2>&1 | tee -a "$LOG_FILE"
+        SW_EXIT=$?
+        log "softwareupdate -i exit code: $SW_EXIT"
     else
-        log "WARNING: CLT not found in Software Update catalog"
+        log "WARNING: No CLT package found in Software Update catalog"
+        log "Attempting xcode-select --install as fallback..."
+        xcode-select --install 2>&1 | tee -a "$LOG_FILE" || true
     fi
+
     rm -f /tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress
+
     if xcode-select -p &>/dev/null; then
-        log "Xcode CLT installed"
+        log "Xcode CLT installed at: $(xcode-select -p)"
     else
-        log "WARNING: Xcode CLT installation may have failed — Homebrew will attempt its own install"
+        log "WARNING: Xcode CLT still not detected after install attempt"
     fi
 else
-    log "Xcode CLT already installed — skipping"
+    log "Xcode CLT already installed at: $CLT_PATH"
 fi
 
 # --- Homebrew ---
+log "Checking Homebrew..."
+BREW_PATH=$(run_as_user "command -v brew" 2>&1) || true
+log "brew path: '$BREW_PATH'"
+
 if ! run_as_user "command -v brew" &>/dev/null; then
-    log "Installing Homebrew..."
-    if run_as_user 'NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"'; then
+    log "Homebrew not found — installing..."
+
+    # Pre-checks
+    log "Pre-checks before Homebrew install:"
+    log "  curl: $(which curl 2>&1)"
+    log "  git: $(run_as_user 'command -v git' 2>&1 || echo 'not found')"
+    log "  xcode-select -p: $(xcode-select -p 2>&1 || echo 'not installed')"
+    log "  Running as user: $REAL_USER"
+    log "  User HOME: $REAL_HOME"
+    log "  User shell: $(dscl . -read /Users/$REAL_USER UserShell 2>/dev/null | awk '{print $2}' || echo 'unknown')"
+
+    log "Running Homebrew installer (NONINTERACTIVE=1)..."
+    BREW_OUTPUT=$(run_as_user 'NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"' 2>&1)
+    BREW_EXIT=$?
+    log "Homebrew installer exit code: $BREW_EXIT"
+    log "Homebrew installer output:"
+    echo "$BREW_OUTPUT" >> "$LOG_FILE"
+
+    # Log last 20 lines to console too
+    echo "$BREW_OUTPUT" | tail -20 | while IFS= read -r line; do log "  brew: $line"; done
+
+    if [ $BREW_EXIT -eq 0 ]; then
         # Add brew to shell profile for Apple Silicon
         if [[ $(uname -m) == "arm64" ]]; then
             if ! grep -q "brew shellenv" "$REAL_HOME/.zprofile" 2>/dev/null; then
                 run_as_user 'echo "eval \"\$(/opt/homebrew/bin/brew shellenv)\"" >> ~/.zprofile'
+                log "Added brew shellenv to .zprofile"
             fi
         fi
-        log "Homebrew installed"
+        log "Homebrew installed successfully"
     else
-        log "ERROR: Homebrew installation failed — continuing anyway"
+        log "ERROR: Homebrew installation failed (exit code: $BREW_EXIT)"
+        log "Check full output in $LOG_FILE for details"
     fi
 else
-    log "Homebrew already installed — skipping"
+    BREW_VER=$(run_as_user 'brew --version' 2>/dev/null | head -1)
+    log "Homebrew already installed: $BREW_VER"
 fi
 
 # --- Node.js ---
