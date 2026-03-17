@@ -20,6 +20,7 @@ jobs:
         run: |
           chmod +x mac/scripts/postinstall
           cp source/statusline.mjs mac/scripts/statusline.mjs
+          cp source/configure-statusline.js mac/scripts/configure-statusline.js
 
       - name: Build .pkg
         run: |

@@ -125,6 +125,20 @@ else
     log "CLAUDE_CODE_STATUSLINE already in $SHELL_RC — skipping"
 fi
 
+# Configure statusline in Claude Code settings.json
+CONFIGURE_SCRIPT="$(dirname "$0")/configure-statusline.js"
+if [ -f "$CONFIGURE_SCRIPT" ]; then
+    log "Configuring statusline in Claude Code settings..."
+    run_as_user "node '$CONFIGURE_SCRIPT' '$STATUSLINE_DIR/statusline.mjs'" 2>/dev/null
+    if [ $? -eq 0 ]; then
+        log "Statusline configured in Claude Code settings"
+    else
+        log "WARNING: Could not configure statusline in settings"
+    fi
+else
+    log "WARNING: configure-statusline.js not found in package"
+fi
+
 # --- Desktop Shortcut ---
 log "Creating desktop shortcut..."
 SHORTCUT_PATH="$REAL_HOME/Desktop/Kivun Terminal.command"

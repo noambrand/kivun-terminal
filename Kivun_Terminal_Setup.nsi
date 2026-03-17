@@ -158,6 +158,7 @@ Section "!Core Components (Required)" SecCore
   File "source\kivun-wt-fragment.json"
   File "source\apply-wt-settings.vbs"
   File "source\statusline.mjs"
+  File "source\configure-statusline.js"
 
   ; Copy documentation
   File "README.md"
@@ -363,6 +364,16 @@ Section "!Install Claude Code (Required)" SecClaudeCode
     ${Else}
       DetailPrint "WARNING: claude command not found in PATH - may need restart"
     ${EndIf}
+  ${EndIf}
+
+  ; Configure statusline in Claude Code settings.json
+  DetailPrint "Configuring Claude Code statusline..."
+  nsExec::ExecToLog 'node "$INSTDIR\configure-statusline.js" "$INSTDIR\statusline.mjs"'
+  Pop $0
+  ${If} $0 == 0
+    DetailPrint "Statusline configured in Claude Code settings"
+  ${Else}
+    DetailPrint "WARNING: Could not configure statusline in settings (exit code: $0)"
   ${EndIf}
 SectionEnd
 
