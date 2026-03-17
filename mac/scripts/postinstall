@@ -197,7 +197,7 @@ export CLAUDE_CODE_STATUSLINE="$STATUSLINE_DIR/statusline.mjs"
 osascript -e '
 tell application "Terminal"
     tell front window
-        set background color of selected tab to {59624, 61937, 64250}
+        set background color of selected tab to {51400, 59110, 65535}
         set normal text color of selected tab to {0, 0, 0}
         set bold text color of selected tab to {0, 0, 0}
         set cursor color of selected tab to {6425, 6425, 6425}
