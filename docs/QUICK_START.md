@@ -8,7 +8,7 @@ ClaudeCode CLI Pack is a Claude Code installer for Windows and macOS. It sets up
 
 ### Windows
 
-> **Note:** The installer may close open terminal windows (Windows Terminal, cmd.exe) during setup - particularly when installing Git or Windows Terminal. Save your work in any open terminals before running the installer.
+> **Note:** The installer may close open terminal windows (Windows Terminal, cmd.exe) during setup- particularly when installing Git or Windows Terminal. Save your work in any open terminals before running the installer.
 
 1. Run `Kivun_Terminal_Setup.exe` as Administrator
 2. Follow the wizard:
@@ -29,7 +29,7 @@ ClaudeCode CLI Pack is a Claude Code installer for Windows and macOS. It sets up
 6. Open **Terminal** (Finder → Applications → Utilities → Terminal)
 7. Type `claude` and press Enter
 
-On first launch, Claude Code will ask for your account details or Anthropic API key(https://console.anthropic.com).
+On first launch, Claude Code will ask for your account details or Anthropic API key.
 
 **If something goes wrong:** Check the install log at `/tmp/kivun_install.log`.
 
