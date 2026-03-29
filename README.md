@@ -1,5 +1,5 @@
 <p align="left">
-  <img src="ClaudeCode CLI Pack.jpeg" width="250">
+  <img src="ClaudeCode CLI Pack.jpeg" width="500">
 </p>
 
 # ClaudeCode CLI Pack
