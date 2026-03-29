@@ -63,7 +63,7 @@ The installer auto-detects what you already have and skips it.
 
 ## A Note on RTL (Hebrew/Arabic) Support
 
-The first version of Kivun Terminal included a custom RTL text-reversal fix that made Hebrew and Arabic display correctly in the terminal. Since then, **Claude has released a built-in RTL fix**, so the current version uses Claude's native implementation instead.
+The first version of Kivun Terminal 1.05 included a custom RTL text-reversal fix that made Hebrew and Arabic display correctly in the terminal. Since then, **Claude has released a built-in RTL fix**, so the current version uses Claude's native implementation instead.
 
 **Regardless of RTL**, the installer saves significant setup time and adds features (status bar, light blue theme, desktop shortcut, folder picker) that make it worthwhile on its own.
 
@@ -71,7 +71,7 @@ The first version of Kivun Terminal included a custom RTL text-reversal fix that
 
 ### Differences between the original RTL fix and Claude's built-in fix
 
-| | Original (v1.x) | Current (Claude's built-in) |
+| | Original (v1.5) | Current (Claude's built-in) |
 |---|---|---|
 | Hebrew/Arabic display | Reversed per-line | Reversed natively |
 | Copy Hebrew text from terminal | Worked correctly | May copy in visual order |
