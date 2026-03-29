@@ -1,5 +1,5 @@
 <p align="left">
-  <img src="Kivun_Terminal.png" width="250">
+  <img src="ClaudeCode CLI Pack.jpeg" width="250">
 </p>
 
 # ClaudeCode CLI Pack
