@@ -86,7 +86,7 @@ The original fix had its own trade-offs — mixed Hebrew/English lines didn't al
 
 - **Windows**: Windows 10/11
 - **macOS**: macOS 12 (Monterey) or later
-- **Cluade**: Pro/ Max 
+- **Claude**: Pro/ Max 
 
 ## Documentation
 
