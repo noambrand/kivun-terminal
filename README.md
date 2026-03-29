@@ -2,7 +2,7 @@
   <img src="Kivun_Terminal.png" width="250">
 </p>
 
-# Kivun Terminal
+# ClaudeCode CLI Pack
 
 **Claude Code installer for Windows and macOS**
 
@@ -21,7 +21,7 @@
 
 ## Status Bar
 
-Kivun Terminal adds a status bar at the bottom of Claude Code that shows live session info:
+ClaudeCode CLI Pack adds a status bar at the bottom of Claude Code that shows live session info:
 
 ```
 Opus 4.6 | context used:23% | my-project | total tokens:45K | duration:12m | /Users/me/my-project
