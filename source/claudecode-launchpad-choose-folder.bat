@@ -23,8 +23,8 @@ if "!PICKER_RESULT!"=="CANCELLED" (
 if "!PICKER_RESULT!"=="OK" (
     echo Folder selected. Starting ClaudeCode Launchpad CLI...
     echo.
-    REM Pass READFILE marker - kivun-terminal.bat will read path from file
-    call "%~dp0kivun-terminal.bat" "READFILE"
+    REM Pass READFILE marker - claudecode-launchpad.bat will read path from file
+    call "%~dp0claudecode-launchpad.bat" "READFILE"
 ) else (
     echo.
     echo ========================================
@@ -64,5 +64,5 @@ if "!PICKER_RESULT!"=="OK" (
 
     REM Write typed path via VBS (preserves Unicode)
     cscript //nologo "%~dp0write-path.vbs" "!CHOSEN_FOLDER!" 2>nul
-    call "%~dp0kivun-terminal.bat" "READFILE"
+    call "%~dp0claudecode-launchpad.bat" "READFILE"
 )

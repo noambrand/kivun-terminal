@@ -23,7 +23,7 @@ If you discover a security vulnerability in ClaudeCode Launchpad CLI, please rep
 
 The following are in scope for security reports:
 
-- The NSIS installer (`Kivun_Terminal_Setup.nsi`) and its scripts
+- The NSIS installer (`ClaudeCode_Launchpad_CLI_Setup.nsi`) and its scripts
 - The macOS postinstall script (`mac/scripts/postinstall`)
 - Launcher batch files and VBScript helpers in `source/`
 - Registry and environment variable modifications

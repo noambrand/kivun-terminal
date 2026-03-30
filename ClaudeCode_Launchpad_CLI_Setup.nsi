@@ -148,14 +148,14 @@ Section "!Core Components (Required)" SecCore
   ; Copy essential files from source/
   File "source\claude_code.ico"
   File "source\config.txt"
-  File "source\kivun-terminal.bat"
-  File "source\kivun-terminal-choose-folder.bat"
+  File "source\claudecode-launchpad.bat"
+  File "source\claudecode-launchpad-choose-folder.bat"
   File "source\folder-picker.vbs"
   File "source\folder-picker-launcher.vbs"
   File "source\write-path.vbs"
   File "source\create-shortcut.vbs"
   File "source\post-install.bat"
-  File "source\kivun-wt-fragment.json"
+  File "source\claudecode-launchpad-wt-fragment.json"
   File "source\apply-wt-settings.vbs"
   File "source\statusline.mjs"
   File "source\configure-statusline.js"
@@ -250,7 +250,7 @@ Section "!Core Components (Required)" SecCore
   CreateShortCut "$DESKTOP\ClaudeCode Launchpad CLI.lnk" "wscript.exe" '"$INSTDIR\folder-picker-launcher.vbs"' "$INSTDIR\claude_code.ico" 0 SW_SHOWNORMAL "" "${PRODUCT_DESCRIPTION}"
 
   ; Create SendTo shortcut
-  CreateShortCut "$SENDTO\ClaudeCode Launchpad CLI.lnk" "$INSTDIR\kivun-terminal.bat" "" "$INSTDIR\claude_code.ico" 0 SW_SHOWNORMAL "" "Open with ClaudeCode Launchpad CLI"
+  CreateShortCut "$SENDTO\ClaudeCode Launchpad CLI.lnk" "$INSTDIR\claudecode-launchpad.bat" "" "$INSTDIR\claude_code.ico" 0 SW_SHOWNORMAL "" "Open with ClaudeCode Launchpad CLI"
 
   ; Write registry for Add/Remove Programs
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\ClaudeCodeLaunchpad" "DisplayName" "${PRODUCT_NAME}"
@@ -266,16 +266,16 @@ Section "!Core Components (Required)" SecCore
   ; Add right-click context menu for folders: "Open with ClaudeCode Launchpad CLI"
   WriteRegStr HKCR "Directory\shell\ClaudeCodeLaunchpad" "" "Open with ClaudeCode Launchpad CLI"
   WriteRegStr HKCR "Directory\shell\ClaudeCodeLaunchpad" "Icon" "$INSTDIR\claude_code.ico"
-  WriteRegStr HKCR "Directory\shell\ClaudeCodeLaunchpad\command" "" '"$INSTDIR\kivun-terminal.bat" "%1"'
+  WriteRegStr HKCR "Directory\shell\ClaudeCodeLaunchpad\command" "" '"$INSTDIR\claudecode-launchpad.bat" "%1"'
 
   ; Also add to directory background (right-click inside a folder)
   WriteRegStr HKCR "Directory\Background\shell\ClaudeCodeLaunchpad" "" "Open ClaudeCode Launchpad CLI here"
   WriteRegStr HKCR "Directory\Background\shell\ClaudeCodeLaunchpad" "Icon" "$INSTDIR\claude_code.ico"
-  WriteRegStr HKCR "Directory\Background\shell\ClaudeCodeLaunchpad\command" "" '"$INSTDIR\kivun-terminal.bat" "%V"'
+  WriteRegStr HKCR "Directory\Background\shell\ClaudeCodeLaunchpad\command" "" '"$INSTDIR\claudecode-launchpad.bat" "%V"'
 
   ; Install Windows Terminal fragment
   CreateDirectory "$LOCALAPPDATA\Microsoft\Windows Terminal\Fragments\ClaudeCodeLaunchpad"
-  CopyFiles /SILENT "$INSTDIR\kivun-wt-fragment.json" "$LOCALAPPDATA\Microsoft\Windows Terminal\Fragments\ClaudeCodeLaunchpad\kivun-wt-fragment.json"
+  CopyFiles /SILENT "$INSTDIR\claudecode-launchpad-wt-fragment.json" "$LOCALAPPDATA\Microsoft\Windows Terminal\Fragments\ClaudeCodeLaunchpad\claudecode-launchpad-wt-fragment.json"
 
   ; Apply Noam color scheme directly to WT settings (fragments alone may not apply colors)
   DetailPrint "Applying Windows Terminal color scheme..."

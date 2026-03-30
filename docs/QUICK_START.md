@@ -10,7 +10,7 @@ ClaudeCode Launchpad CLI is a Claude Code installer for Windows and macOS. It se
 
 > **Note:** The installer may close open terminal windows (Windows Terminal, cmd.exe) during setup- particularly when installing Git or Windows Terminal. Save your work in any open terminals before running the installer.
 
-1. Run `Kivun_Terminal_Setup.exe` as Administrator
+1. Run `ClaudeCode_Launchpad_CLI_Setup.exe` as Administrator
 2. Follow the wizard:
    - Enter your name
    - Choose response language (English or Hebrew)
@@ -21,7 +21,7 @@ ClaudeCode Launchpad CLI is a Claude Code installer for Windows and macOS. It se
 
 > **Note:** An internet connection is required. The installer downloads all dependencies via Homebrew - no binaries are bundled in the .pkg.
 
-1. Download `Kivun_Terminal_Setup_<version>.pkg` from the [latest release](https://github.com/noambrand/kivun-terminal/releases/latest)
+1. Download `ClaudeCode_Launchpad_CLI_Setup_<version>.pkg` from the [latest release](https://github.com/noambrand/kivun-terminal/releases/latest)
 2. **Right-click** the `.pkg` file → select **Open** (macOS blocks unsigned packages on double-click)
 3. Click "Open" again in the confirmation dialog
 4. Enter your Mac password when prompted (admin access is needed to install packages)
@@ -86,8 +86,8 @@ The status bar is installed automatically - no configuration needed.
 Everything is installed in: `%LOCALAPPDATA%\Kivun`
 
 Key files:
-- `kivun-terminal.bat` - Main launcher
-- `kivun-terminal-choose-folder.bat` - Folder picker launcher
+- `claudecode-launchpad.bat` - Main launcher
+- `claudecode-launchpad-choose-folder.bat` - Folder picker launcher
 - `config.txt` - Your configuration
 - `post-install.bat` - Re-runs Claude Code installation if needed
 

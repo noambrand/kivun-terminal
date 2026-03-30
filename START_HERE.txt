@@ -11,12 +11,12 @@ INSTALLATION:
     Save your work in any open terminals before running the installer.
 
   Windows:
-    1. Double-click Kivun_Terminal_Setup.exe (Run as Administrator)
+    1. Double-click ClaudeCode_Launchpad_CLI_Setup.exe (Run as Administrator)
     2. Follow the wizard — choose your language, click Next
     3. The installer auto-detects what you have and skips it
 
   macOS:
-    1. Double-click Kivun_Terminal_Setup.pkg
+    1. Double-click ClaudeCode_Launchpad_CLI_Setup.pkg
     2. Follow the prompts — Homebrew, Node.js, Git, and Claude Code
        are installed automatically
 

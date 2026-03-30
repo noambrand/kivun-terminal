@@ -42,7 +42,7 @@ Opus 4.6 | context used:23% | my-project | total tokens:45K | duration:12m | /Us
 
 ### Windows
 
-1. **[Download](https://github.com/noambrand/kivun-terminal/releases/latest)** `Kivun_Terminal_Setup.exe`
+1. **[Download](https://github.com/noambrand/kivun-terminal/releases/latest)** `ClaudeCode_Launchpad_CLI_Setup.exe`
 2. Run as Administrator - follow the wizard
 3. Double-click the "ClaudeCode Launchpad CLI" desktop shortcut
 
@@ -50,7 +50,7 @@ The installer auto-detects what you already have and skips it.
 
 ### macOS
 
-1. **[Download](https://github.com/noambrand/kivun-terminal/releases/latest)** `Kivun_Terminal_Setup_<version>.pkg`
+1. **[Download](https://github.com/noambrand/kivun-terminal/releases/latest)** `ClaudeCode_Launchpad_CLI_Setup_<version>.pkg`
 2. **Right-click** the `.pkg` file → **Open** (required because the package is unsigned — macOS will block a regular double-click)
 3. Enter your password when prompted — the installer needs admin access to install Homebrew, Node.js, Git, and Claude Code
 4. Open **Terminal** (Applications → Utilities → Terminal) and type `claude`
@@ -59,7 +59,7 @@ The installer auto-detects what you already have and skips it.
 
 > **First time using Claude Code?** You'll need a Claude account (Pro/Max) or [Anthropic API key](https://console.anthropic.com). Claude will ask for it on first launch.
 
-![Terminal Demo](/kivun_terminal_GIF.gif)
+![Terminal Demo](/claudecode_launchpad_GIF.gif)
 
 ## A Note on RTL Support (v1.05 only)
 

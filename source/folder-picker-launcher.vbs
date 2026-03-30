@@ -80,6 +80,6 @@ outStream.SaveToFile filePath, 2
 outStream.Close
 stream.Close
 
-' Launch kivun-terminal.bat with READFILE argument
+' Launch claudecode-launchpad.bat with READFILE argument
 ' Window style 0 = hidden cmd window (WT opens its own visible window)
-wshShell.Run """" & scriptDir & "\kivun-terminal.bat"" ""READFILE""", 0, False
+wshShell.Run """" & scriptDir & "\claudecode-launchpad.bat"" ""READFILE""", 0, False

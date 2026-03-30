@@ -6,7 +6,7 @@
 backups/
 
 # Build output
-Kivun_Terminal_Setup.exe
+ClaudeCode_Launchpad_CLI_Setup.exe
 build/.bundled/
 bundled/
 
