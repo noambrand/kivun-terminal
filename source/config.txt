@@ -1,4 +1,4 @@
-# Kivun Terminal Configuration
+# ClaudeCode Launchpad CLI Configuration
 # Claude Code response language
 #
 # Options: english, hebrew, arabic, persian, urdu, kurdish, pashto, sindhi, yiddish, syriac, dhivehi, nko, adlam, mandaic, samaritan, dari, uyghur, balochi, kashmiri, shahmukhi, azeri_south, jawi, hausa_ajami, rohingya, turoyo

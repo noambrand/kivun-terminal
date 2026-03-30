@@ -1,5 +1,16 @@
 # Changelog
 
+## [2.1.0] - 2026-03-31
+
+### Changed
+- **Renamed product** from "Kivun Terminal" to "ClaudeCode Launchpad CLI" (v2.0+; v1.x keeps original name)
+- Fixed WT color fallback: self-invoking ANSI pattern (`--run` flag) replaces profile dependency
+  - WT path now calls `kivun-terminal.bat --run` instead of `cmd /c claude`
+  - Phase 2 applies ANSI RGB escape sequences (#C8E6FF) directly inside the terminal
+  - Colors work regardless of whether the WT profile/fragment is loaded
+- Removed `color B0` fallback (replaced by 24-bit ANSI RGB)
+- CMD fallback reuses the same ANSI color logic via `goto :run_claude`
+
 ## [2.0.2] - 2026-03-14
 
 ### Added

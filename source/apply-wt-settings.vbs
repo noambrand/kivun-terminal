@@ -1,4 +1,4 @@
-' Kivun Terminal - Apply Windows Terminal color scheme
+' ClaudeCode Launchpad CLI - Apply Windows Terminal color scheme
 ' Closes WT first (it overwrites settings while running), then adds Noam scheme
 
 Set fso = CreateObject("Scripting.FileSystemObject")
@@ -57,7 +57,7 @@ If InStr(content, """name"": ""Noam""") = 0 And InStr(content, """name"":""Noam"
     End If
 End If
 
-' --- 2. Add colorScheme to Kivun Terminal profile if missing ---
+' --- 2. Add colorScheme to ClaudeCode Launchpad CLI profile if missing ---
 pos = InStr(content, """Kivun Terminal""")
 If pos > 0 Then
     profileStart = 0
@@ -96,7 +96,7 @@ If pos > 0 Then
                     "                ""tabTitle"": ""Kivun Terminal""," & vbCrLf
                 content = Left(content, nlPos) & insertion & Mid(content, nlPos + 1)
                 changed = True
-                WScript.Echo "Updated Kivun Terminal profile"
+                WScript.Echo "Updated ClaudeCode Launchpad CLI profile"
             End If
         End If
     End If

@@ -1,10 +1,10 @@
-; Kivun Terminal v2.0.0 - Professional Installer
+; ClaudeCode Launchpad CLI v2.0.0 - Professional Installer
 ; Claude Code installer for Windows
 ; Encoding: UTF-8
 
 Unicode True
 
-!define PRODUCT_NAME "Kivun Terminal"
+!define PRODUCT_NAME "ClaudeCode Launchpad CLI"
 !define PRODUCT_VERSION "2.0.2"
 !define PRODUCT_PUBLISHER "Noam Brand"
 !define PRODUCT_WEB_SITE "https://github.com"
@@ -168,7 +168,7 @@ Section "!Core Components (Required)" SecCore
   ; Create config.txt with user preferences
   Delete "$INSTDIR\config.txt"
   FileOpen $0 "$INSTDIR\config.txt" w
-  FileWrite $0 "# Kivun Terminal Configuration$\r$\n"
+  FileWrite $0 "# ClaudeCode Launchpad CLI Configuration$\r$\n"
   FileWrite $0 "# Claude Code response language$\r$\n"
   FileWrite $0 "#$\r$\n"
   FileWrite $0 "# Options: english, hebrew, arabic, persian, urdu, kurdish, pashto, sindhi, yiddish, syriac, dhivehi, nko, adlam, mandaic, samaritan, dari, uyghur, balochi, kashmiri, shahmukhi, azeri_south, jawi, hausa_ajami, rohingya, turoyo$\r$\n"
@@ -241,7 +241,7 @@ Section "!Core Components (Required)" SecCore
   CreateShortCut "$DESKTOP\Kivun Terminal.lnk" "wscript.exe" '"$INSTDIR\folder-picker-launcher.vbs"' "$INSTDIR\claude_code.ico" 0 SW_SHOWNORMAL "" "${PRODUCT_DESCRIPTION}"
 
   ; Create SendTo shortcut
-  CreateShortCut "$SENDTO\Kivun Terminal.lnk" "$INSTDIR\kivun-terminal.bat" "" "$INSTDIR\claude_code.ico" 0 SW_SHOWNORMAL "" "Open with Kivun Terminal"
+  CreateShortCut "$SENDTO\Kivun Terminal.lnk" "$INSTDIR\kivun-terminal.bat" "" "$INSTDIR\claude_code.ico" 0 SW_SHOWNORMAL "" "Open with ClaudeCode Launchpad CLI"
 
   ; Write registry for Add/Remove Programs
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Kivun" "DisplayName" "${PRODUCT_NAME}"
@@ -254,13 +254,13 @@ Section "!Core Components (Required)" SecCore
   WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Kivun" "NoModify" 1
   WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Kivun" "NoRepair" 1
 
-  ; Add right-click context menu for folders: "Open with Kivun Terminal"
-  WriteRegStr HKCR "Directory\shell\KivunTerminal" "" "Open with Kivun Terminal"
+  ; Add right-click context menu for folders: "Open with ClaudeCode Launchpad CLI"
+  WriteRegStr HKCR "Directory\shell\KivunTerminal" "" "Open with ClaudeCode Launchpad CLI"
   WriteRegStr HKCR "Directory\shell\KivunTerminal" "Icon" "$INSTDIR\claude_code.ico"
   WriteRegStr HKCR "Directory\shell\KivunTerminal\command" "" '"$INSTDIR\kivun-terminal.bat" "%1"'
 
   ; Also add to directory background (right-click inside a folder)
-  WriteRegStr HKCR "Directory\Background\shell\KivunTerminal" "" "Open Kivun Terminal here"
+  WriteRegStr HKCR "Directory\Background\shell\KivunTerminal" "" "Open ClaudeCode Launchpad CLI here"
   WriteRegStr HKCR "Directory\Background\shell\KivunTerminal" "Icon" "$INSTDIR\claude_code.ico"
   WriteRegStr HKCR "Directory\Background\shell\KivunTerminal\command" "" '"$INSTDIR\kivun-terminal.bat" "%V"'
 
@@ -396,13 +396,13 @@ Section "Install Windows Terminal (Recommended)" SecWindowsTerminal
 
       ${If} $0 != 0
         DetailPrint "winget install failed - recommending manual install"
-        MessageBox MB_OK "Could not install Windows Terminal automatically.$\n$\nPlease install it from the Microsoft Store:$\nSearch for 'Windows Terminal'$\n$\nKivun Terminal will fall back to cmd.exe until Windows Terminal is installed."
+        MessageBox MB_OK "Could not install Windows Terminal automatically.$\n$\nPlease install it from the Microsoft Store:$\nSearch for 'Windows Terminal'$\n$\nClaudeCode Launchpad CLI will fall back to cmd.exe until Windows Terminal is installed."
       ${Else}
         DetailPrint "Windows Terminal installed successfully"
       ${EndIf}
     ${Else}
       DetailPrint "winget not available - recommending manual install"
-      MessageBox MB_OK "Could not install Windows Terminal automatically (winget not available).$\n$\nPlease install it from the Microsoft Store:$\nSearch for 'Windows Terminal'$\n$\nKivun Terminal will fall back to cmd.exe until Windows Terminal is installed."
+      MessageBox MB_OK "Could not install Windows Terminal automatically (winget not available).$\n$\nPlease install it from the Microsoft Store:$\nSearch for 'Windows Terminal'$\n$\nClaudeCode Launchpad CLI will fall back to cmd.exe until Windows Terminal is installed."
     ${EndIf}
   ${Else}
     DetailPrint "Windows Terminal already installed - skipping"

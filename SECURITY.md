@@ -9,7 +9,7 @@
 
 ## Reporting a Vulnerability
 
-If you discover a security vulnerability in Kivun Terminal, please report it responsibly:
+If you discover a security vulnerability in ClaudeCode Launchpad CLI, please report it responsibly:
 
 1. **Do not** open a public GitHub issue for security vulnerabilities.
 2. Email **noambrand@proton.me** with:

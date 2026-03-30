@@ -1,8 +1,8 @@
-# ClaudeCode CLI Pack - Quick Start Guide
+# ClaudeCode Launchpad CLI - Quick Start Guide
 
-## What is ClaudeCode CLI Pack?
+## What is ClaudeCode Launchpad CLI?
 
-ClaudeCode CLI Pack is a Claude Code installer for Windows and macOS. It sets up Node.js, Claude Code, and a preconfigured terminal environment.
+ClaudeCode Launchpad CLI is a Claude Code installer for Windows and macOS. It sets up Node.js, Claude Code, and a preconfigured terminal environment.
 
 ## Installation
 
@@ -33,7 +33,7 @@ On first launch, Claude Code will ask for your account details or Anthropic API 
 
 **If something goes wrong:** Check the install log at `/tmp/kivun_install.log`.
 
-## Using Kivun Terminal
+## Using ClaudeCode Launchpad CLI
 
 ### Method 1: Default Launch
 
@@ -54,14 +54,14 @@ Double-click the desktop shortcut "Kivun Terminal" - opens Claude Code in your h
 ### Method 4: Right-Click Context Menu
 
 1. Right-click any folder in Windows Explorer
-2. Select "Open with Kivun Terminal"
+2. Select "Open with ClaudeCode Launchpad CLI"
 3. Claude Code opens in that folder
 
 ## Configuration
 
 ## Status Bar
 
-Kivun Terminal adds a status bar at the bottom of Claude Code. It updates automatically and shows:
+ClaudeCode Launchpad CLI adds a status bar at the bottom of Claude Code. It updates automatically and shows:
 
 ```
 Opus 4.6 | context used:23% | my-project | total tokens:45K | duration:12m | /Users/me/my-project
@@ -96,7 +96,7 @@ Key files:
 
 ### Windows Terminal not installed
 
-Kivun Terminal falls back to cmd.exe with a light blue color scheme. For the best experience, install Windows Terminal from the Microsoft Store.
+ClaudeCode Launchpad CLI falls back to cmd.exe with a light blue color scheme. For the best experience, install Windows Terminal from the Microsoft Store.
 
 ### Node.js not found
 
@@ -104,4 +104,4 @@ Download and install from https://nodejs.org/
 
 ## Uninstalling
 
-Start Menu - Kivun Terminal - Uninstall
+Start Menu - ClaudeCode Launchpad CLI - Uninstall

@@ -1,5 +1,5 @@
 #!/bin/bash
-# Kivun Terminal — macOS dependency installer (postinstall)
+# ClaudeCode Launchpad CLI — macOS dependency installer (postinstall)
 # Runs as root after .pkg installation
 
 # Do NOT use set -e — we handle errors per-step so one failure doesn't kill the whole install
@@ -15,7 +15,7 @@ run_as_user() {
     sudo -u "$REAL_USER" bash -l -c "$1"
 }
 
-log "=== Kivun Terminal macOS Installer ==="
+log "=== ClaudeCode Launchpad CLI macOS Installer ==="
 log "User: $REAL_USER | Home: $REAL_HOME"
 log "Arch: $(uname -m) | macOS: $(sw_vers -productVersion)"
 
@@ -187,7 +187,7 @@ fi
 run_as_user "touch '$SHELL_RC'" 2>/dev/null || true
 EXPORT_LINE="export CLAUDE_CODE_STATUSLINE=\"$STATUSLINE_DIR/statusline.mjs\""
 if ! grep -q "CLAUDE_CODE_STATUSLINE" "$SHELL_RC" 2>/dev/null; then
-    run_as_user "echo '' >> '$SHELL_RC' && echo '# Kivun Terminal statusline' >> '$SHELL_RC' && echo '$EXPORT_LINE' >> '$SHELL_RC'"
+    run_as_user "echo '' >> '$SHELL_RC' && echo '# ClaudeCode Launchpad CLI statusline' >> '$SHELL_RC' && echo '$EXPORT_LINE' >> '$SHELL_RC'"
     log "CLAUDE_CODE_STATUSLINE added to $SHELL_RC"
 else
     log "CLAUDE_CODE_STATUSLINE already in $SHELL_RC — skipping"
@@ -212,7 +212,7 @@ log "Creating desktop shortcut..."
 SHORTCUT_PATH="$REAL_HOME/Desktop/Kivun Terminal.command"
 cat > "$SHORTCUT_PATH" << SCRIPT
 #!/bin/bash
-# Kivun Terminal — launches Claude Code
+# ClaudeCode Launchpad CLI — launches Claude Code
 
 # Statusline
 export CLAUDE_CODE_STATUSLINE="$STATUSLINE_DIR/statusline.mjs"

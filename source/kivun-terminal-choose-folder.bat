@@ -1,10 +1,10 @@
 @echo off
 chcp 65001 >nul 2>&1
 setlocal enabledelayedexpansion
-title Kivun Terminal - Choose Folder
+title ClaudeCode Launchpad CLI - Choose Folder
 
 echo ========================================
-echo   Kivun Terminal - Folder Selector
+echo   ClaudeCode Launchpad CLI - Folder Selector
 echo ========================================
 echo.
 echo Opening folder picker...
@@ -21,7 +21,7 @@ if "!PICKER_RESULT!"=="CANCELLED" (
 )
 
 if "!PICKER_RESULT!"=="OK" (
-    echo Folder selected. Starting Kivun Terminal...
+    echo Folder selected. Starting ClaudeCode Launchpad CLI...
     echo.
     REM Pass READFILE marker - kivun-terminal.bat will read path from file
     call "%~dp0kivun-terminal.bat" "READFILE"

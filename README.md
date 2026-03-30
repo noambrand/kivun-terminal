@@ -1,8 +1,8 @@
 <p align="left">
-  <img src="ClaudeCode CLI Pack.jpeg" width="500">
+  <img src="ClaudeCode Launchpad CLI.jpeg" width="500">
 </p>
 
-# ClaudeCode CLI Pack
+# ClaudeCode Launchpad CLI
 
 **Claude Code installer for Windows and macOS**
 
@@ -16,12 +16,12 @@
 - **Clean, modern terminal** - light blue theme with dark text (Windows Terminal on Windows)
 - **One-click launch** - double-click the desktop shortcut and Claude Code starts immediately (Windows)
 - **Folder picker** - choose a project folder and Claude opens right there, no `cd` needed (Windows)
-- **Right-click any folder** - "Open with Kivun Terminal" context menu integration (Windows)
+- **Right-click any folder** - "Open with ClaudeCode Launchpad CLI" context menu integration (Windows)
 - **Status bar** - live display of model, context usage, token count, and session duration
 
 ## Status Bar
 
-ClaudeCode CLI Pack adds a status bar at the bottom of Claude Code that shows live session info:
+ClaudeCode Launchpad CLI adds a status bar at the bottom of Claude Code that shows live session info:
 
 ```
 Opus 4.6 | context used:23% | my-project | total tokens:45K | duration:12m | /Users/me/my-project
@@ -44,7 +44,7 @@ Opus 4.6 | context used:23% | my-project | total tokens:45K | duration:12m | /Us
 
 1. **[Download](https://github.com/noambrand/kivun-terminal/releases/latest)** `Kivun_Terminal_Setup.exe`
 2. Run as Administrator - follow the wizard
-3. Double-click the "Kivun Terminal" desktop shortcut
+3. Double-click the "ClaudeCode Launchpad CLI" desktop shortcut
 
 The installer auto-detects what you already have and skips it.
 
@@ -63,7 +63,7 @@ The installer auto-detects what you already have and skips it.
 
 ## A Note on RTL Support (v1.05 only)
 
-The first version of Kivun Terminal 1.05 included a custom RTL text-reversal fix that made Hebrew and Arabic display correctly in the terminal. Since then, **Claude has released a built-in RTL fix**, so the current version uses Claude's native implementation instead.
+The first version of ClaudeCode Launchpad CLI 1.05 included a custom RTL text-reversal fix that made Hebrew and Arabic display correctly in the terminal. Since then, **Claude has released a built-in RTL fix**, so the current version uses Claude's native implementation instead.
 
 **Regardless of RTL**, the installer saves significant setup time and adds features (status bar, light blue theme, desktop shortcut, folder picker) that make it worthwhile on its own.
 

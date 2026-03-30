@@ -1,6 +1,6 @@
 ╔════════════════════════════════════════════════════════════╗
 ║                                                            ║
-║        Kivun Terminal for Claude Code v2.0.1                ║
+║        ClaudeCode Launchpad CLI v2.0.1                      ║
 ║        Windows & macOS Installer                           ║
 ║                                                            ║
 ╚════════════════════════════════════════════════════════════╝
@@ -27,8 +27,8 @@ DAILY USE:
   Desktop shortcut:
     "Kivun Terminal"  → pick a project folder and start Claude Code
 
-  Or: Start Menu → Kivun Terminal (Windows)
-  Or: Right-click any folder → "Open with Kivun Terminal" (Windows)
+  Or: Start Menu → ClaudeCode Launchpad CLI (Windows)
+  Or: Right-click any folder → "Open with ClaudeCode Launchpad CLI" (Windows)
   Or: Open Terminal and run 'claude' (macOS)
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

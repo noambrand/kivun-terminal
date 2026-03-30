@@ -3,7 +3,7 @@ chcp 65001 >nul 2>&1
 setlocal enabledelayedexpansion
 
 REM ========================================
-REM   Kivun Terminal v2.1 - Launcher
+REM   ClaudeCode Launchpad CLI v2.1 - Launcher
 REM   Runs Claude Code natively on Windows
 REM   ANSI color fix: applies #C8E6FF background
 REM   regardless of WT profile state
@@ -12,7 +12,7 @@ REM ========================================
 REM --- Phase 2: inside terminal, apply colors and run Claude ---
 if "%~1"=="--run" goto :run_claude
 
-title Kivun Terminal
+title ClaudeCode Launchpad CLI
 
 REM --- Read configuration ---
 set "RESPONSE_LANGUAGE=english"
@@ -83,7 +83,7 @@ REM ========================================
 REM   Phase 2: Apply colors + launch Claude
 REM ========================================
 :run_claude
-title Kivun Terminal
+title ClaudeCode Launchpad CLI
 
 REM Generate ESC character for ANSI sequences (Windows 10+)
 for /f %%a in ('echo prompt $E ^| cmd') do set "ESC=%%a"

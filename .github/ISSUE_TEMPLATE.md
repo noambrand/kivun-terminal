@@ -11,7 +11,7 @@ assignees: ''
 
 ## Environment
 - **Windows Version**: (e.g., Windows 11 Build 22631)
-- **Kivun Terminal Version**: (e.g., 2.0.0)
+- **ClaudeCode Launchpad CLI Version**: (e.g., 2.0.0)
 - **Node.js Version**: (run `node --version`)
 - **Claude Code Version**: (run `claude --version`)
 - **Windows Terminal installed**: (yes/no)

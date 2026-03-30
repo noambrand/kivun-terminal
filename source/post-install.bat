@@ -1,7 +1,7 @@
 @echo off
 chcp 65001 >nul 2>&1
 echo ============================================
-echo   Kivun Terminal - Post Installation
+echo   ClaudeCode Launchpad CLI - Post Installation
 echo ============================================
 echo.
 

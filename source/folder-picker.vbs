@@ -5,7 +5,7 @@ Set fso = CreateObject("Scripting.FileSystemObject")
 Dim choice
 choice = MsgBox("Click YES to browse for a folder." & vbCrLf & vbCrLf & _
                 "Click NO to type or paste a folder path.", _
-                vbYesNoCancel + vbQuestion, "Kivun Terminal - Choose Folder")
+                vbYesNoCancel + vbQuestion, "ClaudeCode Launchpad CLI - Choose Folder")
 
 If choice = vbCancel Then
     WScript.Echo "CANCELLED"
@@ -18,7 +18,7 @@ If choice = vbNo Then
     ' Paste mode
     Dim pastedPath
     pastedPath = InputBox("Type or paste the full folder path:", _
-                          "Kivun Terminal - Folder Path")
+                          "ClaudeCode Launchpad CLI - Folder Path")
 
     If pastedPath = "" Then
         WScript.Echo "CANCELLED"
@@ -26,7 +26,7 @@ If choice = vbNo Then
     End If
 
     If Not fso.FolderExists(pastedPath) Then
-        MsgBox "Folder not found:" & vbCrLf & pastedPath, vbExclamation, "Kivun Terminal"
+        MsgBox "Folder not found:" & vbCrLf & pastedPath, vbExclamation, "ClaudeCode Launchpad CLI"
         WScript.Echo "CANCELLED"
         WScript.Quit
     End If
@@ -37,7 +37,7 @@ Else
     Set objShell = CreateObject("Shell.Application")
     Dim startPath
     startPath = wshShell.ExpandEnvironmentStrings("%USERPROFILE%")
-    Set objFolder = objShell.BrowseForFolder(0, "Select folder for Kivun Terminal", 0, startPath)
+    Set objFolder = objShell.BrowseForFolder(0, "Select folder for ClaudeCode Launchpad CLI", 0, startPath)
 
     If objFolder Is Nothing Then
         WScript.Echo "CANCELLED"
