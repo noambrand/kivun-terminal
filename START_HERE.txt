@@ -25,7 +25,7 @@ INSTALLATION:
 DAILY USE:
 
   Desktop shortcut:
-    "Kivun Terminal"  → pick a project folder and start Claude Code
+    "ClaudeCode Launchpad CLI"  → pick a project folder and start Claude Code
 
   Or: Start Menu → ClaudeCode Launchpad CLI (Windows)
   Or: Right-click any folder → "Open with ClaudeCode Launchpad CLI" (Windows)

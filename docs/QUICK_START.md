@@ -37,18 +37,18 @@ On first launch, Claude Code will ask for your account details or Anthropic API 
 
 ### Method 1: Default Launch
 
-Double-click the desktop shortcut "Kivun Terminal" - opens Claude Code in your home folder.
+Double-click the desktop shortcut "ClaudeCode Launchpad CLI" - opens Claude Code in your home folder.
 
 ### Method 2: Choose a Folder
 
-1. Double-click desktop shortcut "Kivun Terminal (Choose Folder)"
+1. Double-click desktop shortcut "ClaudeCode Launchpad CLI (Choose Folder)"
 2. Pick a folder using the folder picker (or type/paste the path)
 3. Claude Code opens in that folder
 
 ### Method 3: Right-Click Send To
 
 1. Right-click any file or folder in Windows Explorer
-2. Send To - Kivun Terminal
+2. Send To - ClaudeCode Launchpad CLI
 3. Claude Code opens in that folder
 
 ### Method 4: Right-Click Context Menu

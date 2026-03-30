@@ -1,7 +1,7 @@
 {
     "profiles": [
         {
-            "name": "Kivun Terminal",
+            "name": "ClaudeCode Launchpad CLI",
             "commandline": "cmd /c claude",
             "icon": "%LOCALAPPDATA%\\Kivun\\claude_code.ico",
             "colorScheme": "Noam",
@@ -13,7 +13,7 @@
             },
             "scrollbarState": "visible",
             "startingDirectory": "%USERPROFILE%",
-            "tabTitle": "Kivun Terminal"
+            "tabTitle": "ClaudeCode Launchpad CLI"
         }
     ],
     "schemes": [

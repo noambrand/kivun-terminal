@@ -71,7 +71,7 @@ where wt.exe >nul 2>&1
 if errorlevel 1 goto :fallback_cmd
 
 REM Launch WT calling self with --run (colors applied inside terminal)
-start "" wt.exe --maximized -p "Kivun Terminal" -d "!WORK_DIR!" -- "!SCRIPT_DIR!kivun-terminal.bat" --run
+start "" wt.exe --maximized -p "ClaudeCode Launchpad CLI" -d "!WORK_DIR!" -- "!SCRIPT_DIR!kivun-terminal.bat" --run
 exit /b 0
 
 :fallback_cmd

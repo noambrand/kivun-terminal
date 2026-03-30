@@ -58,7 +58,7 @@ If InStr(content, """name"": ""Noam""") = 0 And InStr(content, """name"":""Noam"
 End If
 
 ' --- 2. Add colorScheme to ClaudeCode Launchpad CLI profile if missing ---
-pos = InStr(content, """Kivun Terminal""")
+pos = InStr(content, """ClaudeCode Launchpad CLI""")
 If pos > 0 Then
     profileStart = 0
     For i = pos To 1 Step -1
@@ -93,7 +93,7 @@ If pos > 0 Then
                     "                ""cursorShape"": ""bar""," & vbCrLf & _
                     "                ""font"": { ""face"": ""Cascadia Mono"", ""size"": 11 }," & vbCrLf & _
                     "                ""scrollbarState"": ""visible""," & vbCrLf & _
-                    "                ""tabTitle"": ""Kivun Terminal""," & vbCrLf
+                    "                ""tabTitle"": ""ClaudeCode Launchpad CLI""," & vbCrLf
                 content = Left(content, nlPos) & insertion & Mid(content, nlPos + 1)
                 changed = True
                 WScript.Echo "Updated ClaudeCode Launchpad CLI profile"

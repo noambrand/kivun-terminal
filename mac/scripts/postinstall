@@ -209,7 +209,9 @@ fi
 
 # --- Desktop Shortcut ---
 log "Creating desktop shortcut..."
-SHORTCUT_PATH="$REAL_HOME/Desktop/Kivun Terminal.command"
+# Remove old-name shortcut from previous installs
+rm -f "$REAL_HOME/Desktop/Kivun Terminal.command"
+SHORTCUT_PATH="$REAL_HOME/Desktop/ClaudeCode Launchpad CLI.command"
 cat > "$SHORTCUT_PATH" << SCRIPT
 #!/bin/bash
 # ClaudeCode Launchpad CLI — launches Claude Code
