@@ -57,7 +57,7 @@ The installer auto-detects what you already have and skips it.
 
 > **What happens during install:** The .pkg runs a script that installs [Homebrew](https://brew.sh) (the macOS package manager), then uses it to install Node.js and Git, then installs Claude Code via `npm`. Everything is downloaded fresh — no binaries are bundled. An internet connection is required.
 
-> **First time using Claude Code?** You'll need an [Anthropic API key](https://console.anthropic.com). Claude will ask for it on first launch.
+> **First time using Claude Code?** You'll need a Claude account (Pro/Max) or [Anthropic API key](https://console.anthropic.com). Claude will ask for it on first launch.
 
 ![Terminal Demo](/kivun_terminal_GIF.gif)
 
