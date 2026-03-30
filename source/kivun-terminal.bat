@@ -1,12 +1,18 @@
 @echo off
 chcp 65001 >nul 2>&1
 setlocal enabledelayedexpansion
-title Kivun Terminal
 
 REM ========================================
-REM   Kivun Terminal v2.0 - Launcher
+REM   Kivun Terminal v2.1 - Launcher
 REM   Runs Claude Code natively on Windows
+REM   ANSI color fix: applies #C8E6FF background
+REM   regardless of WT profile state
 REM ========================================
+
+REM --- Phase 2: inside terminal, apply colors and run Claude ---
+if "%~1"=="--run" goto :run_claude
+
+title Kivun Terminal
 
 REM --- Read configuration ---
 set "RESPONSE_LANGUAGE=english"
@@ -26,7 +32,6 @@ set "WORK_DIR=%USERPROFILE%"
 
 if "%~1"=="" goto :work_dir_done
 if /i "%~1"=="READFILE" (
-    REM Read path from file written by folder-picker.vbs
     set "PATHFILE=%LOCALAPPDATA%\Kivun\kivun-workdir.txt"
     if exist "!PATHFILE!" (
         for /f "usebackq delims=" %%P in ("!PATHFILE!") do set "WORK_DIR=%%P"
@@ -34,7 +39,6 @@ if /i "%~1"=="READFILE" (
     goto :work_dir_done
 )
 
-REM Direct folder path argument
 if exist "%~1" (
     set "WORK_DIR=%~1"
 )
@@ -60,6 +64,44 @@ if "!CLAUDE_FOUND!"=="0" (
     echo.
     pause
     exit /b 1
+)
+
+REM --- Try Windows Terminal first ---
+where wt.exe >nul 2>&1
+if errorlevel 1 goto :fallback_cmd
+
+REM Launch WT calling self with --run (colors applied inside terminal)
+start "" wt.exe --maximized -p "Kivun Terminal" -d "!WORK_DIR!" -- "!SCRIPT_DIR!kivun-terminal.bat" --run
+exit /b 0
+
+:fallback_cmd
+REM Fallback: run in current CMD window
+cd /d "!WORK_DIR!"
+goto :run_claude
+
+REM ========================================
+REM   Phase 2: Apply colors + launch Claude
+REM ========================================
+:run_claude
+title Kivun Terminal
+
+REM Generate ESC character for ANSI sequences (Windows 10+)
+for /f %%a in ('echo prompt $E ^| cmd') do set "ESC=%%a"
+
+REM Apply Kivun light-blue background #C8E6FF (200,230,255) + dark text #0C0C0C (12,12,12)
+<nul set /p="!ESC![48;2;200;230;255m!ESC![38;2;12;12;12m"
+cls
+
+REM Re-read config (needed when launched via --run)
+set "RESPONSE_LANGUAGE=english"
+set "SCRIPT_DIR=%~dp0"
+if exist "!SCRIPT_DIR!config.txt" (
+    for /f "usebackq tokens=1,* delims==" %%A in ("!SCRIPT_DIR!config.txt") do (
+        set "LINE=%%A"
+        if not "!LINE:~0,1!"=="#" (
+            if "%%A"=="RESPONSE_LANGUAGE" set "RESPONSE_LANGUAGE=%%B"
+        )
+    )
 )
 
 REM --- Set language prompt ---
@@ -89,23 +131,7 @@ if /i "!RESPONSE_LANGUAGE!"=="hausa_ajami" set "LANG_PROMPT=Always respond in Ha
 if /i "!RESPONSE_LANGUAGE!"=="rohingya" set "LANG_PROMPT=Always respond in Rohingya."
 if /i "!RESPONSE_LANGUAGE!"=="turoyo" set "LANG_PROMPT=Always respond in Turoyo (Neo-Aramaic)."
 
-REM --- Try Windows Terminal first ---
-where wt.exe >nul 2>&1
-if errorlevel 1 goto :fallback_cmd
-
-REM Launch via Windows Terminal (claude is a .cmd file, needs cmd /c)
-if defined LANG_PROMPT (
-    start "" wt.exe --maximized -p "Kivun Terminal" -d "!WORK_DIR!" -- cmd /c claude --append-system-prompt "!LANG_PROMPT!"
-) else (
-    start "" wt.exe --maximized -p "Kivun Terminal" -d "!WORK_DIR!" -- cmd /c claude
-)
-exit /b 0
-
-:fallback_cmd
-REM Fallback: run Claude directly in this window with light blue colors
-color B0
-title Kivun Terminal
-cd /d "!WORK_DIR!"
+REM --- Launch Claude Code ---
 if defined LANG_PROMPT (
     claude --append-system-prompt "!LANG_PROMPT!"
 ) else (
