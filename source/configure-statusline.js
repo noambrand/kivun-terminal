@@ -26,7 +26,8 @@ try {
 const normalizedPath = statuslinePath.replace(/\\/g, '/');
 settings.statusLine = {
     type: 'command',
-    command: 'node "' + normalizedPath + '"'
+    command: 'node "' + normalizedPath + '"',
+    lines: 2
 };
 
 // Write back

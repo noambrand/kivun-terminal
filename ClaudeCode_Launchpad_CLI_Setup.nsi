@@ -39,7 +39,7 @@ VIAddVersionKey "LegalCopyright" "(C) 2026 ${PRODUCT_PUBLISHER}"
 
 ; Modern UI Configuration
 !define MUI_ABORTWARNING
-!define MUI_ICON "source\claude_code.ico"
+!define MUI_ICON "source\claude_icon.ico"
 !define MUI_HEADERIMAGE
 !define MUI_HEADERIMAGE_BITMAP_NOSTRETCH
 !define MUI_WELCOMEFINISHPAGE_BITMAP_NOSTRETCH
@@ -146,17 +146,16 @@ Section "!Core Components (Required)" SecCore
   SetOutPath "$INSTDIR"
 
   ; Copy essential files from source/
-  File "source\claude_code.ico"
+  File "source\claude_icon.ico"
   File "source\config.txt"
   File "source\claudecode-launchpad.bat"
   File "source\claudecode-launchpad-choose-folder.bat"
-  File "source\folder-picker.vbs"
-  File "source\folder-picker-launcher.vbs"
-  File "source\write-path.vbs"
-  File "source\create-shortcut.vbs"
+  File "source\folder-picker.js"
+  File "source\folder-picker-launcher.js"
+  File "source\write-path.js"
   File "source\post-install.bat"
   File "source\claudecode-launchpad-wt-fragment.json"
-  File "source\apply-wt-settings.vbs"
+  File "source\apply-wt-settings.js"
   File "source\statusline.mjs"
   File "source\configure-statusline.js"
 
@@ -233,7 +232,7 @@ Section "!Core Components (Required)" SecCore
 
   ; Create Start Menu shortcuts
   CreateDirectory "$SMPROGRAMS\${PRODUCT_NAME}"
-  CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\${PRODUCT_NAME}.lnk" "wscript.exe" '"$INSTDIR\folder-picker-launcher.vbs"' "$INSTDIR\claude_code.ico" 0 SW_SHOWNORMAL "" "${PRODUCT_DESCRIPTION}"
+  CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\${PRODUCT_NAME}.lnk" "wscript.exe" '"$INSTDIR\folder-picker-launcher.js"' "$INSTDIR\claude_icon.ico" 0 SW_SHOWNORMAL "" "${PRODUCT_DESCRIPTION}"
   CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\Configuration.lnk" "notepad.exe" "$INSTDIR\config.txt" "" 0 SW_SHOWNORMAL "" "Configure language settings"
   CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\Uninstall.lnk" "$INSTDIR\Uninstall.exe" "" "" 0 SW_SHOWNORMAL "" "Uninstall ${PRODUCT_NAME}"
 
@@ -247,17 +246,17 @@ Section "!Core Components (Required)" SecCore
   RMDir /r "$LOCALAPPDATA\Microsoft\Windows Terminal\Fragments\KivunTerminal"
 
   ; Create Desktop shortcut
-  CreateShortCut "$DESKTOP\ClaudeCode Launchpad CLI.lnk" "wscript.exe" '"$INSTDIR\folder-picker-launcher.vbs"' "$INSTDIR\claude_code.ico" 0 SW_SHOWNORMAL "" "${PRODUCT_DESCRIPTION}"
+  CreateShortCut "$DESKTOP\ClaudeCode Launchpad CLI.lnk" "wscript.exe" '"$INSTDIR\folder-picker-launcher.js"' "$INSTDIR\claude_icon.ico" 0 SW_SHOWNORMAL "" "${PRODUCT_DESCRIPTION}"
 
   ; Create SendTo shortcut
-  CreateShortCut "$SENDTO\ClaudeCode Launchpad CLI.lnk" "$INSTDIR\claudecode-launchpad.bat" "" "$INSTDIR\claude_code.ico" 0 SW_SHOWNORMAL "" "Open with ClaudeCode Launchpad CLI"
+  CreateShortCut "$SENDTO\ClaudeCode Launchpad CLI.lnk" "$INSTDIR\claudecode-launchpad.bat" "" "$INSTDIR\claude_icon.ico" 0 SW_SHOWNORMAL "" "Open with ClaudeCode Launchpad CLI"
 
   ; Write registry for Add/Remove Programs
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\ClaudeCodeLaunchpad" "DisplayName" "${PRODUCT_NAME}"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\ClaudeCodeLaunchpad" "DisplayVersion" "${PRODUCT_VERSION}"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\ClaudeCodeLaunchpad" "Publisher" "${PRODUCT_PUBLISHER}"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\ClaudeCodeLaunchpad" "UninstallString" "$INSTDIR\Uninstall.exe"
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\ClaudeCodeLaunchpad" "DisplayIcon" "$INSTDIR\claude_code.ico"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\ClaudeCodeLaunchpad" "DisplayIcon" "$INSTDIR\claude_icon.ico"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\ClaudeCodeLaunchpad" "URLInfoAbout" "${PRODUCT_WEB_SITE}"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\ClaudeCodeLaunchpad" "HelpLink" "${PRODUCT_WEB_SITE}"
   WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\ClaudeCodeLaunchpad" "NoModify" 1
@@ -265,22 +264,17 @@ Section "!Core Components (Required)" SecCore
 
   ; Add right-click context menu for folders: "Open with ClaudeCode Launchpad CLI"
   WriteRegStr HKCR "Directory\shell\ClaudeCodeLaunchpad" "" "Open with ClaudeCode Launchpad CLI"
-  WriteRegStr HKCR "Directory\shell\ClaudeCodeLaunchpad" "Icon" "$INSTDIR\claude_code.ico"
+  WriteRegStr HKCR "Directory\shell\ClaudeCodeLaunchpad" "Icon" "$INSTDIR\claude_icon.ico"
   WriteRegStr HKCR "Directory\shell\ClaudeCodeLaunchpad\command" "" '"$INSTDIR\claudecode-launchpad.bat" "%1"'
 
   ; Also add to directory background (right-click inside a folder)
   WriteRegStr HKCR "Directory\Background\shell\ClaudeCodeLaunchpad" "" "Open ClaudeCode Launchpad CLI here"
-  WriteRegStr HKCR "Directory\Background\shell\ClaudeCodeLaunchpad" "Icon" "$INSTDIR\claude_code.ico"
+  WriteRegStr HKCR "Directory\Background\shell\ClaudeCodeLaunchpad" "Icon" "$INSTDIR\claude_icon.ico"
   WriteRegStr HKCR "Directory\Background\shell\ClaudeCodeLaunchpad\command" "" '"$INSTDIR\claudecode-launchpad.bat" "%V"'
 
   ; Install Windows Terminal fragment
   CreateDirectory "$LOCALAPPDATA\Microsoft\Windows Terminal\Fragments\ClaudeCodeLaunchpad"
   CopyFiles /SILENT "$INSTDIR\claudecode-launchpad-wt-fragment.json" "$LOCALAPPDATA\Microsoft\Windows Terminal\Fragments\ClaudeCodeLaunchpad\claudecode-launchpad-wt-fragment.json"
-
-  ; Apply Noam color scheme directly to WT settings (fragments alone may not apply colors)
-  DetailPrint "Applying Windows Terminal color scheme..."
-  nsExec::ExecToLog 'cscript //nologo "$INSTDIR\apply-wt-settings.vbs"'
-  Pop $0
 
   ; Set CLAUDE_CODE_STATUSLINE environment variable (system-wide, persists)
   DetailPrint "Setting CLAUDE_CODE_STATUSLINE environment variable..."
@@ -384,6 +378,11 @@ Section "!Install Claude Code (Required)" SecClaudeCode
   ${Else}
     DetailPrint "WARNING: Could not configure statusline in settings (exit code: $0)"
   ${EndIf}
+
+  ; Apply Noam color scheme directly to WT settings (fragments alone may not apply colors)
+  DetailPrint "Applying Windows Terminal color scheme..."
+  nsExec::ExecToLog 'node "$INSTDIR\apply-wt-settings.js"'
+  Pop $0
 SectionEnd
 
 Section "Install Windows Terminal (Recommended)" SecWindowsTerminal
@@ -467,7 +466,7 @@ SectionEnd
 ; Desktop shortcut creation function (called from finish page)
 Function CreateDesktopShortcut
   Delete "$DESKTOP\Kivun Terminal.lnk"
-  CreateShortCut "$DESKTOP\ClaudeCode Launchpad CLI.lnk" "wscript.exe" '"$INSTDIR\folder-picker-launcher.vbs"' "$INSTDIR\claude_code.ico" 0 SW_SHOWNORMAL "" "${PRODUCT_DESCRIPTION}"
+  CreateShortCut "$DESKTOP\ClaudeCode Launchpad CLI.lnk" "wscript.exe" '"$INSTDIR\folder-picker-launcher.js"' "$INSTDIR\claude_icon.ico" 0 SW_SHOWNORMAL "" "${PRODUCT_DESCRIPTION}"
 FunctionEnd
 
 ; Uninstaller

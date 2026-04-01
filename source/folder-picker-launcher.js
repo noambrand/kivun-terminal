@@ -1,0 +1,60 @@
+// ClaudeCode Launchpad CLI - Folder Picker & Launcher (JScript for Windows Script Host)
+// Shows folder browse dialog, then launches ClaudeCode Launchpad CLI.
+// No intermediate cmd window is displayed.
+// Run with: wscript.exe folder-picker-launcher.js
+
+var wshShell = new ActiveXObject("WScript.Shell");
+var fso = new ActiveXObject("Scripting.FileSystemObject");
+var shell = new ActiveXObject("Shell.Application");
+
+var scriptDir = fso.GetParentFolderName(WScript.ScriptFullName);
+var startPath = wshShell.ExpandEnvironmentStrings("%USERPROFILE%");
+
+// Show folder browse dialog
+var folder = shell.BrowseForFolder(0, "Select folder for ClaudeCode Launchpad CLI", 0, startPath);
+
+if (folder == null) {
+    // User cancelled browse - offer text-based alternative
+    // 4 = vbYesNo, 32 = vbQuestion
+    var choice = wshShell.Popup(
+        "Would you like to type or paste a folder path instead?",
+        0, "ClaudeCode Launchpad CLI", 4 + 32
+    );
+    if (choice == 6) { // vbYes
+        wshShell.Run("\"" + scriptDir + "\\claudecode-launchpad-choose-folder.bat\" --text-only", 1, false);
+    }
+    WScript.Quit();
+}
+
+var selectedPath = folder.Self.Path;
+
+// Write selected path to file (UTF-8 without BOM)
+var kivunDir = wshShell.ExpandEnvironmentStrings("%LOCALAPPDATA%") + "\\Kivun";
+var filePath = kivunDir + "\\kivun-workdir.txt";
+
+if (!fso.FolderExists(kivunDir)) {
+    fso.CreateFolder(kivunDir);
+}
+
+var stream = new ActiveXObject("ADODB.Stream");
+stream.Type = 2; // adTypeText
+stream.Charset = "utf-8";
+stream.Open();
+stream.WriteText(selectedPath);
+
+// Strip the 3-byte UTF-8 BOM before saving
+stream.Position = 0;
+stream.Type = 1; // adTypeBinary
+stream.Position = 3;
+
+var outStream = new ActiveXObject("ADODB.Stream");
+outStream.Type = 1;
+outStream.Open();
+stream.CopyTo(outStream);
+outStream.SaveToFile(filePath, 2); // adSaveCreateOverWrite
+outStream.Close();
+stream.Close();
+
+// Launch claudecode-launchpad.bat with READFILE argument
+// Window style 0 = hidden cmd window (WT opens its own visible window)
+wshShell.Run("\"" + scriptDir + "\\claudecode-launchpad.bat\" \"READFILE\"", 0, false);
