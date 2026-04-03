@@ -21,22 +21,32 @@
 
 ## Status Bar
 
-ClaudeCode Launchpad CLI adds a status bar at the bottom of Claude Code that shows live session info:
+ClaudeCode Launchpad CLI adds a two-line status bar at the bottom of Claude Code that shows live session info:
 
 ```
-Opus 4.6 | context used:23% | my-project | total tokens:45K | duration:12m | /Users/me/my-project
+BookWriter | Sonnet 4.6 | Context █████░░░░░ 51% | total tokens:284K | duration:24:13 | C:\Users\Lenovo\Downloads\BookWriter
+  Session ████████░░ 77% resets in 4h15m  |  Weekly ██░░░░░░░░ 16% resets in 6d18h
 ```
+
+**Line 1 — Session overview**
 
 | Field | What it shows | Colors |
 |-------|---------------|--------|
-| **Model** | Active Claude model (e.g. "Opus 4.6") | Green = Opus, Yellow = Sonnet/Haiku |
-| **Context used** | % of context window consumed | Green = under 40%, Yellow = 40–69%, Red = 70%+ |
 | **Project** | Current folder name | Cyan |
-| **Total tokens** | Combined input + output tokens | Yellow |
-| **Duration** | Session time (e.g. "12m" or "1:30") | Gray |
+| **Model** | Active Claude model (e.g. "Sonnet 4.6") | Green = Opus, Yellow = Sonnet/Haiku |
+| **Context** | % of context window consumed (progress bar) | Green < 50%, Yellow 50–79%, Red 80%+ |
+| **Total tokens** | Combined input + output tokens this session | Yellow |
+| **Duration** | Wall-clock session time (e.g. "24:13") | Gray |
 | **Full path** | Complete working directory path | Gray |
 
-> **Tip:** Watch the **context used** field — when it turns red (70%+), Claude is running low on context and may start forgetting earlier parts of the conversation. Consider starting a new session.
+**Line 2 — Usage limits**
+
+| Field | What it shows | Colors |
+|-------|---------------|--------|
+| **Session** | Session token usage % with time until reset (progress bar) | Green < 50%, Yellow 50–79%, Red 80%+ |
+| **Weekly** | Weekly token usage % with time until reset (progress bar) | Green < 50%, Yellow 50–79%, Red 80%+ |
+
+> **Tip:** Watch the **Context** bar on line 1 — when it turns red (80%+), Claude is running low on context and may start forgetting earlier parts of the conversation. Consider starting a new session. Monitor **Session** and **Weekly** on line 2 to track your plan usage limits.
 
 ## Installation
 
