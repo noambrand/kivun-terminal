@@ -1,5 +1,28 @@
 # Changelog
 
+## [2.3.0] - 2026-04-04
+
+### Added
+- **Optional color theme**: Installer checkbox (checked by default) — uncheck to keep your existing terminal colors instead of applying the Kivun light-blue theme
+- **New no-color WT fragment** (`claudecode-launchpad-wt-fragment-nocolor.json`): registers the WT profile without overriding the color scheme
+- **One-time Claude flags**: After typing a folder path in the text-input fallback, a prompt asks for optional Claude flags (e.g. `--continue`). Flags are written to `kivun-claude-flags.txt`, read at launch, then deleted
+- **Persistent Claude flags**: `CLAUDE_FLAGS=` key in `config.txt` — set once, applied on every launch
+- `docs/RELEASING.md`: Release checklist documenting required assets and build steps for every release
+
+### Changed
+- `claudecode-launchpad.bat`: Phase 2 config re-read moved before ANSI color block so `TERMINAL_COLOR` is available when Windows Terminal launches via `--run`
+- `apply-wt-settings.js` is now only executed when the color theme checkbox is checked
+- WT fragment copy is now conditional: color fragment for checked, no-color fragment for unchecked
+
+## [2.2.0] - 2026-04-01
+
+### Changed
+- **VBS → JScript migration**: All `.vbs` scripts replaced with `.js` for better compatibility
+- **Statusline fix**: Second line now shows on session start (configures `lines: 2` by default)
+- **Folder picker paste support**: Cancelling the folder picker now falls through to a text input prompt where users can paste or type a folder path
+- Icon renamed to `claude_icon.ico`
+- NSIS installer updated for all file changes
+
 ## [2.1.0] - 2026-03-31
 
 ### Changed
