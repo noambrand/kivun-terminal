@@ -13,11 +13,13 @@
 ## What You Get
 
 - **Automatic installation** - Node.js, Git, and Claude Code installed and kept up to date automatically
-- **Clean, modern terminal** - light blue theme with dark text (Windows Terminal on Windows)
+- **Two-line live status bar** - model, context %, token count, session/weekly usage bars with time until reset
 - **One-click launch** - double-click the desktop shortcut and Claude Code starts immediately (Windows)
 - **Folder picker** - choose a project folder and Claude opens right there, no `cd` needed (Windows)
 - **Right-click any folder** - "Open with ClaudeCode Launchpad CLI" context menu integration (Windows)
-- **Status bar** - live display of model, context usage, token count, and session duration
+- **Optional terminal theme** - installer checkbox to apply the Kivun light-blue theme or keep your own colors
+- **Claude flags support** - pass flags like `--continue` from the folder picker, or set persistent flags in `config.txt`
+- **Multi-language** - Claude responds in your language (Hebrew, Arabic, Persian, and 20+ others)
 
 ## Status Bar
 
@@ -92,6 +94,25 @@ The original fix had its own trade-offs — mixed Hebrew/English lines didn't al
 
 > **For developers:** If you prefer the original RTL approach, you're welcome to [fork this repo](https://github.com/noambrand/kivun-terminal/fork) and build on it.
 
+## Configuration
+
+After installation, edit `%LOCALAPPDATA%\Kivun\config.txt` (Windows) or open Terminal and run `claude` (macOS):
+
+```ini
+# Response language — Claude replies in this language
+RESPONSE_LANGUAGE=english
+
+# Terminal color theme
+# Options: kivun (light-blue), default (keep your terminal theme)
+TERMINAL_COLOR=kivun
+
+# Claude startup flags applied on every launch
+# Example: CLAUDE_FLAGS=--continue
+CLAUDE_FLAGS=
+```
+
+**One-time flags (Windows):** Open the desktop shortcut → cancel the folder picker → type a path → you'll be prompted for flags (e.g. `--continue`). These are used once then discarded.
+
 ## Requirements
 
 - **Windows**: Windows 10/11
@@ -102,6 +123,14 @@ The original fix had its own trade-offs — mixed Hebrew/English lines didn't al
 
 - [Quick Start](docs/QUICK_START.md)
 - [Changelog](docs/CHANGELOG.md)
+
+## Community
+
+ClaudeCode Launchpad CLI has been submitted to the following awesome lists — pending review:
+
+- [awesome-claude-code](https://github.com/jqueryscript/awesome-claude-code/pull/166) — jqueryscript/awesome-claude-code
+- [awesome-claude](https://github.com/webfuse-com/awesome-claude/pull/159) — webfuse-com/awesome-claude
+- [awesome-claude-plugins](https://github.com/quemsah/awesome-claude-plugins/pull/85) — quemsah/awesome-claude-plugins
 
 ## License
 
