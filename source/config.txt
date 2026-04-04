@@ -4,3 +4,9 @@
 # Options: english, hebrew, arabic, persian, urdu, kurdish, pashto, sindhi, yiddish, syriac, dhivehi, nko, adlam, mandaic, samaritan, dari, uyghur, balochi, kashmiri, shahmukhi, azeri_south, jawi, hausa_ajami, rohingya, turoyo
 # Default: english
 RESPONSE_LANGUAGE=english
+# Terminal color theme
+# Options: kivun (light-blue), default (keep your terminal theme)
+TERMINAL_COLOR=kivun
+# Claude startup flags (optional, applied on every launch)
+# Example: CLAUDE_FLAGS=--continue
+CLAUDE_FLAGS=

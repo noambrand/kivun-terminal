@@ -81,6 +81,7 @@ Page custom ConfigPage ConfigPageLeave
 ; Variables
 Var ConfigLanguage
 Var ConfigUsername
+Var ConfigTerminalColor
 
 ; Configuration page
 Function ConfigPage
@@ -131,12 +132,18 @@ nsDialogs::Create 1018
   ${NSD_CB_AddString} $ConfigLanguage "Turoyo"
   ${NSD_CB_SelectString} $ConfigLanguage "English"
 
+  ; Terminal color theme checkbox
+  ${NSD_CreateCheckbox} 0 95u 100% 12u "Apply Kivun light-blue terminal theme (recommended)"
+  Pop $ConfigTerminalColor
+  ${NSD_Check} $ConfigTerminalColor
+
 nsDialogs::Show
 FunctionEnd
 
 Function ConfigPageLeave
   ${NSD_GetText} $ConfigLanguage $ConfigLanguage
   ${NSD_GetText} $ConfigUsername $ConfigUsername
+  ${NSD_GetState} $ConfigTerminalColor $ConfigTerminalColor
 FunctionEnd
 
 ; Installation sections
@@ -155,6 +162,7 @@ Section "!Core Components (Required)" SecCore
   File "source\write-path.js"
   File "source\post-install.bat"
   File "source\claudecode-launchpad-wt-fragment.json"
+  File "source\claudecode-launchpad-wt-fragment-nocolor.json"
   File "source\apply-wt-settings.js"
   File "source\statusline.mjs"
   File "source\configure-statusline.js"
@@ -225,6 +233,18 @@ Section "!Core Components (Required)" SecCore
     FileWrite $0 "RESPONSE_LANGUAGE=english$\r$\n"
   ${EndIf}
 
+  FileWrite $0 "# Terminal color theme$\r$\n"
+  FileWrite $0 "# Options: kivun (light-blue), default (keep your terminal theme)$\r$\n"
+  ${If} $ConfigTerminalColor == ${BST_CHECKED}
+    FileWrite $0 "TERMINAL_COLOR=kivun$\r$\n"
+  ${Else}
+    FileWrite $0 "TERMINAL_COLOR=default$\r$\n"
+  ${EndIf}
+
+  FileWrite $0 "# Claude startup flags (optional, applied on every launch)$\r$\n"
+  FileWrite $0 "# Example: CLAUDE_FLAGS=--continue$\r$\n"
+  FileWrite $0 "CLAUDE_FLAGS=$\r$\n"
+
   FileClose $0
 
   ; Write uninstaller
@@ -274,7 +294,11 @@ Section "!Core Components (Required)" SecCore
 
   ; Install Windows Terminal fragment
   CreateDirectory "$LOCALAPPDATA\Microsoft\Windows Terminal\Fragments\ClaudeCodeLaunchpad"
-  CopyFiles /SILENT "$INSTDIR\claudecode-launchpad-wt-fragment.json" "$LOCALAPPDATA\Microsoft\Windows Terminal\Fragments\ClaudeCodeLaunchpad\claudecode-launchpad-wt-fragment.json"
+  ${If} $ConfigTerminalColor == ${BST_CHECKED}
+    CopyFiles /SILENT "$INSTDIR\claudecode-launchpad-wt-fragment.json" "$LOCALAPPDATA\Microsoft\Windows Terminal\Fragments\ClaudeCodeLaunchpad\claudecode-launchpad-wt-fragment.json"
+  ${Else}
+    CopyFiles /SILENT "$INSTDIR\claudecode-launchpad-wt-fragment-nocolor.json" "$LOCALAPPDATA\Microsoft\Windows Terminal\Fragments\ClaudeCodeLaunchpad\claudecode-launchpad-wt-fragment.json"
+  ${EndIf}
 
   ; Set CLAUDE_CODE_STATUSLINE environment variable (system-wide, persists)
   DetailPrint "Setting CLAUDE_CODE_STATUSLINE environment variable..."
@@ -379,10 +403,12 @@ Section "!Install Claude Code (Required)" SecClaudeCode
     DetailPrint "WARNING: Could not configure statusline in settings (exit code: $0)"
   ${EndIf}
 
-  ; Apply Noam color scheme directly to WT settings (fragments alone may not apply colors)
-  DetailPrint "Applying Windows Terminal color scheme..."
-  nsExec::ExecToLog 'node "$INSTDIR\apply-wt-settings.js"'
-  Pop $0
+  ; Apply Noam color scheme directly to WT settings (only when theme is enabled)
+  ${If} $ConfigTerminalColor == ${BST_CHECKED}
+    DetailPrint "Applying Windows Terminal color scheme..."
+    nsExec::ExecToLog 'node "$INSTDIR\apply-wt-settings.js"'
+    Pop $0
+  ${EndIf}
 SectionEnd
 
 Section "Install Windows Terminal (Recommended)" SecWindowsTerminal

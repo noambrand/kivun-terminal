@@ -63,4 +63,13 @@ if not exist "!CHOSEN_FOLDER!" (
 
 REM Write typed path via JScript (preserves Unicode)
 cscript //nologo "%~dp0write-path.js" "!CHOSEN_FOLDER!" 2>nul
+
+REM --- Optional one-time Claude flags ---
+echo.
+set "ONE_TIME_FLAGS="
+set /p "ONE_TIME_FLAGS=Claude flags (Enter to skip, e.g. --continue): "
+if not "!ONE_TIME_FLAGS!"=="" (
+    echo !ONE_TIME_FLAGS!> "%LOCALAPPDATA%\Kivun\kivun-claude-flags.txt"
+)
+
 call "%~dp0claudecode-launchpad.bat" "READFILE"

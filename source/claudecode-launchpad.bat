@@ -16,6 +16,8 @@ title ClaudeCode Launchpad CLI
 
 REM --- Read configuration ---
 set "RESPONSE_LANGUAGE=english"
+set "TERMINAL_COLOR=kivun"
+set "CLAUDE_FLAGS="
 set "SCRIPT_DIR=%~dp0"
 
 if exist "!SCRIPT_DIR!config.txt" (
@@ -23,6 +25,8 @@ if exist "!SCRIPT_DIR!config.txt" (
         set "LINE=%%A"
         if not "!LINE:~0,1!"=="#" (
             if "%%A"=="RESPONSE_LANGUAGE" set "RESPONSE_LANGUAGE=%%B"
+            if "%%A"=="TERMINAL_COLOR" set "TERMINAL_COLOR=%%B"
+            if "%%A"=="CLAUDE_FLAGS" set "CLAUDE_FLAGS=%%B"
         )
     )
 )
@@ -85,23 +89,28 @@ REM ========================================
 :run_claude
 title ClaudeCode Launchpad CLI
 
-REM Generate ESC character for ANSI sequences (Windows 10+)
-for /f %%a in ('echo prompt $E ^| cmd') do set "ESC=%%a"
-
-REM Apply Kivun light-blue background #C8E6FF (200,230,255) + dark text #0C0C0C (12,12,12)
-<nul set /p="!ESC![48;2;200;230;255m!ESC![38;2;12;12;12m"
-cls
-
-REM Re-read config (needed when launched via --run)
+REM Re-read config (needed when launched via --run inside Windows Terminal)
 set "RESPONSE_LANGUAGE=english"
+set "TERMINAL_COLOR=kivun"
+set "CLAUDE_FLAGS="
 set "SCRIPT_DIR=%~dp0"
 if exist "!SCRIPT_DIR!config.txt" (
     for /f "usebackq tokens=1,* delims==" %%A in ("!SCRIPT_DIR!config.txt") do (
         set "LINE=%%A"
         if not "!LINE:~0,1!"=="#" (
             if "%%A"=="RESPONSE_LANGUAGE" set "RESPONSE_LANGUAGE=%%B"
+            if "%%A"=="TERMINAL_COLOR" set "TERMINAL_COLOR=%%B"
+            if "%%A"=="CLAUDE_FLAGS" set "CLAUDE_FLAGS=%%B"
         )
     )
+)
+
+if /i "!TERMINAL_COLOR!"=="kivun" (
+    REM Generate ESC character for ANSI sequences (Windows 10+)
+    for /f %%a in ('echo prompt $E ^| cmd') do set "ESC=%%a"
+    REM Apply Kivun light-blue background #C8E6FF (200,230,255) + dark text #0C0C0C (12,12,12)
+    <nul set /p="!ESC![48;2;200;230;255m!ESC![38;2;12;12;12m"
+    cls
 )
 
 REM --- Set language prompt ---
@@ -131,10 +140,19 @@ if /i "!RESPONSE_LANGUAGE!"=="hausa_ajami" set "LANG_PROMPT=Always respond in Ha
 if /i "!RESPONSE_LANGUAGE!"=="rohingya" set "LANG_PROMPT=Always respond in Rohingya."
 if /i "!RESPONSE_LANGUAGE!"=="turoyo" set "LANG_PROMPT=Always respond in Turoyo (Neo-Aramaic)."
 
+REM --- Read one-time flags (written by choose-folder on text-input path) ---
+set "ONE_TIME_FLAGS="
+if exist "%LOCALAPPDATA%\Kivun\kivun-claude-flags.txt" (
+    for /f "usebackq delims=" %%F in ("%LOCALAPPDATA%\Kivun\kivun-claude-flags.txt") do set "ONE_TIME_FLAGS=%%F"
+    del "%LOCALAPPDATA%\Kivun\kivun-claude-flags.txt"
+)
+set "FINAL_FLAGS=!CLAUDE_FLAGS!"
+if not "!ONE_TIME_FLAGS!"=="" set "FINAL_FLAGS=!FINAL_FLAGS! !ONE_TIME_FLAGS!"
+
 REM --- Launch Claude Code ---
 if defined LANG_PROMPT (
-    claude --append-system-prompt "!LANG_PROMPT!"
+    claude !FINAL_FLAGS! --append-system-prompt "!LANG_PROMPT!"
 ) else (
-    claude
+    claude !FINAL_FLAGS!
 )
 exit /b 0

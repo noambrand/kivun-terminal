@@ -1,0 +1,17 @@
+{
+    "profiles": [
+        {
+            "name": "ClaudeCode Launchpad CLI",
+            "commandline": "cmd /c claude",
+            "icon": "%LOCALAPPDATA%\\Kivun\\claude_code.ico",
+            "cursorShape": "bar",
+            "font": {
+                "face": "Cascadia Mono",
+                "size": 11
+            },
+            "scrollbarState": "visible",
+            "startingDirectory": "%USERPROFILE%",
+            "tabTitle": "ClaudeCode Launchpad CLI"
+        }
+    ]
+}
