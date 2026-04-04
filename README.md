@@ -63,9 +63,10 @@ The installer auto-detects what you already have and skips it.
 ### macOS
 
 1. **[Download](https://github.com/noambrand/kivun-terminal/releases/latest)** `ClaudeCode_Launchpad_CLI_Setup_<version>.pkg`
-2. **Right-click** the `.pkg` file → **Open** (required because the package is unsigned — macOS will block a regular double-click)
-3. Enter your password when prompted — the installer needs admin access to install Homebrew, Node.js, Git, and Claude Code
-4. Open **Terminal** (Applications → Utilities → Terminal) and type `claude`
+2. **Double-click** the `.pkg` — macOS will block it with *"cannot be opened because Apple cannot check it for malicious software"*. Close the alert.
+3. Go to  → **System Settings → Privacy & Security**, scroll to the bottom, and click **Allow Anyway** next to the blocked installer.
+4. **Double-click the `.pkg` again** to run the installer. Enter your password when prompted — admin access is needed to install Homebrew, Node.js, Git, and Claude Code.
+5. Open **Terminal** (Applications → Utilities → Terminal) and type `claude`
 
 > **What happens during install:** The .pkg runs a script that installs [Homebrew](https://brew.sh) (the macOS package manager), then uses it to install Node.js and Git, then installs Claude Code via `npm`. Everything is downloaded fresh — no binaries are bundled. An internet connection is required.
 
