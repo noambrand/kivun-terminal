@@ -58,10 +58,9 @@
 
 A two-line live status bar at the bottom of every session:
 
-```
-BookWriter | Sonnet 4.6 | Context █████░░░░░ 51% | total tokens:284K | duration:24:13 | C:\Users\you\BookWriter
-  Session ████████░░ 77% resets in 4h15m  |  Weekly ██░░░░░░░░ 16% resets in 6d18h
-```
+> **BookWriter** | 🟢 Sonnet 4.6 | Context 🟩🟩🟩🟩🟩⬜⬜⬜⬜⬜ 51% | tokens: 284K | 24:13
+>
+> Session 🟨🟨🟨🟨🟨🟨🟨🟨⬜⬜ 77% resets in 4h15m &nbsp;|&nbsp; Weekly 🟩🟩⬜⬜⬜⬜⬜⬜⬜⬜ 16% resets in 6d18h
 
 | Field | What it shows |
 |-------|---------------|
