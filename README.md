@@ -1,141 +1,147 @@
-<p align="left">
-  <img src="ClaudeCode Launchpad CLI.jpeg" width="500">
+<p align="center">
+  <img src="ClaudeCode Launchpad CLI.jpeg" width="700" alt="ClaudeCode Launchpad CLI">
 </p>
 
-# ClaudeCode Launchpad CLI
+<p align="center">
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="MIT License"></a>
+  <img src="https://img.shields.io/badge/version-2.0.3-brightgreen" alt="v2.0.3">
+  <img src="https://img.shields.io/badge/platform-Windows%2010%2F11%20%7C%20macOS%2012%2B-lightgrey" alt="Platform">
+  <img src="https://img.shields.io/badge/languages-24%2B-orange" alt="24+ Languages">
+  <a href="https://github.com/noambrand/kivun-terminal/releases/latest"><img src="https://img.shields.io/github/downloads/noambrand/kivun-terminal/total?color=purple&label=downloads" alt="Downloads"></a>
+</p>
 
-**Claude Code installer for Windows and macOS**
+<h3 align="center">Zero-to-Claude in 2 minutes. Installer, status bar, and launcher for Claude Code on Windows & macOS.</h3>
 
-2-minute setup to get Claude Code working instead of 30+ minutes of manual configuration.
+<p align="center">
+  <a href="#-quick-start">Quick Start</a> &bull;
+  <a href="#-why-launchpad-cli">Why Launchpad CLI?</a> &bull;
+  <a href="#-status-bar">Status Bar</a> &bull;
+  <a href="#-architecture">Architecture</a> &bull;
+  <a href="#-configuration">Configuration</a> &bull;
+  <a href="docs/CHANGELOG.md">Changelog</a> &bull;
+  <a href="TROUBLESHOOTING.md">Troubleshooting</a>
+</p>
 
-## [Download Latest Release](https://github.com/noambrand/kivun-terminal/releases/latest)
+---
 
-## What You Get
+## Why Launchpad CLI?
 
-- **Automatic installation** - Node.js, Git, and Claude Code installed and kept up to date automatically
-- **Two-line live status bar** - model, context %, token count, session/weekly usage bars with time until reset
-- **One-click launch** - double-click the desktop shortcut and Claude Code starts immediately (Windows)
-- **Folder picker** - choose a project folder and Claude opens right there, no `cd` needed (Windows)
-- **Right-click any folder** - "Open with ClaudeCode Launchpad CLI" context menu integration (Windows)
-- **Optional terminal theme** - installer checkbox to apply the Kivun light-blue theme or keep your own colors
-- **Claude flags support** - pass flags like `--continue` from the folder picker, or set persistent flags in `config.txt`
-- **Multi-language** - Claude responds in your language (Hebrew, Arabic, Persian, and 20+ others)
+|  | Manual Setup | Launchpad CLI |
+|---|---|---|
+| **Install Node.js, Git, Claude Code** | Find downloads, run 3 installers, configure PATH | Handled automatically |
+| **Terminal theme** | Edit Windows Terminal JSON by hand | One checkbox in the wizard |
+| **Status bar** (model, context %, usage limits) | Write your own statusline script, configure settings.json | Pre-installed and configured |
+| **Desktop shortcut + right-click menu** | Create shortcuts manually, edit registry | Included |
+| **Folder picker** | `cd` into every project | GUI picker or right-click any folder |
+| **Multi-language support** | Configure manually | One setting in `config.txt` |
+| **Time to first prompt** | 30+ minutes | ~2 minutes |
 
-## Status Bar
-
-ClaudeCode Launchpad CLI adds a two-line status bar at the bottom of Claude Code that shows live session info:
-
-```
-BookWriter | Sonnet 4.6 | Context █████░░░░░ 51% | total tokens:284K | duration:24:13 | C:\Users\Lenovo\Downloads\BookWriter
-  Session ████████░░ 77% resets in 4h15m  |  Weekly ██░░░░░░░░ 16% resets in 6d18h
-```
-
-**Line 1 — Session overview**
-
-| Field | What it shows | Colors |
-|-------|---------------|--------|
-| **Project** | Current folder name | Cyan |
-| **Model** | Active Claude model (e.g. "Sonnet 4.6") | Green = Opus, Yellow = Sonnet/Haiku |
-| **Context** | % of context window consumed (progress bar) | Green < 50%, Yellow 50–79%, Red 80%+ |
-| **Total tokens** | Combined input + output tokens this session | Yellow |
-| **Duration** | Wall-clock session time (e.g. "24:13") | Gray |
-| **Full path** | Complete working directory path | Gray |
-
-**Line 2 — Usage limits**
-
-| Field | What it shows | Colors |
-|-------|---------------|--------|
-| **Session** | Session token usage % with time until reset (progress bar) | Green < 50%, Yellow 50–79%, Red 80%+ |
-| **Weekly** | Weekly token usage % with time until reset (progress bar) | Green < 50%, Yellow 50–79%, Red 80%+ |
-
-> **Tip:** Watch the **Context** bar on line 1 — when it turns red (80%+), Claude is running low on context and may start forgetting earlier parts of the conversation. Consider starting a new session. Monitor **Session** and **Weekly** on line 2 to track your plan usage limits.
-
-## Installation
+## Quick Start
 
 ### Windows
 
-1. **[Download](https://github.com/noambrand/kivun-terminal/releases/latest)** `ClaudeCode_Launchpad_CLI_Setup.exe`
-2. Run as Administrator - follow the wizard
-3. Double-click the "ClaudeCode Launchpad CLI" desktop shortcut
-
-The installer auto-detects what you already have and skips it.
+1. **[Download `ClaudeCode_Launchpad_CLI_Setup.exe`](https://github.com/noambrand/kivun-terminal/releases/latest)**
+2. Run as Administrator — the wizard auto-detects what's already installed
+3. Double-click the **"ClaudeCode Launchpad CLI"** desktop shortcut
+4. Start coding with Claude
 
 ### macOS
 
-1. **[Download](https://github.com/noambrand/kivun-terminal/releases/latest)** `ClaudeCode_Launchpad_CLI_Setup_<version>.pkg`
-2. **Double-click** the `.pkg` — macOS will block it with *"cannot be opened because Apple cannot check it for malicious software"*. Close the alert.
-3. Go to  → **System Settings → Privacy & Security**, scroll to the bottom, and click **Allow Anyway** next to the blocked installer.
-4. **Double-click the `.pkg` again** to run the installer. Enter your password when prompted — admin access is needed to install Homebrew, Node.js, Git, and Claude Code.
-5. Open **Terminal** (Applications → Utilities → Terminal) and type `claude`
+1. **[Download the `.pkg` installer](https://github.com/noambrand/kivun-terminal/releases/latest)**
+2. Double-click it, allow in **System Settings > Privacy & Security**, then run again
+3. Open **Terminal** and type `claude`
+4. Start coding with Claude
 
-> **What happens during install:** The .pkg runs a script that installs [Homebrew](https://brew.sh) (the macOS package manager), then uses it to install Node.js and Git, then installs Claude Code via `npm`. Everything is downloaded fresh — no binaries are bundled. An internet connection is required.
+> **First time?** You'll need a Claude Pro/Max subscription or [Anthropic API key](https://console.anthropic.com).
 
-> **First time using Claude Code?** You'll need a Claude account (Pro/Max) or [Anthropic API key](https://console.anthropic.com). Claude will ask for it on first launch.
+## Status Bar
 
-![Terminal Demo](/claudecode_launchpad_GIF.gif)
+A two-line live status bar at the bottom of every session:
 
-## A Note on RTL Support (v1.05 only)
+```
+BookWriter | Sonnet 4.6 | Context █████░░░░░ 51% | total tokens:284K | duration:24:13 | C:\Users\you\BookWriter
+  Session ████████░░ 77% resets in 4h15m  |  Weekly ██░░░░░░░░ 16% resets in 6d18h
+```
 
-The first version of ClaudeCode Launchpad CLI 1.05 included a custom RTL text-reversal fix that made Hebrew and Arabic display correctly in the terminal. Since then, **Claude has released a built-in RTL fix**, so the current version uses Claude's native implementation instead.
+| Field | What it shows |
+|-------|---------------|
+| **Model** | Active Claude model (color-coded: green = Opus, yellow = Sonnet/Haiku) |
+| **Context** | % of context window consumed (green/yellow/red) |
+| **Tokens** | Combined input + output tokens this session |
+| **Session / Weekly** | Usage limit % with countdown to reset |
 
-**Regardless of RTL**, the installer saves significant setup time and adds features (status bar, light blue theme, desktop shortcut, folder picker) that make it worthwhile on its own.
+## Architecture
 
-**Disclaimer:** Text alignment is left-to-right, but the text itself is fully readable.
+```mermaid
+graph TD
+    A[NSIS Installer / macOS .pkg] --> B{Dependency Check}
+    B -->|Missing| C[Install Node.js + Git + Windows Terminal]
+    B -->|Present| D[Skip]
+    C --> E[npm install -g claude-code]
+    D --> E
+    E --> F[Configure statusline.mjs]
+    F --> G[Register WT Profile + Color Scheme]
+    G --> H[Create Desktop Shortcut + Context Menu]
 
-### Differences between the original RTL fix and Claude's built-in fix
+    subgraph Runtime
+        I[Launcher .bat / Terminal] --> J{Windows Terminal available?}
+        J -->|Yes| K[WT with Kivun profile]
+        J -->|No| L[CMD fallback + ANSI colors]
+        K --> M[Claude Code + Status Bar]
+        L --> M
+    end
+```
 
-| | Original (v1.05) | Current (Claude's built-in) |
-|---|---|---|
-| Hebrew/Arabic display | Reversed per-line | Reversed natively |
-| Copy Hebrew text from terminal | Worked correctly | May copy in visual order |
-| Parentheses/brackets direction | Displayed correctly | May appear reversed |
-| Mixed Hebrew + English | Could break ordering | Preserves original order |
+## Tech Stack
 
-The original fix had its own trade-offs — mixed Hebrew/English lines didn't always maintain the correct order. We hope Claude will continue improving their built-in RTL support to address the remaining edge cases.
-
-> **For developers:** If you prefer the original RTL approach, you're welcome to [fork this repo](https://github.com/noambrand/kivun-terminal/fork) and build on it.
+| Component | Technology | Purpose |
+|-----------|-----------|---------|
+| Windows installer | NSIS | Silent/wizard install with dependency detection |
+| macOS installer | pkgbuild | .pkg with postinstall script via Homebrew |
+| Launcher | Batch / Shell | Folder picker, flag passing, WT/CMD fallback |
+| Terminal profile | Windows Terminal JSON Fragment | Custom "Noam" color scheme (#C8E6FF) |
+| Status bar | Node.js (`statusline.mjs`) | Live model, context, and usage display |
+| Config scripts | Node.js | WT settings injection, statusline setup |
+| CI/CD | GitHub Actions | Automated macOS .pkg builds |
 
 ## Configuration
 
-After installation, edit `%LOCALAPPDATA%\Kivun\config.txt` (Windows) or open Terminal and run `claude` (macOS):
+Edit `%LOCALAPPDATA%\Kivun\config.txt` (Windows) after installation:
 
 ```ini
-# Response language — Claude replies in this language
-RESPONSE_LANGUAGE=english
-
-# Terminal color theme
-# Options: kivun (light-blue), default (keep your terminal theme)
-TERMINAL_COLOR=kivun
-
-# Claude startup flags applied on every launch
-# Example: CLAUDE_FLAGS=--continue
-CLAUDE_FLAGS=
+RESPONSE_LANGUAGE=english     # 24+ languages supported
+TERMINAL_COLOR=kivun          # "kivun" or "default"
+CLAUDE_FLAGS=                 # e.g. --continue
 ```
 
-**One-time flags (Windows):** Open the desktop shortcut → cancel the folder picker → type a path → you'll be prompted for flags (e.g. `--continue`). These are used once then discarded.
+## Contributing
 
-## Requirements
+Contributions are welcome! Areas where help is especially useful:
 
-- **Windows**: Windows 10/11
-- **macOS**: macOS 12 (Monterey) or later
-- **Claude**: Pro/ Max 
+- **Linux installer** -- no Linux support yet
+- **New languages** -- expanding language support
+- **Status bar features** -- cost tracking, git branch display
+- **Installer testing** -- different Windows/macOS versions and locales
 
-## Documentation
-
-- [Quick Start](docs/QUICK_START.md)
-- [Changelog](docs/CHANGELOG.md)
+Fork the repo, make your changes, and open a PR.
 
 ## Community
 
-ClaudeCode Launchpad CLI has been submitted to the following awesome lists — pending review:
+Submitted to awesome lists (pending review):
 
-- [awesome-claude-code](https://github.com/jqueryscript/awesome-claude-code/pull/166) — jqueryscript/awesome-claude-code
-- [awesome-claude](https://github.com/webfuse-com/awesome-claude/pull/159) — webfuse-com/awesome-claude
-- [awesome-claude-plugins](https://github.com/quemsah/awesome-claude-plugins/pull/85) — quemsah/awesome-claude-plugins
+- [awesome-claude-code](https://github.com/jqueryscript/awesome-claude-code/pull/166)
+- [awesome-claude](https://github.com/webfuse-com/awesome-claude/pull/159)
+- [awesome-claude-plugins](https://github.com/quemsah/awesome-claude-plugins/pull/85)
 
 ## License
 
-MIT
+[MIT](LICENSE)
 
 ---
-**Made by [Noam Brand](https://github.com/noambrand)**
+
+<p align="center">
+  <strong>Made by <a href="https://github.com/noambrand">Noam Brand</a></strong>
+  <br><br>
+  <a href="https://github.com/noambrand"><img src="https://img.shields.io/badge/GitHub-noambrand-181717?logo=github" alt="GitHub"></a>
+  <a href="mailto:noambrand@proton.me"><img src="https://img.shields.io/badge/Email-noambrand%40proton.me-8B89CC?logo=protonmail&logoColor=white" alt="Email"></a>
+</p>
