@@ -118,8 +118,6 @@ CLAUDE_FLAGS=                 # e.g. --continue
 Contributions are welcome! Areas where help is especially useful:
 
 - **Linux installer** -- no Linux support yet
-- **New languages** -- expanding language support
-- **Status bar features** -- cost tracking, git branch display
 - **Installer testing** -- different Windows/macOS versions and locales
 
 Fork the repo, make your changes, and open a PR.
