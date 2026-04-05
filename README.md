@@ -143,5 +143,5 @@ Submitted to awesome lists (pending review):
   <strong>Made by <a href="https://github.com/noambrand">Noam Brand</a></strong>
   <br><br>
   <a href="https://github.com/noambrand"><img src="https://img.shields.io/badge/GitHub-noambrand-181717?logo=github" alt="GitHub"></a>
-  <a href="mailto:noambrand@proton.me"><img src="https://img.shields.io/badge/Email-noambrand%40proton.me-8B89CC?logo=protonmail&logoColor=white" alt="Email"></a>
+  <a href="mailto:noambbb@gmail.com"><img src="https://img.shields.io/badge/Email-noambbb%40gmail.com-EA4335?logo=gmail&logoColor=white" alt="Email"></a>
 </p>
