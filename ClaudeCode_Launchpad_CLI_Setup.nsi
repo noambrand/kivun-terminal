@@ -166,6 +166,7 @@ Section "!Core Components (Required)" SecCore
   File "source\apply-wt-settings.js"
   File "source\statusline.mjs"
   File "source\configure-statusline.js"
+  File "source\install.cmd"
 
   ; Copy documentation
   File "README.md"
@@ -311,65 +312,32 @@ SectionEnd
 Section "!Install Node.js (Required)" SecNodeJS
   SectionIn RO  ; Read-only, cannot be deselected
 
-  DetailPrint "Checking for Node.js..."
+  DetailPrint "Installing Node.js via install.cmd (curl + winget fallback)..."
+  ExecWait 'cmd /c "$INSTDIR\install.cmd" /node' $0
+  DetailPrint "install.cmd /node exit code: $0"
+
+  ${If} $0 == 10
+    MessageBox MB_OK "Node.js could not be installed: neither curl nor winget available.$\n$\nPlease install Node.js manually from https://nodejs.org/"
+  ${ElseIf} $0 != 0
+    MessageBox MB_OK "Node.js installation may have failed (exit code: $0).$\n$\nYou can install Node.js manually from https://nodejs.org/"
+  ${EndIf}
+
+  ; Verify
   nsExec::ExecToStack 'where node.exe'
   Pop $0
-
-  ${If} $0 != 0
-    DetailPrint "Node.js not found - Installing..."
-
-    ; Try bundled installer first
-    SetOutPath "$INSTDIR"
-    File /nonfatal "bundled\node-v24.14.0-x64.msi"
-
-    IfFileExists "$INSTDIR\node-v24.14.0-x64.msi" 0 node_try_winget
-      ; Silent install from bundled MSI
-      DetailPrint "Installing Node.js v24.14.0 (this may take a few minutes)..."
-      ExecWait 'msiexec /i "$INSTDIR\node-v24.14.0-x64.msi" /qn /norestart' $0
-      DetailPrint "Node.js installer exit code: $0"
-
-      ${If} $0 != 0
-        MessageBox MB_OK "Node.js installation may have failed (exit code: $0).$\n$\nYou can install Node.js manually from https://nodejs.org/"
-      ${EndIf}
-      Goto node_verify
-
-    node_try_winget:
-      ; No bundled installer - try winget
-      DetailPrint "Bundled installer not found - trying winget..."
-      nsExec::ExecToStack 'where winget.exe'
-      Pop $0
-      ${If} $0 == 0
-        DetailPrint "Installing Node.js via winget..."
-        ExecWait 'cmd /c winget install OpenJS.NodeJS.LTS --accept-package-agreements --accept-source-agreements' $0
-        DetailPrint "winget install Node.js exit code: $0"
-      ${Else}
-        MessageBox MB_OK "Node.js is required but could not be installed automatically.$\n$\nPlease install Node.js manually from https://nodejs.org/"
-      ${EndIf}
-
-    node_verify:
-
-    ; Verify installation
-    nsExec::ExecToStack 'where node.exe'
-    Pop $0
-    ${If} $0 == 0
-      DetailPrint "Node.js installed successfully"
-    ${Else}
-      DetailPrint "WARNING: node.exe not found in PATH after install - may need restart"
-    ${EndIf}
+  ${If} $0 == 0
+    DetailPrint "Node.js verified in PATH"
   ${Else}
-    DetailPrint "Node.js already installed - skipping"
+    DetailPrint "WARNING: node.exe not found in PATH after install - may need restart"
   ${EndIf}
 SectionEnd
 
 Section "!Install Claude Code (Required)" SecClaudeCode
   SectionIn RO  ; Read-only, cannot be deselected
 
-  DetailPrint "Installing Claude Code..."
-  DetailPrint "Running: npm install -g @anthropic-ai/claude-code"
-
-  ; Use ExecWait so user sees progress in a console window
-  ExecWait 'cmd /c npm install -g @anthropic-ai/claude-code' $0
-  DetailPrint "npm install exit code: $0"
+  DetailPrint "Installing Claude Code via install.cmd..."
+  ExecWait 'cmd /c "$INSTDIR\install.cmd" /claude' $0
+  DetailPrint "install.cmd /claude exit code: $0"
 
   ${If} $0 != 0
     DetailPrint "WARNING: Claude Code installation may have failed"
@@ -412,71 +380,24 @@ Section "!Install Claude Code (Required)" SecClaudeCode
 SectionEnd
 
 Section "Install Windows Terminal (Recommended)" SecWindowsTerminal
-  DetailPrint "Checking for Windows Terminal..."
-  nsExec::ExecToStack 'where wt.exe'
-  Pop $0
+  DetailPrint "Installing Windows Terminal via install.cmd..."
+  ExecWait 'cmd /c "$INSTDIR\install.cmd" /wt' $0
+  DetailPrint "install.cmd /wt exit code: $0"
 
-  ${If} $0 != 0
-    DetailPrint "Windows Terminal not found - attempting to install via winget..."
-
-    ; Check if winget exists
-    nsExec::ExecToStack 'where winget.exe'
-    Pop $0
-
-    ${If} $0 == 0
-      DetailPrint "Installing Windows Terminal via winget..."
-      ExecWait 'cmd /c winget install Microsoft.WindowsTerminal --accept-package-agreements --accept-source-agreements' $0
-      DetailPrint "winget install exit code: $0"
-
-      ${If} $0 != 0
-        DetailPrint "winget install failed - recommending manual install"
-        MessageBox MB_OK "Could not install Windows Terminal automatically.$\n$\nPlease install it from the Microsoft Store:$\nSearch for 'Windows Terminal'$\n$\nClaudeCode Launchpad CLI will fall back to cmd.exe until Windows Terminal is installed."
-      ${Else}
-        DetailPrint "Windows Terminal installed successfully"
-      ${EndIf}
-    ${Else}
-      DetailPrint "winget not available - recommending manual install"
-      MessageBox MB_OK "Could not install Windows Terminal automatically (winget not available).$\n$\nPlease install it from the Microsoft Store:$\nSearch for 'Windows Terminal'$\n$\nClaudeCode Launchpad CLI will fall back to cmd.exe until Windows Terminal is installed."
-    ${EndIf}
-  ${Else}
-    DetailPrint "Windows Terminal already installed - skipping"
+  ${If} $0 == 4
+    MessageBox MB_OK "Could not install Windows Terminal automatically.$\n$\nPlease install it from the Microsoft Store:$\nSearch for 'Windows Terminal'$\n$\nClaudeCode Launchpad CLI will fall back to cmd.exe until Windows Terminal is installed."
   ${EndIf}
 SectionEnd
 
 Section "Install Git (Optional)" SecGit
-  DetailPrint "Checking for Git..."
-  nsExec::ExecToStack 'where git.exe'
-  Pop $0
+  DetailPrint "Installing Git via install.cmd..."
+  ExecWait 'cmd /c "$INSTDIR\install.cmd" /git' $0
+  DetailPrint "install.cmd /git exit code: $0"
 
-  ${If} $0 != 0
-    DetailPrint "Git not found - Installing..."
-
-    ; Try bundled installer first
-    SetOutPath "$INSTDIR"
-    File /nonfatal "bundled\Git-2.53.0-64-bit.exe"
-
-    IfFileExists "$INSTDIR\Git-2.53.0-64-bit.exe" 0 git_try_winget
-      DetailPrint "Installing Git for Windows (this may take a few minutes)..."
-      ExecWait '"$INSTDIR\Git-2.53.0-64-bit.exe" /VERYSILENT /NORESTART /NOCANCEL /SP- /CLOSEAPPLICATIONS /RESTARTAPPLICATIONS /COMPONENTS="icons,ext\reg\shellhere,assoc,assoc_sh"'
-      DetailPrint "Git installed successfully"
-      Goto git_done
-
-    git_try_winget:
-      ; No bundled installer - try winget
-      DetailPrint "Bundled installer not found - trying winget..."
-      nsExec::ExecToStack 'where winget.exe'
-      Pop $0
-      ${If} $0 == 0
-        DetailPrint "Installing Git via winget..."
-        ExecWait 'cmd /c winget install Git.Git --accept-package-agreements --accept-source-agreements' $0
-        DetailPrint "winget install Git exit code: $0"
-      ${Else}
-        DetailPrint "Git not installed - winget not available. Install manually from https://git-scm.com/"
-      ${EndIf}
-
-    git_done:
-  ${Else}
-    DetailPrint "Git already installed - skipping"
+  ${If} $0 == 10
+    MessageBox MB_OK "Git could not be installed: neither curl nor winget available.$\n$\nPlease install Git manually from https://git-scm.com/"
+  ${ElseIf} $0 != 0
+    DetailPrint "Git installation issue (exit code: $0)"
   ${EndIf}
 SectionEnd
 

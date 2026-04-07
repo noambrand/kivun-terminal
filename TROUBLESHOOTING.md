@@ -42,6 +42,15 @@ Right-click the shortcut > Properties > verify the target points to:
 
 Re-run the installer as Administrator. The context menu entry is added to the registry during installation.
 
+### Download failed during installation
+
+The installer uses `curl.exe` (built-in on Windows 10 1803+) to download Node.js and Git. If downloads fail:
+
+1. **Firewall/proxy** — corporate firewalls may block `nodejs.org` or `github.com`. Ask your IT team to whitelist these domains
+2. **No internet** — an internet connection is required during installation
+3. **curl missing** — on very old Windows 10 builds (before 1803), curl may not exist. The installer falls back to winget automatically
+4. **Manual install** — if all else fails, install [Node.js](https://nodejs.org/) and [Git](https://git-scm.com/) manually, then re-run the installer (it will detect them and skip)
+
 ---
 
 ## macOS

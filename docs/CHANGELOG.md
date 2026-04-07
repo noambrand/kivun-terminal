@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.4.0] - 2026-04-07
+
+### Changed
+- **Dependency installation via `install.cmd`**: Replaced bundled MSI/EXE installers with a new `install.cmd` script that downloads Node.js and Git via `curl.exe` (built-in on Windows 10 1803+), with automatic winget fallback if curl is unavailable
+- **No PowerShell dependency**: The entire install chain is now pure CMD — works in environments where PowerShell execution policy is restricted
+- **Smaller installer**: No bundled binaries; Node.js and Git are downloaded at install time from official sources
+- **NSIS sections simplified**: SecNodeJS, SecGit, SecWindowsTerminal, and SecClaudeCode now delegate to `install.cmd` with `/node`, `/git`, `/wt`, `/claude` flags
+- **PATH refresh**: `install.cmd` re-reads PATH from the registry after each install, so subsequent steps see newly installed tools without requiring a restart
+
+### Added
+- `source/install.cmd`: Standalone dependency installer — can also be run outside the NSIS wizard to repair or reinstall components
+- `TROUBLESHOOTING.md`: Added "Download failed during installation" section
+
 ## [2.3.0] - 2026-04-04
 
 ### Added
