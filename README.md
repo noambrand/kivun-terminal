@@ -10,7 +10,7 @@
   <a href="https://github.com/noambrand/kivun-terminal/releases/latest"><img src="https://img.shields.io/github/downloads/noambrand/kivun-terminal/total?color=purple&label=downloads" alt="Downloads"></a>
 </p>
 
-<h3 align="center">Zero-to-Claude in 2 minutes. Installer, status bar, and launcher for Claude Code on Windows & macOS.</h3>
+<h3 align="center">Zero-to-Claude in 1 minute. Installer, status bar, and launcher for Claude Code on Windows & macOS.</h3>
 
 <p align="center">
   <a href="#-quick-start">Quick Start</a> &bull;
@@ -34,7 +34,7 @@
 | **Desktop shortcut + right-click menu** | Create shortcuts manually, edit registry | Included |
 | **Folder picker** | `cd` into every project | GUI picker or right-click any folder |
 | **Multi-language support** | Configure manually | One setting in `config.txt` |
-| **Time to first prompt** | 30+ minutes | ~2 minutes |
+| **Time to first prompt** | 20+ minutes | ~1 minute |
 
 ## Quick Start
 
