@@ -153,16 +153,21 @@ fi
 
 # --- Claude Code ---
 if ! run_as_user "command -v claude" &>/dev/null; then
-    log "Installing Claude Code..."
-    if run_as_user "npm install -g @anthropic-ai/claude-code"; then
-        log "Claude Code installed"
+    log "Installing Claude Code via Anthropic native installer..."
+    CLAUDE_INSTALL_SCRIPT="/tmp/claude-install.sh"
+    if curl -fsSL -o "$CLAUDE_INSTALL_SCRIPT" "https://claude.ai/install.sh" 2>&1 | tee -a "$LOG_FILE"; then
+        chmod +x "$CLAUDE_INSTALL_SCRIPT"
+        if run_as_user "bash '$CLAUDE_INSTALL_SCRIPT'"; then
+            log "Claude Code installed"
+        else
+            log "ERROR: Claude Code installation failed"
+        fi
+        rm -f "$CLAUDE_INSTALL_SCRIPT"
     else
-        log "ERROR: Claude Code installation failed"
+        log "ERROR: Failed to download Claude Code installer"
     fi
 else
-    log "Updating Claude Code..."
-    run_as_user "npm update -g @anthropic-ai/claude-code" 2>/dev/null || true
-    log "Claude Code already installed — updated"
+    log "Claude Code already installed — skipping"
 fi
 
 # --- Statusline ---
@@ -207,38 +212,465 @@ else
     log "WARNING: configure-statusline.js not found in package"
 fi
 
-# --- Desktop Shortcut ---
+# --- Configuration File ---
+log "Creating configuration file..."
+CONFIG_DIR="$REAL_HOME/Library/Application Support/ClaudeCode-Launchpad"
+CONFIG_FILE="$CONFIG_DIR/config.txt"
+run_as_user "mkdir -p '$CONFIG_DIR'" 2>/dev/null || true
+if [ ! -f "$CONFIG_FILE" ]; then
+    cat > "$CONFIG_FILE" << 'CONFIG'
+# ClaudeCode Launchpad CLI Configuration
+
+# Claude Code response language
+# Options: english, hebrew, arabic, persian, urdu, kurdish, pashto, sindhi, yiddish, syriac, dhivehi, nko, adlam, mandaic, samaritan, dari, uyghur, balochi, kashmiri, shahmukhi, azeri_south, jawi, hausa_ajami, rohingya, turoyo
+# Default: english
+RESPONSE_LANGUAGE=english
+
+# Terminal color theme
+# Options: kivun (light-blue), default (keep your terminal theme)
+TERMINAL_COLOR=kivun
+
+# Claude startup flags (optional, applied on every launch)
+# Example: CLAUDE_FLAGS=--continue
+CLAUDE_FLAGS=
+CONFIG
+    chown "$REAL_USER" "$CONFIG_FILE"
+    log "Configuration file created at $CONFIG_FILE"
+else
+    log "Configuration file already exists — skipping"
+fi
+
+# --- Desktop Shortcut with Folder Picker ---
 log "Creating desktop shortcut..."
 # Remove old-name shortcut from previous installs
 rm -f "$REAL_HOME/Desktop/Kivun Terminal.command"
 SHORTCUT_PATH="$REAL_HOME/Desktop/ClaudeCode Launchpad CLI.command"
-cat > "$SHORTCUT_PATH" << SCRIPT
+cat > "$SHORTCUT_PATH" << 'SCRIPT'
 #!/bin/bash
-# ClaudeCode Launchpad CLI — launches Claude Code
+# ClaudeCode Launchpad CLI — launches Claude Code with folder picker
+
+CONFIG_DIR="$HOME/Library/Application Support/ClaudeCode-Launchpad"
+CONFIG_FILE="$CONFIG_DIR/config.txt"
+STATUSLINE_DIR="/usr/local/share/kivun"
 
 # Statusline
 export CLAUDE_CODE_STATUSLINE="$STATUSLINE_DIR/statusline.mjs"
 
-# Apply light blue background with dark text via AppleScript
-osascript -e '
-tell application "Terminal"
-    tell front window
-        set background color of selected tab to {51400, 59110, 65535}
-        set normal text color of selected tab to {0, 0, 0}
-        set bold text color of selected tab to {0, 0, 0}
-        set cursor color of selected tab to {6425, 6425, 6425}
+# Read configuration
+RESPONSE_LANGUAGE="english"
+TERMINAL_COLOR="kivun"
+CLAUDE_FLAGS=""
+if [ -f "$CONFIG_FILE" ]; then
+    while IFS='=' read -r key value; do
+        # Skip comments and empty lines
+        [[ "$key" =~ ^#.*$ ]] && continue
+        [[ -z "$key" ]] && continue
+        # Trim whitespace
+        key=$(echo "$key" | xargs)
+        value=$(echo "$value" | xargs)
+        case "$key" in
+            RESPONSE_LANGUAGE) RESPONSE_LANGUAGE="$value" ;;
+            TERMINAL_COLOR) TERMINAL_COLOR="$value" ;;
+            CLAUDE_FLAGS) CLAUDE_FLAGS="$value" ;;
+        esac
+    done < "$CONFIG_FILE"
+fi
+
+# Apply light blue background if enabled
+if [ "$TERMINAL_COLOR" = "kivun" ]; then
+    osascript -e '
+    tell application "Terminal"
+        tell front window
+            set background color of selected tab to {51400, 59110, 65535}
+            set normal text color of selected tab to {0, 0, 0}
+            set bold text color of selected tab to {0, 0, 0}
+            set cursor color of selected tab to {6425, 6425, 6425}
+        end tell
     end tell
-end tell
-' 2>/dev/null
+    ' 2>/dev/null
+fi
 
 clear
-echo "Starting Claude Code..."
+echo "ClaudeCode Launchpad CLI"
 echo ""
-claude
+
+# Folder picker
+FOLDER=$(osascript -e 'tell application "Finder"
+    try
+        set selectedFolder to choose folder with prompt "Select a folder to open with Claude Code:"
+        return POSIX path of selectedFolder
+    on error
+        return ""
+    end try
+end tell' 2>/dev/null)
+
+if [ -z "$FOLDER" ]; then
+    echo "No folder selected. Exiting..."
+    read -p "Press Enter to close..."
+    exit 0
+fi
+
+cd "$FOLDER" || exit 1
+
+# Build language prompt argument
+LANG_PROMPT=""
+case "$RESPONSE_LANGUAGE" in
+    hebrew) LANG_PROMPT="--append-system-prompt \"Always respond in Hebrew.\"" ;;
+    arabic) LANG_PROMPT="--append-system-prompt \"Always respond in Arabic.\"" ;;
+    persian) LANG_PROMPT="--append-system-prompt \"Always respond in Persian (Farsi).\"" ;;
+    urdu) LANG_PROMPT="--append-system-prompt \"Always respond in Urdu.\"" ;;
+    kurdish) LANG_PROMPT="--append-system-prompt \"Always respond in Kurdish.\"" ;;
+    pashto) LANG_PROMPT="--append-system-prompt \"Always respond in Pashto.\"" ;;
+    sindhi) LANG_PROMPT="--append-system-prompt \"Always respond in Sindhi.\"" ;;
+    yiddish) LANG_PROMPT="--append-system-prompt \"Always respond in Yiddish.\"" ;;
+    syriac) LANG_PROMPT="--append-system-prompt \"Always respond in Syriac.\"" ;;
+    dhivehi) LANG_PROMPT="--append-system-prompt \"Always respond in Dhivehi.\"" ;;
+    nko) LANG_PROMPT="--append-system-prompt \"Always respond in N'Ko.\"" ;;
+    adlam) LANG_PROMPT="--append-system-prompt \"Always respond in Adlam.\"" ;;
+    mandaic) LANG_PROMPT="--append-system-prompt \"Always respond in Mandaic.\"" ;;
+    samaritan) LANG_PROMPT="--append-system-prompt \"Always respond in Samaritan.\"" ;;
+    dari) LANG_PROMPT="--append-system-prompt \"Always respond in Dari.\"" ;;
+    uyghur) LANG_PROMPT="--append-system-prompt \"Always respond in Uyghur.\"" ;;
+    balochi) LANG_PROMPT="--append-system-prompt \"Always respond in Balochi.\"" ;;
+    kashmiri) LANG_PROMPT="--append-system-prompt \"Always respond in Kashmiri.\"" ;;
+    shahmukhi) LANG_PROMPT="--append-system-prompt \"Always respond in Shahmukhi (Punjabi).\"" ;;
+    azeri_south) LANG_PROMPT="--append-system-prompt \"Always respond in South Azerbaijani.\"" ;;
+    jawi) LANG_PROMPT="--append-system-prompt \"Always respond in Jawi (Malay).\"" ;;
+    hausa_ajami) LANG_PROMPT="--append-system-prompt \"Always respond in Hausa (Ajami script).\"" ;;
+    rohingya) LANG_PROMPT="--append-system-prompt \"Always respond in Rohingya.\"" ;;
+    turoyo) LANG_PROMPT="--append-system-prompt \"Always respond in Turoyo.\"" ;;
+esac
+
+echo "Starting Claude Code in: $FOLDER"
+echo ""
+
+# Launch Claude with all flags
+eval claude "$LANG_PROMPT" $CLAUDE_FLAGS
 SCRIPT
 chmod +x "$SHORTCUT_PATH"
 chown "$REAL_USER" "$SHORTCUT_PATH"
 log "Desktop shortcut created at $SHORTCUT_PATH"
+
+# --- Finder Quick Action (Right-Click Context Menu) ---
+log "Creating Finder Quick Action..."
+WORKFLOW_DIR="$REAL_HOME/Library/Services"
+WORKFLOW_PATH="$WORKFLOW_DIR/Open with ClaudeCode Launchpad.workflow"
+run_as_user "mkdir -p '$WORKFLOW_DIR'" 2>/dev/null || true
+
+# Remove old workflow if it exists
+rm -rf "$WORKFLOW_PATH" 2>/dev/null || true
+
+# Create Automator workflow directory structure
+mkdir -p "$WORKFLOW_PATH/Contents"
+cat > "$WORKFLOW_PATH/Contents/Info.plist" << 'PLIST'
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>NSServices</key>
+    <array>
+        <dict>
+            <key>NSMenuItem</key>
+            <dict>
+                <key>default</key>
+                <string>Open with ClaudeCode Launchpad</string>
+            </dict>
+            <key>NSMessage</key>
+            <string>runWorkflowAsService</string>
+            <key>NSRequiredContext</key>
+            <dict>
+                <key>NSApplicationIdentifier</key>
+                <string>com.apple.finder</string>
+            </dict>
+            <key>NSSendFileTypes</key>
+            <array>
+                <string>public.folder</string>
+            </array>
+        </dict>
+    </array>
+    <key>CFBundleIdentifier</key>
+    <string>com.noambrand.claudecode-launchpad-quickaction</string>
+    <key>CFBundleName</key>
+    <string>Open with ClaudeCode Launchpad</string>
+    <key>CFBundleVersion</key>
+    <string>1.0</string>
+</dict>
+</plist>
+PLIST
+
+mkdir -p "$WORKFLOW_PATH/Contents/QuickLook"
+cat > "$WORKFLOW_PATH/Contents/document.wflow" << 'WFLOW'
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>AMApplicationBuild</key>
+    <string>521</string>
+    <key>AMApplicationVersion</key>
+    <string>2.10</string>
+    <key>AMDocumentVersion</key>
+    <string>2</string>
+    <key>actions</key>
+    <array>
+        <dict>
+            <key>action</key>
+            <dict>
+                <key>AMAccepts</key>
+                <dict>
+                    <key>Container</key>
+                    <string>List</string>
+                    <key>Optional</key>
+                    <true/>
+                    <key>Types</key>
+                    <array>
+                        <string>com.apple.cocoa.path</string>
+                    </array>
+                </dict>
+                <key>AMActionVersion</key>
+                <string>1.0</string>
+                <key>AMApplication</key>
+                <array>
+                    <string>Automator</string>
+                </array>
+                <key>AMParameterProperties</key>
+                <dict>
+                    <key>source</key>
+                    <dict/>
+                </dict>
+                <key>AMProvides</key>
+                <dict>
+                    <key>Container</key>
+                    <string>List</string>
+                    <key>Types</key>
+                    <array>
+                        <string>com.apple.cocoa.path</string>
+                    </array>
+                </dict>
+                <key>ActionBundlePath</key>
+                <string>/System/Library/Automator/Run Shell Script.action</string>
+                <key>ActionName</key>
+                <string>Run Shell Script</string>
+                <key>ActionParameters</key>
+                <dict>
+                    <key>COMMAND_STRING</key>
+                    <string>#!/bin/bash
+CONFIG_DIR="$HOME/Library/Application Support/ClaudeCode-Launchpad"
+CONFIG_FILE="$CONFIG_DIR/config.txt"
+STATUSLINE_DIR="/usr/local/share/kivun"
+
+# Get folder path from input
+FOLDER="$1"
+
+# Read configuration
+RESPONSE_LANGUAGE="english"
+TERMINAL_COLOR="kivun"
+CLAUDE_FLAGS=""
+if [ -f "$CONFIG_FILE" ]; then
+    while IFS='=' read -r key value; do
+        [[ "$key" =~ ^#.*$ ]] && continue
+        [[ -z "$key" ]] && continue
+        key=$(echo "$key" | xargs)
+        value=$(echo "$value" | xargs)
+        case "$key" in
+            RESPONSE_LANGUAGE) RESPONSE_LANGUAGE="$value" ;;
+            TERMINAL_COLOR) TERMINAL_COLOR="$value" ;;
+            CLAUDE_FLAGS) CLAUDE_FLAGS="$value" ;;
+        esac
+    done &lt; "$CONFIG_FILE"
+fi
+
+# Build language prompt
+LANG_PROMPT=""
+case "$RESPONSE_LANGUAGE" in
+    hebrew) LANG_PROMPT="--append-system-prompt \"Always respond in Hebrew.\"" ;;
+    arabic) LANG_PROMPT="--append-system-prompt \"Always respond in Arabic.\"" ;;
+    persian) LANG_PROMPT="--append-system-prompt \"Always respond in Persian (Farsi).\"" ;;
+    urdu) LANG_PROMPT="--append-system-prompt \"Always respond in Urdu.\"" ;;
+    kurdish) LANG_PROMPT="--append-system-prompt \"Always respond in Kurdish.\"" ;;
+    pashto) LANG_PROMPT="--append-system-prompt \"Always respond in Pashto.\"" ;;
+    sindhi) LANG_PROMPT="--append-system-prompt \"Always respond in Sindhi.\"" ;;
+    yiddish) LANG_PROMPT="--append-system-prompt \"Always respond in Yiddish.\"" ;;
+    syriac) LANG_PROMPT="--append-system-prompt \"Always respond in Syriac.\"" ;;
+    dhivehi) LANG_PROMPT="--append-system-prompt \"Always respond in Dhivehi.\"" ;;
+    nko) LANG_PROMPT="--append-system-prompt \"Always respond in N'Ko.\"" ;;
+    adlam) LANG_PROMPT="--append-system-prompt \"Always respond in Adlam.\"" ;;
+    mandaic) LANG_PROMPT="--append-system-prompt \"Always respond in Mandaic.\"" ;;
+    samaritan) LANG_PROMPT="--append-system-prompt \"Always respond in Samaritan.\"" ;;
+    dari) LANG_PROMPT="--append-system-prompt \"Always respond in Dari.\"" ;;
+    uyghur) LANG_PROMPT="--append-system-prompt \"Always respond in Uyghur.\"" ;;
+    balochi) LANG_PROMPT="--append-system-prompt \"Always respond in Balochi.\"" ;;
+    kashmiri) LANG_PROMPT="--append-system-prompt \"Always respond in Kashmiri.\"" ;;
+    shahmukhi) LANG_PROMPT="--append-system-prompt \"Always respond in Shahmukhi (Punjabi).\"" ;;
+    azeri_south) LANG_PROMPT="--append-system-prompt \"Always respond in South Azerbaijani.\"" ;;
+    jawi) LANG_PROMPT="--append-system-prompt \"Always respond in Jawi (Malay).\"" ;;
+    hausa_ajami) LANG_PROMPT="--append-system-prompt \"Always respond in Hausa (Ajami script).\"" ;;
+    rohingya) LANG_PROMPT="--append-system-prompt \"Always respond in Rohingya.\"" ;;
+    turoyo) LANG_PROMPT="--append-system-prompt \"Always respond in Turoyo.\"" ;;
+esac
+
+# Apply colors if enabled
+if [ "$TERMINAL_COLOR" = "kivun" ]; then
+    osascript -e '
+    tell application "Terminal"
+        tell front window
+            set background color of selected tab to {51400, 59110, 65535}
+            set normal text color of selected tab to {0, 0, 0}
+            set bold text color of selected tab to {0, 0, 0}
+            set cursor color of selected tab to {6425, 6425, 6425}
+        end tell
+    end tell
+    ' 2&gt;/dev/null
+fi
+
+# Open Terminal and launch Claude
+export CLAUDE_CODE_STATUSLINE="$STATUSLINE_DIR/statusline.mjs"
+osascript -e "tell application \"Terminal\"
+    activate
+    do script \"cd '$FOLDER' &amp;&amp; clear &amp;&amp; echo 'ClaudeCode Launchpad CLI' &amp;&amp; echo '' &amp;&amp; claude $LANG_PROMPT $CLAUDE_FLAGS\"
+end tell"
+</string>
+                    <key>CheckedForUserDefaultShell</key>
+                    <true/>
+                    <key>inputMethod</key>
+                    <integer>1</integer>
+                    <key>shell</key>
+                    <string>/bin/bash</string>
+                    <key>source</key>
+                    <string></string>
+                </dict>
+                <key>BundleIdentifier</key>
+                <string>com.apple.RunShellScript</string>
+                <key>CFBundleVersion</key>
+                <string>1.0</string>
+                <key>CanShowSelectedItemsWhenRun</key>
+                <false/>
+                <key>CanShowWhenRun</key>
+                <true/>
+                <key>Category</key>
+                <array>
+                    <string>AMCategoryUtilities</string>
+                </array>
+                <key>Class Name</key>
+                <string>RunShellScriptAction</string>
+                <key>InputUUID</key>
+                <string>00000000-0000-0000-0000-000000000000</string>
+                <key>Keywords</key>
+                <array>
+                    <string>Shell</string>
+                    <string>Script</string>
+                    <string>Command</string>
+                    <string>Run</string>
+                    <string>Unix</string>
+                </array>
+                <key>OutputUUID</key>
+                <string>00000000-0000-0000-0000-000000000001</string>
+                <key>UUID</key>
+                <string>00000000-0000-0000-0000-000000000002</string>
+                <key>UnlocalizedApplications</key>
+                <array>
+                    <string>Automator</string>
+                </array>
+                <key>arguments</key>
+                <dict>
+                    <key>0</key>
+                    <dict>
+                        <key>default value</key>
+                        <integer>0</integer>
+                        <key>name</key>
+                        <string>inputMethod</string>
+                        <key>required</key>
+                        <string>0</string>
+                        <key>type</key>
+                        <string>0</string>
+                        <key>uuid</key>
+                        <string>0</string>
+                    </dict>
+                    <key>1</key>
+                    <dict>
+                        <key>default value</key>
+                        <false/>
+                        <key>name</key>
+                        <string>CheckedForUserDefaultShell</string>
+                        <key>required</key>
+                        <string>0</string>
+                        <key>type</key>
+                        <string>0</string>
+                        <key>uuid</key>
+                        <string>1</string>
+                    </dict>
+                    <key>2</key>
+                    <dict>
+                        <key>default value</key>
+                        <string></string>
+                        <key>name</key>
+                        <string>source</string>
+                        <key>required</key>
+                        <string>0</string>
+                        <key>type</key>
+                        <string>0</string>
+                        <key>uuid</key>
+                        <string>2</string>
+                    </dict>
+                    <key>3</key>
+                    <dict>
+                        <key>default value</key>
+                        <string>/bin/sh</string>
+                        <key>name</key>
+                        <string>shell</string>
+                        <key>required</key>
+                        <string>0</string>
+                        <key>type</key>
+                        <string>0</string>
+                        <key>uuid</key>
+                        <string>3</string>
+                    </dict>
+                    <key>4</key>
+                    <dict>
+                        <key>default value</key>
+                        <string></string>
+                        <key>name</key>
+                        <string>COMMAND_STRING</string>
+                        <key>required</key>
+                        <string>0</string>
+                        <key>type</key>
+                        <string>0</string>
+                        <key>uuid</key>
+                        <string>4</string>
+                    </dict>
+                </dict>
+                <key>conversionLabel</key>
+                <integer>0</integer>
+                <key>isViewVisible</key>
+                <integer>1</integer>
+                <key>location</key>
+                <string>0.000000:0.000000</string>
+                <key>nibPath</key>
+                <string>/System/Library/Automator/Run Shell Script.action/Contents/Resources/Base.lproj/main.nib</string>
+            </dict>
+            <key>isViewVisible</key>
+            <true/>
+        </dict>
+    </array>
+    <key>connectors</key>
+    <dict/>
+    <key>workflowMetaData</key>
+    <dict>
+        <key>serviceInputTypeIdentifier</key>
+        <string>com.apple.Automator.fileSystemObject.folder</string>
+        <key>serviceOutputTypeIdentifier</key>
+        <string>com.apple.Automator.nothing</string>
+        <key>serviceProcessesInput</key>
+        <integer>0</integer>
+        <key>workflowTypeIdentifier</key>
+        <string>com.apple.Automator.servicesMenu</string>
+    </dict>
+</dict>
+</plist>
+WFLOW
+
+chown -R "$REAL_USER" "$WORKFLOW_PATH"
+log "Finder Quick Action created at $WORKFLOW_PATH"
+log "Note: Right-click context menu will appear after restarting Finder or logging out/in"
 
 # --- Summary ---
 log ""

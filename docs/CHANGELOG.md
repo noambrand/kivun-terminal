@@ -2,11 +2,15 @@
 
 ## [2.4.0] - 2026-04-12
 
-### Changed
-- **Claude Code native installer**: Migrated from deprecated `npm install -g @anthropic-ai/claude-code` to Anthropic's official native CMD installer (`curl -fsSL https://claude.ai/install.cmd`)
+### Changed - Windows & macOS
+- **Claude Code native installer**: Migrated from deprecated `npm install -g @anthropic-ai/claude-code` to Anthropic's official native installer
+  - **Windows**: `curl -fsSL https://claude.ai/install.cmd` (CMD)
+  - **macOS**: `curl -fsSL https://claude.ai/install.sh` (Bash)
   - **Why**: npm package is deprecated; native installer is the official supported method
   - **Benefits**: Works on Windows Server and LTSC builds where winget is unavailable; avoids PowerShell execution policy restrictions
   - **Node.js still required**: Only for statusline display (`statusline.mjs`, `configure-statusline.js`, `apply-wt-settings.js`)
+
+### Changed - Windows Only
 - **Dependency installation via `install.cmd`**: Replaced bundled MSI/EXE installers with a new `install.cmd` script that downloads Node.js and Git via `curl.exe` (built-in on Windows 10 1803+), with automatic winget fallback if curl is unavailable
 - **No PowerShell dependency**: The entire install chain is now pure CMD — works in environments where PowerShell execution policy is restricted
 - **Smaller installer**: No bundled binaries; Node.js and Git are downloaded at install time from official sources
@@ -14,7 +18,13 @@
 - **PATH refresh**: `install.cmd` re-reads PATH from the registry after each install, so subsequent steps see newly installed tools without requiring a restart
 - **Installer messaging updated**: Welcome page, error messages, and section descriptions now reference the native installer instead of npm
 
-### Added
+### Added - macOS Feature Parity
+- **Folder picker dialog**: Desktop shortcut now shows native macOS folder picker (AppleScript `choose folder`) before launching Claude — matches Windows folder picker experience
+- **Right-click context menu**: Finder Quick Action adds "Open with ClaudeCode Launchpad" to right-click menu on any folder (appears in Services menu)
+- **Language configuration**: `~/Library/Application Support/ClaudeCode-Launchpad/config.txt` with same options as Windows (24+ languages including Hebrew, Arabic, Persian, etc.)
+- **Configuration file**: macOS now supports `config.txt` with `RESPONSE_LANGUAGE`, `TERMINAL_COLOR`, and `CLAUDE_FLAGS` settings — full feature parity with Windows
+
+### Added - Windows Only
 - `source/install.cmd`: Standalone dependency installer — can also be run outside the NSIS wizard to repair or reinstall components
 - `TROUBLESHOOTING.md`: Added "Download failed during installation" section
 
