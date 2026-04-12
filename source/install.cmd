@@ -36,171 +36,167 @@ goto :parse_args
 REM --- Check for curl.exe ---
 set "USE_CURL=0"
 where curl.exe >nul 2>&1 && set "USE_CURL=1"
-
-if "!USE_CURL!"=="0" (
-    echo [INFO] curl.exe not found. Will use winget as fallback.
-)
+if "!USE_CURL!"=="0" echo [INFO] curl.exe not found. Will use winget as fallback.
 
 REM --- Create temp directory ---
 mkdir "%TEMP_DIR%" 2>nul
 
-REM ====== NODE.JS ======
-if "!DO_NODE!"=="1" (
-    where node.exe >nul 2>&1
-    if not errorlevel 1 (
-        echo [SKIP] Node.js already installed.
-        goto :node_done
-    )
+REM --- Dispatch to subroutines ---
+if "!DO_NODE!"=="1" call :install_node
+if not "!EXIT_CODE!"=="0" goto :cleanup
+if "!DO_GIT!"=="1" call :install_git
+if not "!EXIT_CODE!"=="0" goto :cleanup
+if "!DO_CLAUDE!"=="1" call :install_claude
+if not "!EXIT_CODE!"=="0" goto :cleanup
+if "!DO_WT!"=="1" call :install_wt
 
-    if "!USE_CURL!"=="1" (
-        echo [DOWNLOAD] Node.js v%NODE_VERSION%...
-        curl.exe -L -o "%TEMP_DIR%\node-setup.msi" "%NODE_URL%" --progress-bar
-        if errorlevel 1 (
-            echo [WARN] curl download failed. Trying winget...
-            goto :node_winget
-        )
+:cleanup
+rmdir /s /q "%TEMP_DIR%" 2>nul
+exit /b !EXIT_CODE!
+
+REM ============================================
+REM   SUBROUTINES
+REM ============================================
+
+:install_node
+where node.exe >nul 2>&1
+if not errorlevel 1 (
+    echo [SKIP] Node.js already installed.
+    goto :eof
+)
+if "!USE_CURL!"=="1" (
+    echo [DOWNLOAD] Node.js v%NODE_VERSION%...
+    curl.exe -L -o "%TEMP_DIR%\node-setup.msi" "%NODE_URL%" --progress-bar
+    if not errorlevel 1 (
         echo [INSTALL] Node.js v%NODE_VERSION% ^(silent^)...
         msiexec /i "%TEMP_DIR%\node-setup.msi" /qn /norestart
         if errorlevel 1 (
             echo [ERROR] Node.js MSI install failed.
             set "EXIT_CODE=1"
-            goto :cleanup
+            goto :eof
         )
         call :refresh_path
-        goto :node_verify
-    )
-
-    :node_winget
-    where winget.exe >nul 2>&1
-    if errorlevel 1 (
-        echo [ERROR] Neither curl nor winget available. Cannot install Node.js.
-        echo         Install manually from https://nodejs.org/
-        set "EXIT_CODE=10"
-        goto :cleanup
-    )
-    echo [INSTALL] Node.js via winget...
-    cmd /c winget install OpenJS.NodeJS.LTS --accept-package-agreements --accept-source-agreements
-    call :refresh_path
-
-    :node_verify
-    where node.exe >nul 2>&1
-    if errorlevel 1 (
-        echo [WARN] node.exe not found in PATH after install. May need restart.
-    ) else (
         echo [OK] Node.js installed.
+        goto :eof
     )
-    :node_done
+    echo [WARN] curl download failed. Trying winget...
 )
+where winget.exe >nul 2>&1
+if errorlevel 1 (
+    echo [ERROR] Neither curl nor winget available. Cannot install Node.js.
+    echo         Install manually from https://nodejs.org/
+    set "EXIT_CODE=10"
+    goto :eof
+)
+echo [INSTALL] Node.js via winget...
+cmd /c winget install OpenJS.NodeJS.LTS --accept-package-agreements --accept-source-agreements
+call :refresh_path
+where node.exe >nul 2>&1
+if errorlevel 1 (
+    echo [WARN] node.exe not found in PATH after install. May need restart.
+) else (
+    echo [OK] Node.js installed.
+)
+goto :eof
 
-REM ====== GIT ======
-if "!DO_GIT!"=="1" (
-    where git.exe >nul 2>&1
+:install_git
+where git.exe >nul 2>&1
+if not errorlevel 1 (
+    echo [SKIP] Git already installed.
+    goto :eof
+)
+if "!USE_CURL!"=="1" (
+    echo [DOWNLOAD] Git v%GIT_VERSION%...
+    curl.exe -L -o "%TEMP_DIR%\git-setup.exe" "%GIT_URL%" --progress-bar
     if not errorlevel 1 (
-        echo [SKIP] Git already installed.
-        goto :git_done
-    )
-
-    if "!USE_CURL!"=="1" (
-        echo [DOWNLOAD] Git v%GIT_VERSION%...
-        curl.exe -L -o "%TEMP_DIR%\git-setup.exe" "%GIT_URL%" --progress-bar
-        if errorlevel 1 (
-            echo [WARN] curl download failed. Trying winget...
-            goto :git_winget
-        )
         echo [INSTALL] Git v%GIT_VERSION% ^(silent^)...
         "%TEMP_DIR%\git-setup.exe" /VERYSILENT /NORESTART /NOCANCEL /SP- /CLOSEAPPLICATIONS /RESTARTAPPLICATIONS /COMPONENTS="icons,ext\reg\shellhere,assoc,assoc_sh"
         if errorlevel 1 (
             echo [ERROR] Git installer failed.
             set "EXIT_CODE=2"
-            goto :cleanup
+            goto :eof
         )
         call :refresh_path
-        goto :git_verify
-    )
-
-    :git_winget
-    where winget.exe >nul 2>&1
-    if errorlevel 1 (
-        echo [ERROR] Neither curl nor winget available. Cannot install Git.
-        echo         Install manually from https://git-scm.com/
-        set "EXIT_CODE=10"
-        goto :cleanup
-    )
-    echo [INSTALL] Git via winget...
-    cmd /c winget install Git.Git --accept-package-agreements --accept-source-agreements
-    call :refresh_path
-
-    :git_verify
-    where git.exe >nul 2>&1
-    if errorlevel 1 (
-        echo [WARN] git.exe not found in PATH after install. May need restart.
-    ) else (
         echo [OK] Git installed.
+        goto :eof
     )
-    :git_done
+    echo [WARN] curl download failed. Trying winget...
 )
-
-REM ====== CLAUDE CODE ======
-if "!DO_CLAUDE!"=="1" (
-    call :refresh_path
-
-    where npm.cmd >nul 2>&1
-    if errorlevel 1 (
-        echo [ERROR] npm not found. Node.js may not be installed correctly.
-        set "EXIT_CODE=3"
-        goto :cleanup
-    )
-
-    where claude.cmd >nul 2>&1 && (
-        echo [SKIP] Claude Code already installed.
-        goto :claude_done
-    )
-    where claude >nul 2>&1 && (
-        echo [SKIP] Claude Code already installed.
-        goto :claude_done
-    )
-
-    echo [INSTALL] Claude Code via npm...
-    cmd /c npm install -g @anthropic-ai/claude-code
-    if errorlevel 1 (
-        echo [ERROR] npm install failed.
-        set "EXIT_CODE=3"
-        goto :cleanup
-    )
-    call :refresh_path
-    echo [OK] Claude Code installed.
-    :claude_done
+where winget.exe >nul 2>&1
+if errorlevel 1 (
+    echo [ERROR] Neither curl nor winget available. Cannot install Git.
+    echo         Install manually from https://git-scm.com/
+    set "EXIT_CODE=10"
+    goto :eof
 )
-
-REM ====== WINDOWS TERMINAL ======
-if "!DO_WT!"=="1" (
-    where wt.exe >nul 2>&1
-    if not errorlevel 1 (
-        echo [SKIP] Windows Terminal already installed.
-        goto :wt_done
-    )
-
-    REM WT is an MSIX/Store package — winget is the only automated method
-    where winget.exe >nul 2>&1
-    if errorlevel 1 (
-        echo [WARN] winget not available. Install Windows Terminal from the Microsoft Store.
-        set "EXIT_CODE=4"
-        goto :wt_done
-    )
-    echo [INSTALL] Windows Terminal via winget...
-    cmd /c winget install Microsoft.WindowsTerminal --accept-package-agreements --accept-source-agreements
-    if errorlevel 1 (
-        echo [WARN] winget install failed. Install Windows Terminal from the Microsoft Store.
-        set "EXIT_CODE=4"
-    ) else (
-        echo [OK] Windows Terminal installed.
-    )
-    :wt_done
+echo [INSTALL] Git via winget...
+cmd /c winget install Git.Git --accept-package-agreements --accept-source-agreements
+call :refresh_path
+where git.exe >nul 2>&1
+if errorlevel 1 (
+    echo [WARN] git.exe not found in PATH after install. May need restart.
+) else (
+    echo [OK] Git installed.
 )
+goto :eof
 
-:cleanup
-rmdir /s /q "%TEMP_DIR%" 2>nul
-exit /b %EXIT_CODE%
+:install_claude
+call :refresh_path
+where claude.cmd >nul 2>&1
+if not errorlevel 1 (
+    echo [SKIP] Claude Code already installed.
+    goto :eof
+)
+where claude >nul 2>&1
+if not errorlevel 1 (
+    echo [SKIP] Claude Code already installed.
+    goto :eof
+)
+if "!USE_CURL!"=="0" (
+    echo [ERROR] curl.exe not found. Cannot install Claude Code.
+    echo         Install manually from https://claude.ai/download
+    set "EXIT_CODE=3"
+    goto :eof
+)
+echo [INSTALL] Claude Code via Anthropic native installer...
+curl.exe -fsSL -o "%TEMP_DIR%\claude-install.cmd" "https://claude.ai/install.cmd"
+if errorlevel 1 (
+    echo [ERROR] Failed to download Claude Code installer.
+    set "EXIT_CODE=3"
+    goto :eof
+)
+cmd /c "%TEMP_DIR%\claude-install.cmd"
+if errorlevel 1 (
+    echo [ERROR] Claude Code installation failed.
+    set "EXIT_CODE=3"
+    goto :eof
+)
+call :refresh_path
+echo [OK] Claude Code installed.
+goto :eof
+
+:install_wt
+where wt.exe >nul 2>&1
+if not errorlevel 1 (
+    echo [SKIP] Windows Terminal already installed.
+    goto :eof
+)
+REM WT is an MSIX/Store package — winget is the only automated method
+where winget.exe >nul 2>&1
+if errorlevel 1 (
+    echo [WARN] winget not available. Install Windows Terminal from the Microsoft Store.
+    set "EXIT_CODE=4"
+    goto :eof
+)
+echo [INSTALL] Windows Terminal via winget...
+cmd /c winget install Microsoft.WindowsTerminal --accept-package-agreements --accept-source-agreements
+if errorlevel 1 (
+    echo [WARN] winget install failed. Install Windows Terminal from the Microsoft Store.
+    set "EXIT_CODE=4"
+) else (
+    echo [OK] Windows Terminal installed.
+)
+goto :eof
 
 REM ============================================
 REM   Refresh PATH from registry (picks up

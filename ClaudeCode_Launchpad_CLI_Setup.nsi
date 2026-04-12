@@ -46,7 +46,7 @@ VIAddVersionKey "LegalCopyright" "(C) 2026 ${PRODUCT_PUBLISHER}"
 
 ; Welcome page
 !define MUI_WELCOMEPAGE_TITLE "Welcome to ${PRODUCT_NAME}"
-!define MUI_WELCOMEPAGE_TEXT "This installer will set up ${PRODUCT_NAME} on your computer.$\r$\n$\r$\n${PRODUCT_DESCRIPTION}$\r$\n$\r$\nWhat will be installed:$\r$\n  - Node.js (if not already installed)$\r$\n  - Claude Code (via npm)$\r$\n  - Windows Terminal (recommended)$\r$\n  - Git (optional)$\r$\n$\r$\nFeatures:$\r$\n  - Light blue terminal color scheme$\r$\n  - Folder shortcuts and right-click integration$\r$\n  - One-click launch from desktop$\r$\n$\r$\nClick Next to continue."
+!define MUI_WELCOMEPAGE_TEXT "This installer will set up ${PRODUCT_NAME} on your computer.$\r$\n$\r$\n${PRODUCT_DESCRIPTION}$\r$\n$\r$\nWhat will be installed:$\r$\n  - Claude Code (via Anthropic native installer)$\r$\n  - Node.js (for statusline display)$\r$\n  - Windows Terminal (recommended)$\r$\n  - Git (optional)$\r$\n$\r$\nFeatures:$\r$\n  - Light blue terminal color scheme$\r$\n  - Folder shortcuts and right-click integration$\r$\n  - One-click launch from desktop$\r$\n$\r$\nClick Next to continue."
 !insertmacro MUI_PAGE_WELCOME
 
 ; Configuration page
@@ -341,7 +341,7 @@ Section "!Install Claude Code (Required)" SecClaudeCode
 
   ${If} $0 != 0
     DetailPrint "WARNING: Claude Code installation may have failed"
-    MessageBox MB_OK "Claude Code installation may have failed.$\n$\nYou can install it manually by running:$\nnpm install -g @anthropic-ai/claude-code"
+    MessageBox MB_OK "Claude Code installation may have failed.$\n$\nYou can install it manually from:$\nhttps://claude.ai/download"
   ${Else}
     DetailPrint "Claude Code installed successfully"
   ${EndIf}
@@ -404,8 +404,8 @@ SectionEnd
 ; Section descriptions
 !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
   !insertmacro MUI_DESCRIPTION_TEXT ${SecCore} "Core files: launcher scripts, shortcuts, configuration, and Windows Terminal profile."
-  !insertmacro MUI_DESCRIPTION_TEXT ${SecNodeJS} "Node.js runtime (required for Claude Code). Skipped if already installed."
-  !insertmacro MUI_DESCRIPTION_TEXT ${SecClaudeCode} "Claude Code CLI tool (installed via npm)."
+  !insertmacro MUI_DESCRIPTION_TEXT ${SecNodeJS} "Node.js runtime (required for statusline display). Skipped if already installed."
+  !insertmacro MUI_DESCRIPTION_TEXT ${SecClaudeCode} "Claude Code CLI tool (installed via Anthropic native installer)."
   !insertmacro MUI_DESCRIPTION_TEXT ${SecWindowsTerminal} "Windows Terminal with light blue color scheme. Falls back to cmd.exe if not installed."
   !insertmacro MUI_DESCRIPTION_TEXT ${SecGit} "Git version control (optional, for development workflows)."
 !insertmacro MUI_FUNCTION_DESCRIPTION_END

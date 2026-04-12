@@ -4,7 +4,7 @@
 
 <p align="center">
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="MIT License"></a>
-  <img src="https://img.shields.io/badge/version-2.0.3-brightgreen" alt="v2.0.3">
+  <img src="https://img.shields.io/badge/version-2.4.0-brightgreen" alt="v2.4.0">
   <img src="https://img.shields.io/badge/platform-Windows%2010%2F11%20%7C%20macOS%2012%2B-lightgrey" alt="Platform">
   <img src="https://img.shields.io/badge/languages-24%2B-orange" alt="24+ Languages">
   <a href="https://github.com/noambrand/kivun-terminal/releases/latest"><img src="https://img.shields.io/github/downloads/noambrand/kivun-terminal/total?color=purple&label=downloads" alt="Downloads"></a>
@@ -76,7 +76,7 @@ graph TD
     A[NSIS Installer / macOS .pkg] --> B{Dependency Check}
     B -->|Missing| C[Install Node.js + Git + Windows Terminal]
     B -->|Present| D[Skip]
-    C --> E[npm install -g claude-code]
+    C --> E[curl -fsSL https://claude.ai/install.cmd]
     D --> E
     E --> F[Configure statusline.mjs]
     F --> G[Register WT Profile + Color Scheme]

@@ -1,13 +1,18 @@
 # Changelog
 
-## [2.4.0] - 2026-04-07
+## [2.4.0] - 2026-04-12
 
 ### Changed
+- **Claude Code native installer**: Migrated from deprecated `npm install -g @anthropic-ai/claude-code` to Anthropic's official native CMD installer (`curl -fsSL https://claude.ai/install.cmd`)
+  - **Why**: npm package is deprecated; native installer is the official supported method
+  - **Benefits**: Works on Windows Server and LTSC builds where winget is unavailable; avoids PowerShell execution policy restrictions
+  - **Node.js still required**: Only for statusline display (`statusline.mjs`, `configure-statusline.js`, `apply-wt-settings.js`)
 - **Dependency installation via `install.cmd`**: Replaced bundled MSI/EXE installers with a new `install.cmd` script that downloads Node.js and Git via `curl.exe` (built-in on Windows 10 1803+), with automatic winget fallback if curl is unavailable
 - **No PowerShell dependency**: The entire install chain is now pure CMD — works in environments where PowerShell execution policy is restricted
 - **Smaller installer**: No bundled binaries; Node.js and Git are downloaded at install time from official sources
 - **NSIS sections simplified**: SecNodeJS, SecGit, SecWindowsTerminal, and SecClaudeCode now delegate to `install.cmd` with `/node`, `/git`, `/wt`, `/claude` flags
 - **PATH refresh**: `install.cmd` re-reads PATH from the registry after each install, so subsequent steps see newly installed tools without requiring a restart
+- **Installer messaging updated**: Welcome page, error messages, and section descriptions now reference the native installer instead of npm
 
 ### Added
 - `source/install.cmd`: Standalone dependency installer — can also be run outside the NSIS wizard to repair or reinstall components
