@@ -1,5 +1,43 @@
 # Changelog
 
+## [2.4.1] - 2026-04-12
+
+### Security Fixes - IMPORTANT UPDATE
+
+**macOS users should update immediately.** This release fixes critical security vulnerabilities in the macOS installer.
+
+#### Fixed Vulnerabilities
+
+1. **Command Injection via Configuration File** (Critical - CVE pending)
+   - **Risk**: Malicious code execution if config.txt is modified
+   - **Fix**: Removed `eval` usage, implemented proper argument passing
+   - **Affected**: macOS installer v2.4.0 only
+   - **Impact**: Desktop shortcut and Finder Quick Action now safely handle user-provided flags
+
+2. **Privilege Escalation via Temporary Sudo** (High)
+   - **Risk**: Passwordless sudo could persist if installer is interrupted
+   - **Fix**: Added trap handler to ensure cleanup even on crash/Ctrl+C
+   - **Affected**: macOS installer v2.4.0 only
+   - **Impact**: `/etc/sudoers.d/` cleanup now guaranteed
+
+3. **Unquoted Variable Expansion** (Medium)
+   - **Risk**: Malformed paths or flags could break execution
+   - **Fix**: Proper quoting throughout macOS scripts
+   - **Affected**: macOS installer v2.4.0 only
+
+#### Recommendation
+
+If you installed v2.4.0 on macOS:
+1. **Download and install v2.4.1** to get security fixes
+2. **Verify no leftover sudo files**: `ls /etc/sudoers.d/kivun-brew-temp` (should not exist)
+3. **Review your config.txt** if you edited it manually
+
+Windows installer is **not affected** by these vulnerabilities.
+
+See `SECURITY_REVIEW_v2.4.0.md` for full technical details.
+
+---
+
 ## [2.4.0] - 2026-04-12
 
 ### Changed - Windows & macOS

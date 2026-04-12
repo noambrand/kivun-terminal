@@ -1,0 +1,107 @@
+AhnLab-V3 False Positive Submission
+=====================================
+
+TO: v3sos@ahnlab.com
+CC: e-support@ahnlab.com
+SUBJECT: False Positive Report - ClaudeCode_Launchpad_CLI_Setup.exe
+
+ATTACHMENT: ClaudeCode_Launchpad_CLI_Setup.exe (compressed as .zip)
+
+---
+
+EMAIL BODY:
+
+Dear AhnLab V3 Security Team,
+
+I am writing to report a false positive detection by AhnLab-V3 antivirus.
+
+FILE INFORMATION:
+- File Name: ClaudeCode_Launchpad_CLI_Setup.exe
+- SHA256: 8e759e2b20a6ea11e87c277c2da367a84ed557c98bdec72ef185f9e27f17eaab
+- VirusTotal Scan: https://www.virustotal.com/gui/file/8e759e2b20a6ea11e87c277c2da367a84ed557c98bdec72ef185f9e27f17eaab/detection
+- Detection Rate: 1/69 vendors (only AhnLab-V3 flagging this file)
+- File Size: 154 KB
+
+PROJECT DETAILS:
+- Project: ClaudeCode Launchpad CLI
+- GitHub Repository: https://github.com/noambrand/kivun-terminal
+- Release: https://github.com/noambrand/kivun-terminal/releases/tag/v2.4.0
+- License: MIT (open source)
+- Purpose: Legitimate NSIS installer for Claude Code CLI toolkit
+
+WHAT THIS SOFTWARE DOES:
+This is an installer for Anthropic's Claude Code CLI tool. It automates the setup process by:
+1. Installing Node.js (if not already present)
+2. Installing Claude Code via Anthropic's official native installer (curl -fsSL https://claude.ai/install.cmd)
+3. Optionally installing Windows Terminal and Git
+4. Configuring a custom status bar and terminal color scheme
+5. Creating desktop shortcuts and right-click context menus
+
+The installer is built using NSIS (Nullsoft Scriptable Install System), a widely-used open-source installer framework.
+
+EXPLANATION:
+This is NOT malware. The detection appears to be a false positive, likely triggered by:
+- Registry modifications (Add/Remove Programs entries, context menu registration)
+- Environment variable changes (CLAUDE_CODE_STATUSLINE)
+- Downloading additional installers via curl.exe (Node.js, Git)
+- Executing MSI installers (msiexec /i for Node.js installation)
+
+These are all standard, legitimate installer behaviors. The entire source code is publicly available and auditable on GitHub.
+
+VERIFICATION:
+- Only 1 out of 69 antivirus vendors on VirusTotal flagged this file
+- The project is open source with full source code available
+- The installer downloads dependencies only from official sources:
+  * nodejs.org (Node.js)
+  * github.com/git-for-windows (Git)
+  * claude.ai/install.cmd (Claude Code native installer)
+  * Microsoft Store via winget (Windows Terminal)
+
+REQUEST:
+Please review this file and add it to your whitelist/trusted files database to prevent false detections for legitimate users.
+
+CONTACT:
+- Project Maintainer: Noam Brand
+- GitHub: @noambrand
+- Repository: https://github.com/noambrand/kivun-terminal
+
+I have attached the file compressed in ZIP format for your analysis. The complete source code including the NSIS build script is available in the GitHub repository.
+
+Please let me know if you need any additional information.
+
+Thank you for your attention to this matter.
+
+Best regards,
+Noam Brand
+ClaudeCode Launchpad CLI Maintainer
+
+---
+
+INSTRUCTIONS FOR SENDING:
+
+1. Compress ClaudeCode_Launchpad_CLI_Setup.exe to a ZIP file first:
+   - Right-click ClaudeCode_Launchpad_CLI_Setup.exe
+   - Send to > Compressed (zipped) folder
+   - Name it: ClaudeCode_Launchpad_CLI_Setup_FalsePositive.zip
+
+2. Open your email client
+3. Create new email to: v3sos@ahnlab.com
+4. Add CC: e-support@ahnlab.com
+5. Subject: False Positive Report - ClaudeCode_Launchpad_CLI_Setup.exe
+6. Copy the EMAIL BODY above
+7. Attach: ClaudeCode_Launchpad_CLI_Setup_FalsePositive.zip
+8. Send
+
+EXPECTED RESPONSE:
+- Initial acknowledgment: 1-2 business days
+- Whitelist update: 3-7 business days
+- Check back on VirusTotal after ~1 week to verify detection is removed
+
+---
+
+ALTERNATIVE SUBMISSION METHOD (Web Form):
+
+If email doesn't work, try:
+https://ask.ahnlab.com/hc/en-us/articles/900003237626-To-Submit-a-Malware-related-Inquiry
+
+Upload the ZIP file and provide the same information from the email body.
