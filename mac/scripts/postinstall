@@ -80,6 +80,10 @@ if ! run_as_user "command -v brew" &>/dev/null; then
     # ("Need sudo access on macOS"). Fix: temporarily grant passwordless sudo.
     log "Granting temporary passwordless sudo for Homebrew install..."
     SUDOERS_TMP="/etc/sudoers.d/kivun-brew-temp"
+
+    # SECURITY FIX: Ensure cleanup happens even if script is interrupted
+    trap 'rm -f "$SUDOERS_TMP"; log "Cleaned up temporary sudo file"' EXIT ERR INT TERM
+
     echo "$REAL_USER ALL=(ALL) NOPASSWD:ALL" > "$SUDOERS_TMP"
     chmod 0440 "$SUDOERS_TMP"
     log "  Created $SUDOERS_TMP"
@@ -100,6 +104,7 @@ if ! run_as_user "command -v brew" &>/dev/null; then
 
     # Remove temporary sudo access immediately
     rm -f "$SUDOERS_TMP"
+    trap - EXIT ERR INT TERM
     log "  Removed $SUDOERS_TMP"
 
     log "Homebrew installer exit code: $BREW_EXIT"
@@ -344,8 +349,20 @@ esac
 echo "Starting Claude Code in: $FOLDER"
 echo ""
 
-# Launch Claude with all flags
-eval claude "$LANG_PROMPT" $CLAUDE_FLAGS
+# Launch Claude with all flags (SECURITY: avoid eval, use proper argument passing)
+if [ -n "$LANG_PROMPT" ]; then
+    if [ -n "$CLAUDE_FLAGS" ]; then
+        claude --append-system-prompt "$LANG_PROMPT" $CLAUDE_FLAGS
+    else
+        claude --append-system-prompt "$LANG_PROMPT"
+    fi
+else
+    if [ -n "$CLAUDE_FLAGS" ]; then
+        claude $CLAUDE_FLAGS
+    else
+        claude
+    fi
+fi
 SCRIPT
 chmod +x "$SHORTCUT_PATH"
 chown "$REAL_USER" "$SHORTCUT_PATH"
@@ -522,11 +539,23 @@ if [ "$TERMINAL_COLOR" = "kivun" ]; then
     ' 2&gt;/dev/null
 fi
 
-# Open Terminal and launch Claude
+# Open Terminal and launch Claude (SECURITY: proper quoting for flags)
 export CLAUDE_CODE_STATUSLINE="$STATUSLINE_DIR/statusline.mjs"
+
+# Build command with proper argument handling
+CMD="cd '$FOLDER' &amp;&amp; clear &amp;&amp; echo 'ClaudeCode Launchpad CLI' &amp;&amp; echo ''"
+if [ -n "$LANG_PROMPT" ]; then
+    CMD="$CMD &amp;&amp; claude --append-system-prompt '$LANG_PROMPT'"
+else
+    CMD="$CMD &amp;&amp; claude"
+fi
+if [ -n "$CLAUDE_FLAGS" ]; then
+    CMD="$CMD $CLAUDE_FLAGS"
+fi
+
 osascript -e "tell application \"Terminal\"
     activate
-    do script \"cd '$FOLDER' &amp;&amp; clear &amp;&amp; echo 'ClaudeCode Launchpad CLI' &amp;&amp; echo '' &amp;&amp; claude $LANG_PROMPT $CLAUDE_FLAGS\"
+    do script \"$CMD\"
 end tell"
 </string>
                     <key>CheckedForUserDefaultShell</key>
