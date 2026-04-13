@@ -18,11 +18,9 @@ REM Folder picker writes path to file (Unicode-safe) and echoes OK/CANCELLED
 for /f "delims=" %%i in ('cscript //nologo "%~dp0folder-picker.js" 2^>nul') do set "PICKER_RESULT=%%i"
 
 if "!PICKER_RESULT!"=="OK" (
-    echo Folder selected. Starting ClaudeCode Launchpad CLI...
+    echo Folder selected.
     echo.
-    REM Pass READFILE marker - claudecode-launchpad.bat will read path from file
-    call "%~dp0claudecode-launchpad.bat" "READFILE"
-    exit /b 0
+    goto :ask_flags
 )
 
 REM Cancelled or picker failed - fall through to text input
@@ -65,9 +63,27 @@ REM Write typed path via JScript (preserves Unicode)
 cscript //nologo "%~dp0write-path.js" "!CHOSEN_FOLDER!" 2>nul
 
 REM --- Optional one-time Claude flags ---
+:ask_flags
+echo.
+echo ========================================
+echo   Optional Claude flags for this session
+echo ========================================
+echo.
+echo   --continue              Resume your last conversation
+echo   --resume my-session     Resume a named session
+echo   --model sonnet          Use Sonnet (faster, cheaper)
+echo   --model opus            Use Opus (strongest reasoning)
+echo   --model haiku           Use Haiku (fastest, lightest)
+echo   --print                 One-off answer, no interactive chat
+echo   --add-dir C:\full\path  Give Claude access to extra folder
+echo   --enable-auto-mode      Skip permission prompts (auto-approve)
+echo.
+echo   Combine: --continue --model sonnet --add-dir C:\MyProject\src
+echo.
+echo ========================================
 echo.
 set "ONE_TIME_FLAGS="
-set /p "ONE_TIME_FLAGS=Claude flags (Enter to skip, e.g. --continue): "
+set /p "ONE_TIME_FLAGS=Claude flags (Enter to skip): "
 if not "!ONE_TIME_FLAGS!"=="" (
     echo !ONE_TIME_FLAGS!> "%LOCALAPPDATA%\Kivun\kivun-claude-flags.txt"
 )
