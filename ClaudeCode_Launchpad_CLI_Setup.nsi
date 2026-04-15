@@ -157,8 +157,8 @@ Section "!Core Components (Required)" SecCore
   File "source\config.txt"
   File "source\claudecode-launchpad.bat"
   File "source\claudecode-launchpad-choose-folder.bat"
-  File "source\folder-picker.js"
-  File "source\folder-picker-launcher.js"
+  File "source\folder-picker.wsf"
+  File "source\folder-picker-launcher.wsf"
   File "source\write-path.js"
   File "source\post-install.bat"
   File "source\claudecode-launchpad-wt-fragment.json"
@@ -253,7 +253,7 @@ Section "!Core Components (Required)" SecCore
 
   ; Create Start Menu shortcuts
   CreateDirectory "$SMPROGRAMS\${PRODUCT_NAME}"
-  CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\${PRODUCT_NAME}.lnk" "wscript.exe" '"$INSTDIR\folder-picker-launcher.js"' "$INSTDIR\claude_icon.ico" 0 SW_SHOWNORMAL "" "${PRODUCT_DESCRIPTION}"
+  CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\${PRODUCT_NAME}.lnk" "wscript.exe" '"$INSTDIR\folder-picker-launcher.wsf"' "$INSTDIR\claude_icon.ico" 0 SW_SHOWNORMAL "" "${PRODUCT_DESCRIPTION}"
   CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\Configuration.lnk" "notepad.exe" "$INSTDIR\config.txt" "" 0 SW_SHOWNORMAL "" "Configure language settings"
   CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\Uninstall.lnk" "$INSTDIR\Uninstall.exe" "" "" 0 SW_SHOWNORMAL "" "Uninstall ${PRODUCT_NAME}"
 
@@ -267,7 +267,7 @@ Section "!Core Components (Required)" SecCore
   RMDir /r "$LOCALAPPDATA\Microsoft\Windows Terminal\Fragments\KivunTerminal"
 
   ; Create Desktop shortcut
-  CreateShortCut "$DESKTOP\ClaudeCode Launchpad CLI.lnk" "wscript.exe" '"$INSTDIR\folder-picker-launcher.js"' "$INSTDIR\claude_icon.ico" 0 SW_SHOWNORMAL "" "${PRODUCT_DESCRIPTION}"
+  CreateShortCut "$DESKTOP\ClaudeCode Launchpad CLI.lnk" "wscript.exe" '"$INSTDIR\folder-picker-launcher.wsf"' "$INSTDIR\claude_icon.ico" 0 SW_SHOWNORMAL "" "${PRODUCT_DESCRIPTION}"
 
   ; Create SendTo shortcut
   CreateShortCut "$SENDTO\ClaudeCode Launchpad CLI.lnk" "$INSTDIR\claudecode-launchpad.bat" "" "$INSTDIR\claude_icon.ico" 0 SW_SHOWNORMAL "" "Open with ClaudeCode Launchpad CLI"
@@ -413,7 +413,7 @@ SectionEnd
 ; Desktop shortcut creation function (called from finish page)
 Function CreateDesktopShortcut
   Delete "$DESKTOP\Kivun Terminal.lnk"
-  CreateShortCut "$DESKTOP\ClaudeCode Launchpad CLI.lnk" "wscript.exe" '"$INSTDIR\folder-picker-launcher.js"' "$INSTDIR\claude_icon.ico" 0 SW_SHOWNORMAL "" "${PRODUCT_DESCRIPTION}"
+  CreateShortCut "$DESKTOP\ClaudeCode Launchpad CLI.lnk" "wscript.exe" '"$INSTDIR\folder-picker-launcher.wsf"' "$INSTDIR\claude_icon.ico" 0 SW_SHOWNORMAL "" "${PRODUCT_DESCRIPTION}"
 FunctionEnd
 
 ; Uninstaller

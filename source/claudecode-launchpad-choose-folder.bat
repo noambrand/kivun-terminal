@@ -15,7 +15,7 @@ echo Opening folder picker...
 echo.
 
 REM Folder picker writes path to file (Unicode-safe) and echoes OK/CANCELLED
-for /f "delims=" %%i in ('cscript //nologo "%~dp0folder-picker.js" 2^>nul') do set "PICKER_RESULT=%%i"
+for /f "delims=" %%i in ('cscript //nologo "%~dp0folder-picker.wsf" 2^>nul') do set "PICKER_RESULT=%%i"
 
 if "!PICKER_RESULT!"=="OK" (
     echo Folder selected.

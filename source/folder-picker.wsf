@@ -1,7 +1,10 @@
-// ClaudeCode Launchpad CLI - Folder Picker (JScript for Windows Script Host)
+<job>
+<script language="JScript">
+// ClaudeCode Launchpad CLI - Folder Picker
+// WSF wrapper ensures JScript engine is used regardless of .js file association.
 // Shows folder browse dialog, writes path to file, echoes OK/CANCELLED.
 // Called from claudecode-launchpad-choose-folder.bat
-// Run with: cscript //nologo folder-picker.js
+// Run with: cscript //nologo folder-picker.wsf
 
 var wshShell = new ActiveXObject("WScript.Shell");
 var fso = new ActiveXObject("Scripting.FileSystemObject");
@@ -47,3 +50,5 @@ outStream.Close();
 stream.Close();
 
 WScript.Echo("OK");
+</script>
+</job>
