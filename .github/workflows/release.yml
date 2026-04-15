@@ -118,6 +118,22 @@ jobs:
           fi
           echo "All required release assets present."
 
+      - name: Generate release notes from template
+        run: |
+          TAG="${{ github.ref_name }}"
+          [ -z "$TAG" ] && TAG="${{ inputs.tag }}"
+          sed "s/TAG_PLACEHOLDER/$TAG/g" .github/RELEASE_TEMPLATE.md > release-notes.md
+          # Append auto-generated changelog from git
+          echo "" >> release-notes.md
+          echo "## Commits since last release" >> release-notes.md
+          echo "" >> release-notes.md
+          PREV_TAG=$(git tag --sort=-version:refname | grep -A1 "^${TAG}$" | tail -1)
+          if [ -n "$PREV_TAG" ] && [ "$PREV_TAG" != "$TAG" ]; then
+            git log --oneline "${PREV_TAG}..${TAG}" | while read line; do
+              echo "- $line" >> release-notes.md
+            done
+          fi
+
       - name: Create or update release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -133,7 +149,7 @@ jobs:
             echo "Creating release $TAG..."
             gh release create "$TAG" release-assets/* \
               --title "ClaudeCode Launchpad CLI $TAG" \
-              --generate-notes \
+              --notes-file release-notes.md \
               --latest
           fi
 
