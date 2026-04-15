@@ -1,0 +1,147 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Tag to release (e.g. v2.4.3)'
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install NSIS
+        run: choco install nsis -y
+
+      - name: Build Windows installer
+        run: |
+          & "C:\Program Files (x86)\NSIS\makensis.exe" ClaudeCode_Launchpad_CLI_Setup.nsi
+
+      - name: Verify installer exists
+        run: |
+          if (!(Test-Path ClaudeCode_Launchpad_CLI_Setup.exe)) {
+            Write-Error "Windows installer not built"
+            exit 1
+          }
+          Write-Output "Windows installer size: $((Get-Item ClaudeCode_Launchpad_CLI_Setup.exe).Length) bytes"
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-installer
+          path: ClaudeCode_Launchpad_CLI_Setup.exe
+
+  build-mac:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Prepare scripts
+        run: |
+          chmod +x mac/scripts/postinstall
+          cp source/statusline.mjs mac/scripts/statusline.mjs
+          cp source/configure-statusline.js mac/scripts/configure-statusline.js
+
+      - name: Build .pkg
+        run: |
+          TAG="${{ github.ref_name }}"
+          [ -z "$TAG" ] && TAG="${{ inputs.tag }}"
+          pkgbuild \
+            --nopayload \
+            --scripts mac/scripts \
+            --identifier com.claudecode.launchpad \
+            --version "$TAG" \
+            --install-location / \
+            ClaudeCode_Launchpad_CLI_Setup_mac.pkg
+
+      - name: Verify pkg exists
+        run: |
+          ls -lh ClaudeCode_Launchpad_CLI_Setup_mac.pkg
+          pkgutil --check-signature ClaudeCode_Launchpad_CLI_Setup_mac.pkg || true
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: mac-installer
+          path: ClaudeCode_Launchpad_CLI_Setup_mac.pkg
+
+  release:
+    needs: [build-windows, build-mac]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download Windows installer
+        uses: actions/download-artifact@v4
+        with:
+          name: windows-installer
+          path: release-assets/
+
+      - name: Download macOS installer
+        uses: actions/download-artifact@v4
+        with:
+          name: mac-installer
+          path: release-assets/
+
+      - name: Copy demo video
+        run: cp kivun_terminal_Hebrew_2_0_2.mp4 release-assets/
+
+      - name: Verify all required assets exist
+        run: |
+          MISSING=0
+          for f in \
+            release-assets/ClaudeCode_Launchpad_CLI_Setup.exe \
+            release-assets/ClaudeCode_Launchpad_CLI_Setup_mac.pkg \
+            release-assets/kivun_terminal_Hebrew_2_0_2.mp4; do
+            if [ ! -f "$f" ]; then
+              echo "MISSING: $f"
+              MISSING=1
+            else
+              echo "OK: $f ($(stat --format=%s "$f") bytes)"
+            fi
+          done
+          if [ "$MISSING" = "1" ]; then
+            echo "::error::Release is missing required assets. Aborting."
+            exit 1
+          fi
+          echo "All required release assets present."
+
+      - name: Create or update release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TAG="${{ github.ref_name }}"
+          [ -z "$TAG" ] && TAG="${{ inputs.tag }}"
+
+          # Check if release already exists
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            echo "Release $TAG exists — uploading assets (overwriting duplicates)..."
+            gh release upload "$TAG" release-assets/* --clobber
+          else
+            echo "Creating release $TAG..."
+            gh release create "$TAG" release-assets/* \
+              --title "ClaudeCode Launchpad CLI $TAG" \
+              --generate-notes \
+              --latest
+          fi
+
+      - name: Verify release assets
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TAG="${{ github.ref_name }}"
+          [ -z "$TAG" ] && TAG="${{ inputs.tag }}"
+          echo "Release assets for $TAG:"
+          gh release view "$TAG" --json assets --jq '.assets[] | "  \(.name) (\(.size) bytes)"'
