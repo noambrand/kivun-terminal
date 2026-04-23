@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <img src="claudecode_launchpad_GIF.gif" width="700" alt="ClaudeCode Launchpad CLI in action — installer wizard, terminal launch, status bar">
+  <img src="claudecode_launchpad_GIF.gif" width="700" alt="ClaudeCode Launchpad CLI in action - installer wizard, terminal launch, status bar">
 </p>
 
 <p align="center">
@@ -28,7 +28,7 @@
 
 ---
 
-> 💡 **Working in Hebrew, Arabic, Persian, or another RTL language?** Check out the sister project **[Kivun Terminal (kivun-terminal-wsl)](https://github.com/noambrand/kivun-terminal-wsl)** — same launcher concept but with full BiDi/RTL rendering for Claude Code on Windows (WSL+Konsole), Linux, and macOS. The new v1.1.0 ships a `kivun-claude-bidi` wrapper that fixes the bullet-line direction bug.
+> 💡 **Working in Hebrew, Arabic, Persian, or another RTL language?** Check out the sister project **[Kivun Terminal (kivun-terminal-wsl)](https://github.com/noambrand/kivun-terminal-wsl)** - same launcher concept but with full BiDi/RTL rendering for Claude Code on Windows (WSL+Konsole), Linux, and macOS. The new v1.1.0 ships a `kivun-claude-bidi` wrapper that fixes the bullet-line direction bug.
 
 ## Why Launchpad CLI?
 
@@ -47,7 +47,7 @@
 ### Windows
 
 1. **[Download `ClaudeCode_Launchpad_CLI_Setup.exe`](https://github.com/noambrand/kivun-terminal/releases/latest)**
-2. Run as Administrator — the wizard auto-detects what's already installed
+2. Run as Administrator - the wizard auto-detects what's already installed
 3. Double-click the **"ClaudeCode Launchpad CLI"** desktop shortcut
 4. Start coding with Claude
 

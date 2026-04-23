@@ -181,7 +181,7 @@ if not errorlevel 1 (
     echo [SKIP] Windows Terminal already installed.
     goto :eof
 )
-REM WT is an MSIX/Store package — winget is the only automated method
+REM WT is an MSIX/Store package - winget is the only automated method
 where winget.exe >nul 2>&1
 if errorlevel 1 (
     echo [WARN] winget not available. Install Windows Terminal from the Microsoft Store.

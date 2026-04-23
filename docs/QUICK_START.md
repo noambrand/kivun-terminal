@@ -22,7 +22,7 @@ ClaudeCode Launchpad CLI is a Claude Code installer for Windows and macOS. It se
 > **Note:** An internet connection is required. The installer downloads all dependencies via Homebrew - no binaries are bundled in the .pkg.
 
 1. Download `ClaudeCode_Launchpad_CLI_Setup_<version>.pkg` from the [latest release](https://github.com/noambrand/kivun-terminal/releases/latest)
-2. **Double-click** the `.pkg` — macOS will block it with *"cannot be opened because Apple cannot check it for malicious software"*. Close the alert.
+2. **Double-click** the `.pkg` - macOS will block it with *"cannot be opened because Apple cannot check it for malicious software"*. Close the alert.
 3. Go to  → **System Settings → Privacy & Security**, scroll to the bottom, and click **Allow Anyway** next to the blocked installer.
 4. **Double-click the `.pkg` again** to run it. Click **Open** in the confirmation dialog.
 5. Enter your Mac password when prompted (admin access is needed to install Homebrew, Node.js, Git, and Claude Code).
@@ -31,7 +31,7 @@ ClaudeCode Launchpad CLI is a Claude Code installer for Windows and macOS. It se
 
 On first launch, Claude Code will ask for your account details or Anthropic API key.
 
-**Navigating to a folder in Terminal:** Drag any folder from Finder into the Terminal window — the path is inserted automatically (spaces escaped). Prefix it with `cd ` and press Enter to navigate there.
+**Navigating to a folder in Terminal:** Drag any folder from Finder into the Terminal window - the path is inserted automatically (spaces escaped). Prefix it with `cd ` and press Enter to navigate there.
 
 **If something goes wrong:** Check the install log at `/tmp/kivun_install.log`.
 

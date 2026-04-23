@@ -7,8 +7,8 @@ Every GitHub release **must** include all three assets. Missing any asset breaks
 | Asset | Built on | Notes |
 |-------|----------|-------|
 | `ClaudeCode_Launchpad_CLI_Setup.exe` | Windows | Compiled from `ClaudeCode_Launchpad_CLI_Setup.nsi` using NSIS |
-| `ClaudeCode_Launchpad_CLI_Setup_mac.pkg` | macOS | Built with `pkgbuild` from `mac/scripts/postinstall` — fixed name enables direct download via `/releases/latest/download/` |
-| `kivun_terminal_Hebrew_2_0_2.mp4` | — | Demo video, same file every release |
+| `ClaudeCode_Launchpad_CLI_Setup_mac.pkg` | macOS | Built with `pkgbuild` from `mac/scripts/postinstall` - fixed name enables direct download via `/releases/latest/download/` |
+| `kivun_terminal_Hebrew_2_0_2.mp4` | - | Demo video, same file every release |
 
 ## Steps
 

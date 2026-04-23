@@ -21,14 +21,14 @@ Then close and reopen the terminal.
 The installer uses ANSI escape sequences as a fallback, so colors should work even without the WT profile. If you see no colors:
 
 1. Make sure **Windows Terminal** is installed (`winget install Microsoft.WindowsTerminal`)
-2. Re-run the installer — it registers a WT JSON fragment automatically
+2. Re-run the installer - it registers a WT JSON fragment automatically
 3. If using CMD fallback, verify your Windows 10 build supports 24-bit ANSI (build 1903+)
 
 ### Folder picker doesn't open
 
 The GUI folder picker requires Windows Script Host. If it's disabled by policy:
 
-- Cancel the picker — a text input prompt will appear where you can type or paste a path
+- Cancel the picker - a text input prompt will appear where you can type or paste a path
 
 ### Desktop shortcut does nothing
 
@@ -46,10 +46,10 @@ Re-run the installer as Administrator. The context menu entry is added to the re
 
 The installer uses `curl.exe` (built-in on Windows 10 1803+) to download Node.js and Git. If downloads fail:
 
-1. **Firewall/proxy** — corporate firewalls may block `nodejs.org` or `github.com`. Ask your IT team to whitelist these domains
-2. **No internet** — an internet connection is required during installation
-3. **curl missing** — on very old Windows 10 builds (before 1803), curl may not exist. The installer falls back to winget automatically
-4. **Manual install** — if all else fails, install [Node.js](https://nodejs.org/) and [Git](https://git-scm.com/) manually, then re-run the installer (it will detect them and skip)
+1. **Firewall/proxy** - corporate firewalls may block `nodejs.org` or `github.com`. Ask your IT team to whitelist these domains
+2. **No internet** - an internet connection is required during installation
+3. **curl missing** - on very old Windows 10 builds (before 1803), curl may not exist. The installer falls back to winget automatically
+4. **Manual install** - if all else fails, install [Node.js](https://nodejs.org/) and [Git](https://git-scm.com/) manually, then re-run the installer (it will detect them and skip)
 
 ---
 
@@ -59,7 +59,7 @@ The installer uses `curl.exe` (built-in on Windows 10 1803+) to download Node.js
 
 This is expected for non-notarized packages:
 
-1. Double-click the `.pkg` — macOS will block it
+1. Double-click the `.pkg` - macOS will block it
 2. Go to **System Settings > Privacy & Security**
 3. Scroll to the bottom, click **Allow Anyway**
 4. Double-click the `.pkg` again

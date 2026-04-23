@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
-// Claude Code Status Line — 2-Line Layout with Usage Bars
-// [UPDATED] v2.1 — restored full labels, full path, 2-line output
+// Claude Code Status Line - 2-Line Layout with Usage Bars
+// [UPDATED] v2.1 - restored full labels, full path, 2-line output
 
 const C = {
   g: '\x1b[32m',
