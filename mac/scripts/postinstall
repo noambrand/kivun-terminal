@@ -1,8 +1,8 @@
 #!/bin/bash
-# ClaudeCode Launchpad CLI - macOS dependency installer (postinstall)
+# ClaudeCode Launchpad CLI — macOS dependency installer (postinstall)
 # Runs as root after .pkg installation
 
-# Do NOT use set -e - we handle errors per-step so one failure doesn't kill the whole install
+# Do NOT use set -e — we handle errors per-step so one failure doesn't kill the whole install
 LOG_FILE="/tmp/kivun_install.log"
 REAL_USER="${SUDO_USER:-$(stat -f '%Su' /dev/console)}"
 REAL_HOME=$(dscl . -read "/Users/$REAL_USER" NFSHomeDirectory 2>/dev/null | awk '{print $2}')
@@ -25,7 +25,7 @@ CLT_PATH=$(xcode-select -p 2>&1) || true
 log "xcode-select -p: '$CLT_PATH' (exit: $?)"
 
 if ! xcode-select -p &>/dev/null; then
-    log "CLT not installed - attempting non-interactive install via softwareupdate"
+    log "CLT not installed — attempting non-interactive install via softwareupdate"
     touch /tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress
 
     log "Running: softwareupdate -l (listing available updates)..."
@@ -64,7 +64,7 @@ BREW_PATH=$(run_as_user "command -v brew" 2>&1) || true
 log "brew path: '$BREW_PATH'"
 
 if ! run_as_user "command -v brew" &>/dev/null; then
-    log "Homebrew not found - installing..."
+    log "Homebrew not found — installing..."
 
     # Pre-checks
     log "Pre-checks before Homebrew install:"
@@ -141,7 +141,7 @@ if ! run_as_user "command -v node" &>/dev/null; then
         log "ERROR: Node.js installation failed"
     fi
 else
-    log "Node.js $(run_as_user 'node --version' 2>/dev/null) already installed - skipping"
+    log "Node.js $(run_as_user 'node --version' 2>/dev/null) already installed — skipping"
 fi
 
 # --- Git ---
@@ -153,7 +153,7 @@ if ! run_as_user "command -v git" &>/dev/null; then
         log "ERROR: Git installation failed"
     fi
 else
-    log "Git already installed - skipping"
+    log "Git already installed — skipping"
 fi
 
 # --- Claude Code ---
@@ -172,7 +172,7 @@ if ! run_as_user "command -v claude" &>/dev/null; then
         log "ERROR: Failed to download Claude Code installer"
     fi
 else
-    log "Claude Code already installed - skipping"
+    log "Claude Code already installed — skipping"
 fi
 
 # --- Statusline ---
@@ -185,7 +185,7 @@ if [ -f "$STATUSLINE_SRC" ]; then
     chmod 644 "$STATUSLINE_DIR/statusline.mjs"
     log "Statusline copied to $STATUSLINE_DIR/statusline.mjs"
 else
-    log "WARNING: statusline.mjs not found in package - skipping"
+    log "WARNING: statusline.mjs not found in package — skipping"
 fi
 
 # Set CLAUDE_CODE_STATUSLINE in user's shell profile
@@ -200,7 +200,7 @@ if ! grep -q "CLAUDE_CODE_STATUSLINE" "$SHELL_RC" 2>/dev/null; then
     run_as_user "echo '' >> '$SHELL_RC' && echo '# ClaudeCode Launchpad CLI statusline' >> '$SHELL_RC' && echo '$EXPORT_LINE' >> '$SHELL_RC'"
     log "CLAUDE_CODE_STATUSLINE added to $SHELL_RC"
 else
-    log "CLAUDE_CODE_STATUSLINE already in $SHELL_RC - skipping"
+    log "CLAUDE_CODE_STATUSLINE already in $SHELL_RC — skipping"
 fi
 
 # Configure statusline in Claude Code settings.json
@@ -242,7 +242,7 @@ CONFIG
     chown "$REAL_USER" "$CONFIG_FILE"
     log "Configuration file created at $CONFIG_FILE"
 else
-    log "Configuration file already exists - skipping"
+    log "Configuration file already exists — skipping"
 fi
 
 # --- Desktop Shortcut with Folder Picker ---
@@ -252,7 +252,7 @@ rm -f "$REAL_HOME/Desktop/Kivun Terminal.command"
 SHORTCUT_PATH="$REAL_HOME/Desktop/ClaudeCode Launchpad CLI.command"
 cat > "$SHORTCUT_PATH" << 'SCRIPT'
 #!/bin/bash
-# ClaudeCode Launchpad CLI - launches Claude Code with folder picker
+# ClaudeCode Launchpad CLI — launches Claude Code with folder picker
 
 CONFIG_DIR="$HOME/Library/Application Support/ClaudeCode-Launchpad"
 CONFIG_FILE="$CONFIG_DIR/config.txt"
