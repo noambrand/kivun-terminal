@@ -11,8 +11,7 @@
   <img src="https://img.shields.io/badge/version-2.4.1-brightgreen" alt="v2.4.1">
   <img src="https://img.shields.io/badge/platform-Windows%2010%2F11%20%7C%20macOS%2012%2B-lightgrey" alt="Platform">
   <img src="https://img.shields.io/badge/languages-24%2B-orange" alt="24+ Languages">
-  <a href="https://github.com/noambrand/kivun-terminal/releases/latest"><img src="https://img.shields.io/github/downloads/noambrand/kivun-terminal/total?color=purple&label=total%20downloads" alt="Total Downloads"></a>
-  <a href="https://github.com/noambrand/kivun-terminal/releases/latest"><img src="https://img.shields.io/github/downloads/noambrand/kivun-terminal/latest/total?color=brightgreen&label=v2.4.2%20downloads" alt="Latest release downloads"></a>
+  <a href="https://github.com/noambrand/kivun-terminal/releases/latest"><img src="https://img.shields.io/github/downloads/noambrand/kivun-terminal/total?color=purple&label=downloads" alt="Total Downloads"></a>
 </p>
 
 <h3 align="center">Zero-to-Claude in 1 minute. Installer, status bar, and launcher for Claude Code on Windows & macOS.</h3>
