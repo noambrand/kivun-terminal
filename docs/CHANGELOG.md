@@ -50,29 +50,29 @@ See `SECURITY_REVIEW_v2.4.0.md` for full technical details.
 
 ### Changed - Windows Only
 - **Dependency installation via `install.cmd`**: Replaced bundled MSI/EXE installers with a new `install.cmd` script that downloads Node.js and Git via `curl.exe` (built-in on Windows 10 1803+), with automatic winget fallback if curl is unavailable
-- **No PowerShell dependency**: The entire install chain is now pure CMD — works in environments where PowerShell execution policy is restricted
+- **No PowerShell dependency**: The entire install chain is now pure CMD - works in environments where PowerShell execution policy is restricted
 - **Smaller installer**: No bundled binaries; Node.js and Git are downloaded at install time from official sources
 - **NSIS sections simplified**: SecNodeJS, SecGit, SecWindowsTerminal, and SecClaudeCode now delegate to `install.cmd` with `/node`, `/git`, `/wt`, `/claude` flags
 - **PATH refresh**: `install.cmd` re-reads PATH from the registry after each install, so subsequent steps see newly installed tools without requiring a restart
 - **Installer messaging updated**: Welcome page, error messages, and section descriptions now reference the native installer instead of npm
 
 ### Added - macOS Feature Parity
-- **Folder picker dialog**: Desktop shortcut now shows native macOS folder picker (AppleScript `choose folder`) before launching Claude — matches Windows folder picker experience
+- **Folder picker dialog**: Desktop shortcut now shows native macOS folder picker (AppleScript `choose folder`) before launching Claude - matches Windows folder picker experience
 - **Right-click context menu**: Finder Quick Action adds "Open with ClaudeCode Launchpad" to right-click menu on any folder (appears in Services menu)
 - **Language configuration**: `~/Library/Application Support/ClaudeCode-Launchpad/config.txt` with same options as Windows (24+ languages including Hebrew, Arabic, Persian, etc.)
-- **Configuration file**: macOS now supports `config.txt` with `RESPONSE_LANGUAGE`, `TERMINAL_COLOR`, and `CLAUDE_FLAGS` settings — full feature parity with Windows
+- **Configuration file**: macOS now supports `config.txt` with `RESPONSE_LANGUAGE`, `TERMINAL_COLOR`, and `CLAUDE_FLAGS` settings - full feature parity with Windows
 
 ### Added - Windows Only
-- `source/install.cmd`: Standalone dependency installer — can also be run outside the NSIS wizard to repair or reinstall components
+- `source/install.cmd`: Standalone dependency installer - can also be run outside the NSIS wizard to repair or reinstall components
 - `TROUBLESHOOTING.md`: Added "Download failed during installation" section
 
 ## [2.3.0] - 2026-04-04
 
 ### Added
-- **Optional color theme**: Installer checkbox (checked by default) — uncheck to keep your existing terminal colors instead of applying the Kivun light-blue theme
+- **Optional color theme**: Installer checkbox (checked by default) - uncheck to keep your existing terminal colors instead of applying the Kivun light-blue theme
 - **New no-color WT fragment** (`claudecode-launchpad-wt-fragment-nocolor.json`): registers the WT profile without overriding the color scheme
 - **One-time Claude flags**: After typing a folder path in the text-input fallback, a prompt asks for optional Claude flags (e.g. `--continue`). Flags are written to `kivun-claude-flags.txt`, read at launch, then deleted
-- **Persistent Claude flags**: `CLAUDE_FLAGS=` key in `config.txt` — set once, applied on every launch
+- **Persistent Claude flags**: `CLAUDE_FLAGS=` key in `config.txt` - set once, applied on every launch
 - `docs/RELEASING.md`: Release checklist documenting required assets and build steps for every release
 
 ### Changed
@@ -134,7 +134,7 @@ Complete rewrite removing WSL/Ubuntu/Konsole dependency. Claude Code now runs na
 - Installer simplified: Node.js + Claude Code + Windows Terminal (recommended) + Git (optional)
 
 ### Added
-- macOS installer (.pkg) via pkgbuild — installs Homebrew, Node.js, Git, and Claude Code
+- macOS installer (.pkg) via pkgbuild - installs Homebrew, Node.js, Git, and Claude Code
 - GitHub Actions workflows for building and testing macOS installer
 - Windows Terminal integration with "Kivun Terminal" profile and Noam color scheme (light blue)
 - Windows Terminal auto-installation via winget
