@@ -8,7 +8,7 @@ Every GitHub release **must** include all three assets. Missing any asset breaks
 |-------|----------|-------|
 | `ClaudeCode_Launchpad_CLI_Setup.exe` | Windows | Compiled from `ClaudeCode_Launchpad_CLI_Setup.nsi` using NSIS |
 | `ClaudeCode_Launchpad_CLI_Setup_mac.pkg` | macOS | Built with `pkgbuild` from `mac/scripts/postinstall` - fixed name enables direct download via `/releases/latest/download/` |
-| `kivun_terminal_Hebrew_2_0_2.mp4` | - | Demo video, same file every release |
+| `assets/kivun_terminal_Hebrew_2_0_2.mp4` | - | Demo video, same file every release |
 
 ## Steps
 
@@ -37,7 +37,7 @@ pkgbuild \
 gh release create v<VERSION> \
   ClaudeCode_Launchpad_CLI_Setup.exe \
   ClaudeCode_Launchpad_CLI_Setup_mac.pkg \
-  kivun_terminal_Hebrew_2_0_2.mp4 \
+  assets/kivun_terminal_Hebrew_2_0_2.mp4 \
   --title "ClaudeCode Launchpad CLI v<VERSION>" \
   --notes "..."
 ```
@@ -47,7 +47,7 @@ Or upload to an existing release:
 gh release upload v<VERSION> \
   ClaudeCode_Launchpad_CLI_Setup.exe \
   ClaudeCode_Launchpad_CLI_Setup_mac.pkg \
-  kivun_terminal_Hebrew_2_0_2.mp4 \
+  assets/kivun_terminal_Hebrew_2_0_2.mp4 \
   --clobber
 ```
 
@@ -59,5 +59,5 @@ Expected output:
 ```
 ClaudeCode_Launchpad_CLI_Setup.exe
 ClaudeCode_Launchpad_CLI_Setup_mac.pkg
-kivun_terminal_Hebrew_2_0_2.mp4
+assets/kivun_terminal_Hebrew_2_0_2.mp4
 ```

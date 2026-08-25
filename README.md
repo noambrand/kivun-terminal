@@ -1,9 +1,9 @@
 <p align="center">
-  <img src="ClaudeCode Launchpad CLI.jpeg" width="700" alt="ClaudeCode Launchpad CLI">
+  <img src="assets/ClaudeCode Launchpad CLI.jpeg" width="700" alt="ClaudeCode Launchpad CLI">
 </p>
 
 <p align="center">
-  <img src="claudecode-launchpad_v2.6.9.gif" width="700" alt="ClaudeCode Launchpad CLI in action - installer wizard, terminal launch, status bar">
+  <img src="assets/claudecode-launchpad_v2.6.9.gif" width="700" alt="ClaudeCode Launchpad CLI in action - installer wizard, terminal launch, status bar">
 </p>
 
 <p align="center">

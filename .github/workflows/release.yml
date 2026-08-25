@@ -108,7 +108,8 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          VID="kivun_terminal_Hebrew_2_0_2.mp4"
+          VID="assets/kivun_terminal_Hebrew_2_0_2.mp4"
+          VIDNAME="kivun_terminal_Hebrew_2_0_2.mp4"
           if [ -f "$VID" ]; then
             cp "$VID" release-assets/
           else
@@ -116,7 +117,7 @@ jobs:
             TAG="${{ github.ref_name }}"; [ -z "$TAG" ] && TAG="${{ inputs.tag }}"
             for t in $(gh release list --limit 40 --json tagName --jq '.[].tagName'); do
               [ "$t" = "$TAG" ] && continue
-              gh release download "$t" -p "$VID" -D release-assets/ 2>/dev/null && break || true
+              gh release download "$t" -p "$VIDNAME" -D release-assets/ 2>/dev/null && break || true
             done
           fi
           # The "Verify all required assets" step below fails the build if the

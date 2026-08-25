@@ -8,7 +8,7 @@ Every release **must** include all three assets:
 |---|---|---|
 | `ClaudeCode_Launchpad_CLI_Setup.exe` | Windows | Built by NSIS from `ClaudeCode_Launchpad_CLI_Setup.nsi` |
 | `ClaudeCode_Launchpad_CLI_Setup_mac.pkg` | macOS | Built by `pkgbuild` from `mac/scripts/` |
-| `kivun_terminal_Hebrew_2_0_2.mp4` | Both | Demo video (static, checked into repo) |
+| `assets/kivun_terminal_Hebrew_2_0_2.mp4` | Both | Demo video (static, checked into repo) |
 
 ## How to Release
 
@@ -41,7 +41,7 @@ makensis ClaudeCode_Launchpad_CLI_Setup.nsi
 gh release create v2.X.Y \
   ClaudeCode_Launchpad_CLI_Setup.exe \
   ClaudeCode_Launchpad_CLI_Setup_mac.pkg \
-  kivun_terminal_Hebrew_2_0_2.mp4 \
+  assets/kivun_terminal_Hebrew_2_0_2.mp4 \
   --title "ClaudeCode Launchpad CLI v2.X.Y" \
   --generate-notes --latest
 ```
@@ -58,7 +58,7 @@ Expected output:
 ```
 ClaudeCode_Launchpad_CLI_Setup.exe
 ClaudeCode_Launchpad_CLI_Setup_mac.pkg
-kivun_terminal_Hebrew_2_0_2.mp4
+assets/kivun_terminal_Hebrew_2_0_2.mp4
 ```
 
 ## CI Workflows
