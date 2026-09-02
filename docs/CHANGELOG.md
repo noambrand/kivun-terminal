@@ -1,5 +1,36 @@
 # Changelog
 
+## [3.1.0] - 2026-09-03
+
+### Added: Claude Code now stays on Anthropic's current release channel
+
+Anthropic publishes Claude Code on two channels. `stable` is conservative and can sit on
+the same build for weeks; `latest` is the current one. Whichever channel a machine installed
+from is the one its built-in auto-updater follows from then on, so a Claude installed without
+an explicit channel quietly falls behind while reporting itself up to date. Measured on
+2026-09-03: `stable` was at 2.1.236 and `latest` at 2.1.258, twenty-two releases apart.
+
+Launchpad now puts Claude on `latest` on every install and every upgrade, on both platforms:
+
+- A fresh install passes `latest` to Anthropic's installer, so the first build is the current
+  one and the updater follows the current channel from then on.
+- An upgrade on a machine that already has Claude runs the new `configure-fast-updates.js`,
+  which writes one key, `"autoUpdatesChannel": "latest"`, into `~/.claude/settings.json`.
+  It downloads nothing; Claude's own updater picks up the newer build on its next check.
+  Everything else in the settings file is left exactly as it was, and a settings file that
+  cannot be parsed is left alone rather than overwritten.
+- The macOS package does the same: `latest` on a fresh install, `claude install latest` when
+  Claude is already there.
+- The server recovery script passes `latest` too, so a repaired server does not come back a
+  month behind.
+
+If the channel cannot be set, the installer says so and carries on. Claude still works; it
+just updates on the slower schedule.
+
+### Changed
+
+- The picker screenshot in the README was refreshed.
+
 ## [3.0.3] - 2026-08-19
 
 ### Fixed — "the path was not found", so Claude never started
