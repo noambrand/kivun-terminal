@@ -244,9 +244,17 @@ REM Run it. This is the long part: Anthropic's bootstrap downloads the ~50 MB
 REM native claude.exe. Its own curl inherits our robust .curlrc via CURL_HOME, so
 REM the schannel reset that used to stall this is now retried / avoided. Tell the
 REM user clearly that it takes a moment so a quiet pause never reads as a freeze.
+REM
+REM The `latest` argument is passed EXPLICITLY and on purpose. Anthropic ships two
+REM release channels: `stable`, which can sit on the same build for weeks, and
+REM `latest`, the current one. Whichever channel an install used is the channel
+REM its auto-updater follows from then on, so landing on `stable` leaves the user
+REM dozens of releases behind while the updater reports itself healthy. The
+REM bootstrap happens to default to `latest` today, but that default is theirs to
+REM change and ours to depend on, so we state it rather than inherit it.
 call :say "[Claude Code] Downloading and installing Claude (~50 MB)."
 call :say "[Claude Code] This can take a minute or two - please don't close this window..."
-cmd /c "%CLAUDE_INSTALLER%" >> "%KIVUN_LOG%" 2>&1
+cmd /c "%CLAUDE_INSTALLER%" latest >> "%KIVUN_LOG%" 2>&1
 if errorlevel 1 (
     call :say "[Claude Code] ERROR: installation failed. See %KIVUN_LOG%"
     call :say "[Claude Code] You can install manually from https://claude.ai/download"

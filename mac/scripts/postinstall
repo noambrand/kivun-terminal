@@ -157,12 +157,19 @@ else
 fi
 
 # --- Claude Code ---
+# Both branches end on the `latest` release channel. Anthropic publishes two:
+# `stable`, which can sit on the same build for weeks, and `latest`, the current
+# one. Whichever channel a machine installed from is the one its auto-updater
+# follows from then on, so an install with no channel argument leaves the user
+# dozens of releases behind while the updater reports itself healthy. Passing
+# `latest` also persists "autoUpdatesChannel": "latest" in ~/.claude/settings.json,
+# which every later auto-update reads.
 if ! run_as_user "command -v claude" &>/dev/null; then
     log "Installing Claude Code via Anthropic native installer..."
     CLAUDE_INSTALL_SCRIPT="/tmp/claude-install.sh"
     if curl -fsSL -o "$CLAUDE_INSTALL_SCRIPT" "https://claude.ai/install.sh" 2>&1 | tee -a "$LOG_FILE"; then
         chmod +x "$CLAUDE_INSTALL_SCRIPT"
-        if run_as_user "bash '$CLAUDE_INSTALL_SCRIPT'"; then
+        if run_as_user "bash '$CLAUDE_INSTALL_SCRIPT' latest"; then
             log "Claude Code installed"
         else
             log "ERROR: Claude Code installation failed"
@@ -172,7 +179,12 @@ if ! run_as_user "command -v claude" &>/dev/null; then
         log "ERROR: Failed to download Claude Code installer"
     fi
 else
-    log "Claude Code already installed — skipping"
+    log "Claude Code already installed — putting it on the current release channel"
+    if run_as_user "claude install latest" 2>&1 | tee -a "$LOG_FILE"; then
+        log "Claude Code set to the current release channel"
+    else
+        log "WARNING: Could not set the release channel — Claude still works, but may update slowly"
+    fi
 fi
 
 # --- Statusline ---

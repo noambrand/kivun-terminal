@@ -5,7 +5,7 @@
 Unicode True
 
 !define PRODUCT_NAME "ClaudeCode Launchpad CLI"
-!define PRODUCT_VERSION "3.0.3"
+!define PRODUCT_VERSION "3.1.0"
 !define PRODUCT_PUBLISHER "Noam Brand"
 !define PRODUCT_WEB_SITE "https://github.com"
 !define PRODUCT_DESCRIPTION "Claude Code installer for Windows"
@@ -36,7 +36,7 @@ InstallDir "${INSTALL_DIR}"
 ShowInstDetails show
 
 ; Version info
-VIProductVersion "3.0.3.0"
+VIProductVersion "3.1.0.0"
 VIAddVersionKey "ProductName" "${PRODUCT_NAME}"
 VIAddVersionKey "ProductVersion" "${PRODUCT_VERSION}"
 VIAddVersionKey "CompanyName" "${PRODUCT_PUBLISHER}"
@@ -271,6 +271,7 @@ Section "!Core Components (Required)" SecCore
   File "source\dedupe-launch-tab.js"
   File "source\statusline.mjs"
   File "source\configure-statusline.js"
+  File "source\configure-fast-updates.js"
   File "source\install.cmd"
   File "source\launchpad-diagnostics.cmd"
   File "source\install-node-elevated.js"
@@ -590,6 +591,20 @@ Section "!Install Claude Code (Required)" SecClaudeCode
     DetailPrint "Statusline configured in Claude Code settings"
   ${Else}
     DetailPrint "WARNING: Could not configure statusline in settings (exit code: $0)"
+  ${EndIf}
+
+  ; Put Claude Code on Anthropic's current release channel.
+  ; install.cmd passes `latest` when it installs Claude, but it skips that path
+  ; when Claude is already present — which is most upgrades — and those machines
+  ; stay on `stable`, a channel that can sit on one build for weeks. This runs on
+  ; every install, writes one settings key, and downloads nothing.
+  DetailPrint "Setting Claude Code to update from the current release channel..."
+  nsExec::ExecToLog '"$NodeExe" "$INSTDIR\configure-fast-updates.js"'
+  Pop $0
+  ${If} $0 == 0
+    DetailPrint "Claude Code will update to each new release automatically"
+  ${Else}
+    DetailPrint "WARNING: Could not set the update channel (exit code: $0)"
   ${EndIf}
 
   ; Configure voice alerts (deploys to %USERPROFILE%\.claude\sounds and wires hooks)

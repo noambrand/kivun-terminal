@@ -103,7 +103,11 @@ if errorlevel 1 (
   pause
   exit /b 1
 )
-cmd /c "%TEMP%\claude-install.cmd" >> "%LOG%" 2>&1
+REM `latest` is passed explicitly: Anthropic's `stable` channel can sit on the
+REM same build for weeks, and whichever channel an install used is the one its
+REM auto-updater follows afterwards. Stating it means a recovered server does not
+REM come back stuck a month behind.
+cmd /c "%TEMP%\claude-install.cmd" latest >> "%LOG%" 2>&1
 
 REM --- 4) Verify Claude actually installed AND runs on this old OS ----------
 call :refresh_path

@@ -1,0 +1,78 @@
+name: Validate fast-updates wiring (v3.1.0)
+
+# Derived from docs/REQUIREMENTS-fast-updates.md. Each check is one invariant
+# from that file; if one fails, the requirement is broken, not the test.
+
+on:
+  push:
+    paths:
+      - 'source/configure-fast-updates.js'
+      - 'source/install.cmd'
+      - 'source/post-install.bat'
+      - 'mac/scripts/postinstall'
+      - 'server-recovery/FIX-CLAUDE-ON-THIS-SERVER.cmd'
+      - 'ClaudeCode_Launchpad_CLI_Setup.nsi'
+      - '.github/workflows/validate-fast-updates.yml'
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  fast-updates:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fresh installs name the channel (Windows, macOS, server recovery)
+        run: |
+          set -eu
+          grep -q 'cmd /c "%CLAUDE_INSTALLER%" latest' source/install.cmd \
+            || (echo "FAIL: install.cmd runs Anthropic's installer without 'latest'"; exit 1)
+          grep -q "bash '\$CLAUDE_INSTALL_SCRIPT' latest" mac/scripts/postinstall \
+            || (echo "FAIL: mac postinstall runs install.sh without 'latest'"; exit 1)
+          grep -q '"claude install latest"' mac/scripts/postinstall \
+            || (echo "FAIL: mac postinstall does not move an existing Claude to 'latest'"; exit 1)
+          grep -qF 'cmd /c "%TEMP%\claude-install.cmd" latest' server-recovery/FIX-CLAUDE-ON-THIS-SERVER.cmd \
+            || (echo "FAIL: server recovery runs the installer without 'latest'"; exit 1)
+          echo "PASS: every fresh-install path passes 'latest'"
+
+      - name: Upgrades set the channel key, and the installer packages and runs the script
+        run: |
+          set -eu
+          NSI=ClaudeCode_Launchpad_CLI_Setup.nsi
+          test -f source/configure-fast-updates.js \
+            || (echo "FAIL: source/configure-fast-updates.js is missing"; exit 1)
+          grep -qF 'File "source\configure-fast-updates.js"' "$NSI" \
+            || (echo "FAIL: NSI does not package configure-fast-updates.js"; exit 1)
+          grep -qF 'nsExec::ExecToLog '"'"'"$NodeExe" "$INSTDIR\configure-fast-updates.js"'"'" "$NSI" \
+            || (echo "FAIL: NSI never runs configure-fast-updates.js"; exit 1)
+          grep -q 'call node "%~dp0configure-fast-updates.js"' source/post-install.bat \
+            || (echo "FAIL: post-install.bat never runs configure-fast-updates.js"; exit 1)
+          echo "PASS: the channel step is packaged and runs on every install"
+
+      - name: The script writes one key and never clobbers an unreadable settings file
+        run: |
+          set -eu
+          JS=source/configure-fast-updates.js
+          grep -q "settings.autoUpdatesChannel = 'latest'" "$JS" \
+            || (echo "FAIL: script does not set autoUpdatesChannel to latest"; exit 1)
+          # Behavioural check: an unparsable settings.json must survive untouched, exit 1.
+          export HOME="$(mktemp -d)"
+          mkdir -p "$HOME/.claude"
+          printf '{ this is not json' > "$HOME/.claude/settings.json"
+          if node "$JS"; then echo "FAIL: script exited 0 on a broken settings.json"; exit 1; fi
+          [ "$(cat "$HOME/.claude/settings.json")" = '{ this is not json' ] \
+            || (echo "FAIL: script overwrote a broken settings.json"; exit 1)
+          # Behavioural check: other keys survive, the channel key is added.
+          printf '{\n  "model": "keep-me",\n  "hooks": {"Stop": []}\n}\n' > "$HOME/.claude/settings.json"
+          node "$JS" || (echo "FAIL: script failed on a valid settings.json"; exit 1)
+          node -e '
+            const s = require(process.env.HOME + "/.claude/settings.json");
+            if (s.autoUpdatesChannel !== "latest") { console.error("FAIL: channel key not written"); process.exit(1); }
+            if (s.model !== "keep-me" || !s.hooks || !Array.isArray(s.hooks.Stop)) { console.error("FAIL: existing keys were lost"); process.exit(1); }
+          '
+          # Behavioural check: no settings file at all is created with just the key.
+          rm -f "$HOME/.claude/settings.json"
+          node "$JS" || (echo "FAIL: script failed with no settings.json"; exit 1)
+          grep -q '"autoUpdatesChannel": "latest"' "$HOME/.claude/settings.json" \
+            || (echo "FAIL: script did not create settings.json with the channel key"; exit 1)
+          echo "PASS: one key written, nothing else touched, broken files left alone"

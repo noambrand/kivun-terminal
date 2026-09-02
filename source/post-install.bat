@@ -5,7 +5,7 @@ echo   ClaudeCode Launchpad CLI - Post Installation
 echo ============================================
 echo.
 
-echo [1/2] Installing Claude Code...
+echo [1/3] Installing Claude Code...
 echo   Running: npm install -g @anthropic-ai/claude-code
 call npm install -g @anthropic-ai/claude-code
 if errorlevel 1 (
@@ -18,7 +18,22 @@ if errorlevel 1 (
 )
 
 echo.
-echo [2/2] Verifying installation...
+echo [2/3] Setting Claude Code to update from the current release channel...
+REM Anthropic ships two release channels: `stable`, which can sit on the same
+REM build for weeks, and `latest`, the current one. Whichever channel a machine
+REM is on is the one its auto-updater follows, so without this a user can end up
+REM dozens of releases behind while the updater reports itself healthy. This
+REM writes one settings key and downloads nothing; the newer build arrives on
+REM Claude's next check. A failure here is not fatal - Claude still works.
+call node "%~dp0configure-fast-updates.js"
+if errorlevel 1 (
+    echo   WARNING: could not set the update channel. Claude Code still works.
+) else (
+    echo   Done - new versions will arrive automatically.
+)
+
+echo.
+echo [3/3] Verifying installation...
 claude --version
 if errorlevel 1 (
     echo.
